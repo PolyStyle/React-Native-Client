@@ -26,7 +26,12 @@ class AppContainer extends Component {
     // on bootstrap try to handle an automatic authentication
     // for the time being is handling the case of being logged in with Facebook
     // and the session is still available (no need to go through the auth process)
-    this.props.dispatch(handleAuthRemotely())
+    
+    // TODO FACEBOOK LOGIN : ADD THE FOLLOWING LINE BACK
+    //this.props.dispatch(handleAuthRemotely())
+    // TODO FACEBOOK LOGIN : REMOVE THE FOLLOWING DISPATCH
+    this.props.dispatch(onAuthChange({id: 0}))
+
   }
   handleHideNotification = () => {
     this.props.dispatch(hideFlashNotification())
@@ -39,6 +44,7 @@ class AppContainer extends Component {
         />
         {this.props.isAuthenticating === true
             ? <PreSplash />
+            // TODO FACEBOOK LOGIN REMOVE THE TRUE BOOLEAN VARIABLE FROM isAuthed condition
             : <AppNavigator isNew={this.props.isNew} isAuthed={this.props.isAuthed} />}
         {this.props.showFlashNotification === true
           ? <FlashNotification

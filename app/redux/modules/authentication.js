@@ -24,6 +24,7 @@ function notAuthed () {
 }
 
 function isAuthed (id) {
+  console.log('Im dispatching is authed, with id ', id)
   return {
     type: IS_AUTHED,
     id,
@@ -37,7 +38,7 @@ function loggingOut () {
 }
 
 
-export function handleAuthRemotely () {
+export function handleAuthRemotely () { 
   return function (dispatch, getState) {
     dispatch(authenticating()) 
     return getAccessToken()
@@ -67,13 +68,12 @@ export function onAuthChange (user) {
       const { id } = user
       // We have a user.
       dispatch(addUser(id, user));
-      dispatch(subscribing());
-      dispatch(friends());
+
+      // TODO LOGIN FACEBOOK : COMMENT OUT THE FOLLOWIGN TWO LINES
+      //dispatch(subscribing());
+      //dispatch(friends());
+
       fetchSettings(id)
-      .then((settings) => Promise.all([
-        dispatch(addSettingsTimerDuration(settings.timerDuration)),
-        dispatch(addSettingsRestDuration(settings.restDuration)) 
-      ]))
       .then(() => dispatch(isAuthed(id)))
     }
   }

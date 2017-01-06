@@ -32,7 +32,7 @@ export default class RNFashion extends Component {
   render(){
     return (
       <Provider store={store}>
-        <AppContainer />
+        <AppContainer/>
       </Provider>
     )
   } 
