@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
-// import { AppContainer } from './containers'
+import { AppContainer } from './containers'
  
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import * as reducers from './redux'
+import reducers from './redux'
 import devTools from 'remote-redux-devtools'
-//import { LOGGING_OUT } from './redux/modules/authentication'
-//import { USER_ONBOARDED } from './redux/modules/users'
-/*
-const appReducer = combineReducers(reducers)
+import { LOGGING_OUT } from './redux/modules/authentication'
+import { USER_ONBOARDED } from './redux/modules/users'
+ 
+const appReducer = reducers
 
 function rootReducer (state, action) {
   if (action.type === LOGGING_OUT) {
@@ -19,7 +19,7 @@ function rootReducer (state, action) {
 
   return appReducer(state, action)
 }
-
+ 
 const store = createStore(
   rootReducer,
   compose(
@@ -27,32 +27,14 @@ const store = createStore(
     devTools()
   )
 )
-*/
+
 export default class RNFashion extends Component {
-  /*render(){
+  render(){
     return (
       <Provider store={store}>
         <AppContainer />
       </Provider>
     )
-  } 
-  */
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
-    );
   } 
 }
 

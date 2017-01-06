@@ -7,7 +7,7 @@ import { onAuthStateChanged } from './../../api/auth'
 import { onAuthChange, handleAuthRemotely } from './../../redux/modules/authentication'
 import { hideFlashNotification } from './../../redux/modules/flashNotification'
 import { userOnboarded } from './../../redux/modules/users'
-import { notifications } from  './../../api/notifications'
+// import { notifications } from  './../../api/notifications'
 console.disableYellowBox = true
 
 class AppContainer extends Component {

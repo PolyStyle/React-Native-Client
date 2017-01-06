@@ -1,16 +1,35 @@
-export AppNavigator from './Navigator/AppNavigator'
-export SplashContainer from './Splash/SplashContainer'
-export AppContainer from './App/AppContainer'
-export FooterTabsContainer from './FooterTabs/FooterTabsContainer'
-export LeaderboardContainer from './Leaderboard/LeaderboardContainer'
-export HomeContainer from './Home/HomeContainer'
-export UserProfileContainer from './UserProfile/UserProfileContainer'
-export SettingsContainer from './Settings/SettingsContainer'
-export SwipeContainer from './Swipe/SwipeContainer'
-export TakeSelfyContainer from './TakeSelfy/TakeSelfyContainer'
-export OnboardingContainer from './Onboarding/OnboardingContainer'
-export StreamContainer from './Stream/StreamContainer'
-export PostContainer from './Post/PostContainer'
-export ProductContainer from './Product/ProductContainer'
-export BrandContainer from './Brand/BrandContainer'
-export CollectionContainer from './Collection/CollectionContainer'
+import AppNavigator from './Navigator/AppNavigator'
+import SplashContainer from './Splash/SplashContainer'
+import AppContainer from './App/AppContainer'
+import FooterTabsContainer from './FooterTabs/FooterTabsContainer'
+import LeaderboardContainer from './Leaderboard/LeaderboardContainer'
+import HomeContainer from './Home/HomeContainer'
+import UserProfileContainer from './UserProfile/UserProfileContainer'
+import SettingsContainer from './Settings/SettingsContainer'
+import SwipeContainer from './Swipe/SwipeContainer'
+import TakeSelfyContainer from './TakeSelfy/TakeSelfyContainer'
+import OnboardingContainer from './Onboarding/OnboardingContainer'
+import StreamContainer from './Stream/StreamContainer'
+import PostContainer from './Post/PostContainer'
+import ProductContainer from './Product/ProductContainer'
+import BrandContainer from './Brand/BrandContainer'
+import CollectionContainer from './Collection/CollectionContainer'
+
+export {
+	AppNavigator,
+	SplashContainer,
+	AppContainer,
+	FooterTabsContainer,
+	LeaderboardContainer,
+	HomeContainer,
+	UserProfileContainer,
+	SettingsContainer,
+	SwipeContainer,
+	TakeSelfyContainer,
+	OnboardingContainer,
+	StreamContainer,
+	PostContainer,
+	ProductContainer,
+	BrandContainer,
+	CollectionContainer
+}

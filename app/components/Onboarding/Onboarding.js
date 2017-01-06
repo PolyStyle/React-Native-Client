@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { View, StyleSheet, Text, Image, Dimensions, Platform } from 'react-native'
 import { LoginButton } from 'react-native-fbsdk'
 import { colors, fontSizes } from './../../styles'
-import Swiper from 'react-native-swiper'
+// import Swiper from 'react-native-swiper'
 const { height,width } = Dimensions.get('window') 
 const Button = require('apsl-react-native-button')
 const ImagePicker = require('react-native-image-picker')
@@ -92,71 +92,7 @@ class Onboarding extends Component {
   render() {
     return(
     <View style={styles.container}>
-       <Swiper style={styles.wrapper} 
-        loop={false}
-        ref="swiper" 
-        dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-        activeDot={<View style={{backgroundColor: '#ea254f', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-        showsButtons = {this.state.showButtons}
-        nextButton = {<Text style={styles.buttonText}>›</Text>}
-        prevButton = {<Text style={styles.buttonText}>‹</Text>}
-        onMomentumScrollEnd={this.handleComplexSwipe.bind(this)}
-        showsPagination = {this.state.showButtons}
-        >
-        <View style={styles.slide1}>
-         <Image style={styles.image} source={require('../../images/logo.png')} />
-          <Text style={styles.text}>Welcome</Text>
-        </View>
-        <View style={styles.slide2}>
-          <Image style={styles.image} source={{uri: 'https://pbs.twimg.com/profile_images/600358273351622657/D6r3E4NB.jpg'}} />
-          <Text style={styles.text}>This is Marco!</Text>
-        </View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>Think you can do</Text>
-          <Text style={styles.text}> better than this? </Text>
-        </View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>We too!</Text>
-        </View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>Let's take your</Text>
-          <Text style={styles.text}> first Selfy! </Text>
-        </View>
-        <View style={styles.slide3}>
-            <Button style={styles.takeSnapshot} onPress={this.takeSnapshot.bind(this)}>
-               Take Selfy!
-            </Button>
-             <Button style={styles.takeSnapshot} onPress={this.skipSelfy.bind(this)}>
-               Take Later
-            </Button>
-        </View>
-         <View style={styles.slide3}>
-            { this.state.avatarSource &&
-              (<View style={styles.flexContainer}>
-                <Image style={styles.avatar} source={this.state.avatarSource} />
-                <Text style={styles.text}>Beautiful, you are set!</Text>
-                <Button style={styles.takeSnapshot} onPress={this.props.onOnboardFinished.bind(this)}>
-               Take Me to the App
-            </Button>
-              </View>)
-            }
-             { !this.state.avatarSource &&
-              (<View style={styles.flexContainer}>
-                <Image style={styles.avatar} source={{uri: 'https://cdn.shopify.com/s/files/1/1061/1924/files/Sad_Face_Emoji.png?9898922749706957214'}} />
-                <Text style={styles.text}>This is sad, but ok!</Text>
-                <Button style={styles.takeSnapshot} onPress={this.takeSnapshot.bind(this)}>
-                Ok, I take a selfy!
-                </Button>
-                <Button style={styles.takeSnapshot} onPress={this.props.onOnboardFinished.bind(this)}>
-               Take Me to the App
-            </Button>
-              </View>)
-            }
-
  
-
-        </View>
-      </Swiper>
     </View>
   )
   }
