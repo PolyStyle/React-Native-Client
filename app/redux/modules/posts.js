@@ -34,6 +34,7 @@ export function fetchAllPosts() {
     return function (dispatch) { 
     console.log('DISPATCH ')
     return getPosts().then(function (posts) {
+      console.log('RETURNED --- ', posts)
       dispatch(addPosts(posts))
     })
   }

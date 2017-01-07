@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { View, ListView, StyleSheet, Text } from 'react-native';
+import { View, ListView, StyleSheet, Text, BackAndroid } from 'react-native';
 import Item from './Item';
 
 
@@ -26,6 +26,25 @@ class StreamListView extends React.Component {
   
   }
 
+  componentDidMount() {
+        BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    }
+
+    componentWillUnmount() {
+        BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    }
+
+    handleBackButton() {
+      console.log('Handle navigator ', this.props.navigator)
+        if (this.props.navigator) {
+          console.log('need to pop out something ')
+            this.props.navigator.pop();
+            return true;
+        }
+        return true;
+    }
+
+
  
   componentDidUpdate(props){
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -37,39 +56,7 @@ class StreamListView extends React.Component {
       });
     }
      
-  }
-    /*
-
-    const demoData = data = [
-    {
-      "name": 'theUserName',
-      "picture": "https://s-media-cache-ak0.pinimg.com/474x/17/e8/5c/17e85c532bb2e46b8b25b051da535de4.jpg",
-      "avatar": "https://d13yacurqjgara.cloudfront.net/users/40224/screenshots/2589124/adidas_illustration.jpg",
-      "username": 'Adidas',
-      "items": [
-        {
-          name: 'Shoes',
-          brandId: '1',
-          brandName: 'Adidas'
-        }
-      ]
-    }
-    ];
-    console.log('------ compoennt constructed ', this.props)
-    const getSectionData = (dataBlob, sectionId) => dataBlob[sectionId];
-    const getRowData = (dataBlob, sectionId, rowId) => dataBlob[`${rowId}`];
-
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-    console.log(ds.cloneWithRows(this.props.posts));
-    this.setState({
-      dataSource: ds.cloneWithRows(this.props.posts),
-    });
-  }
-  */
-
-
-
+  } 
   handlerSelection(id,active){
     //this.props.handlerSelection(id,active);
   }

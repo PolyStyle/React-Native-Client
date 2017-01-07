@@ -2,7 +2,7 @@
  
  /* proxy for all the api calls on the node server */
 
-var baseUrl = 'http://localhost:3000'
+var baseUrl = 'http://192.168.1.102:3000'
 
 
 function isSuccess(code) {
@@ -20,7 +20,6 @@ export function getPosts() {
   	headers: {'Content-Type': 'application/json',
   							'Authorization': 'Bearer ' + 'TOKEN'}
 	}).then(function(res) {
-
 			if(!isSuccess(res.status)){
 				return res.json().then(function(json) {
 					return Promise.reject(json);

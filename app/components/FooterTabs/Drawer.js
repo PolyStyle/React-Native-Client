@@ -18,7 +18,7 @@ export default function Drawer (props) {
     <View style={styles.container}>
       <DrawerHeader />
       <DrawerTab
-        title='Swipe'
+        title='Stream'
         selected={props.activeFooterTab === 'stream'}
         onPress={() => {
           props.onTabSelect('stream')
@@ -60,5 +60,6 @@ export default function Drawer (props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#00ffff'
   }
 })

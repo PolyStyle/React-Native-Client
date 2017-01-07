@@ -22,8 +22,10 @@ function DrawerHeader (props) {
 const styles = StyleSheet.create({
   container: {
     height: 150,
+    width: 500,
+    backgroundColor: '#ffcc00',
     alignItems: 'center',
-    paddingTop: 20,
+    paddingTop: 120,
     borderBottomWidth: 1,
     borderColor: colors.border,
   },
@@ -47,9 +49,9 @@ const styles = StyleSheet.create({
 function mapStateToProps ({users, authentication, scores}) {
   const { authedId } = authentication
   return {
-    photoURL: users[authedId].photoURL,
+    photoURL: 'https://s-media-cache-ak0.pinimg.com/236x/a2/30/5b/a2305b74f056e7d02feb60b29363211c.jpg',
     displayName: 'users[authedId].displayName',
-    score: scores.usersScores[authedId],
+    score: 22,
   }
 }
 

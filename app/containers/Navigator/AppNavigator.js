@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Navigator, Platform, StatusBar } from 'react-native'
+import { View, Navigator, Platform, StatusBar} from 'react-native'
 import { SplashContainer, OnboardingContainer, FooterTabsContainer, SettingsContainer } from './../../containers'
 
 export default class AppNavigator extends Component {
@@ -7,8 +7,11 @@ export default class AppNavigator extends Component {
     isAuthed: PropTypes.bool.isRequired,
     isNew: PropTypes.bool.isRequired
   }
+
+  
+
   renderScene = (route, navigator) => {
-    console.log(this.props.isAuthed, route.settings, this.props.isNew)
+    
     if (this.props.isAuthed === false) {
       return <SplashContainer  style={{flex: 1, backgroundColor: '#00ccff'}} navigator={navigator} />
     } else if (route.settings === true) {

@@ -44,8 +44,9 @@ class StreamContainer extends Component {
         if(index > 0) {
           return (
             <TouchableHighlight
-               underlayColor="transparent"
-               onPress={() => { if (index > 0) { navigator.pop() } }}>
+                style={styles.leftNavButton }
+                underlayColor="transparent"
+                onPress={() => { if (index > 0) { navigator.pop() } }}>
               <Text style={ styles.leftNavButtonText }>Back</Text>
             </TouchableHighlight>
         )} 
@@ -132,13 +133,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
+  leftNavButton:{
+    marginTop: (Platform.OS === 'android' ? 20 : 0),
+  },
+  leftNavButtonText: {
+  },
   textTitle: {
+      marginTop: (Platform.OS === 'android' ? 15 : 0),
       fontFamily: 'AvenirNext-Bold'
   },
   header: {
       width: width,
-      height: 50,
-      borderColor: '#111111',
+      height: (Platform.OS === 'android' ? 60 : 60),
+      borderColor: '#000000',
       borderBottomWidth: 1,
 
     },
@@ -152,10 +159,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   categoriesList: {
-    marginTop: 50,
+    marginTop: 60,
     flex: 1,
     width: width,
-    height: height-60,
+    height: height-160,
     padding: 0
   },
   leftNavButtonText: {

@@ -51,10 +51,13 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 2
   },
-  avatarContainer: {
+  avatarContainerView:{
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  avatarContainer: {
+    
     right: 5,
     top: 5,
     position: 'absolute' 
@@ -166,15 +169,15 @@ updatedAt:"2016-12-25T20:26:19.000Z"
   render(){
     return (
       <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-        <TouchableHighlight onPress={this._navigateToPost.bind(this)}>
+        <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
           <Image onPress={this._navigateToPost.bind(this)} source={{uri:this.props.picture}} style={{ width: this.state.width, height: this.state.height }} />
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
-        <View style={styles.avatarContainer}>
-            <Text style={styles.avatarName}> {this.props.User.displayName} </Text>
-            <Image style={styles.avatar} source={{uri:this.props.User.avatar}} /> 
-        </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
+          <View style={styles.avatarContainerView}>
+              <Text style={styles.avatarName}> {this.props.User.displayName} </Text>
+              <Image style={styles.avatar} source={{uri:this.props.User.avatar}} /> 
+          </View>
+        </TouchableOpacity>
        <View style={styles.descriptions}>
         <View style={styles.iconContainer}>
           <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>

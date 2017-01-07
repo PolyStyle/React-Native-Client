@@ -1,36 +1,27 @@
-import React, { PropTypes } from 'react'
-import { View, StyleSheet, Text, DrawerLayoutAndroid } from 'react-native'
+import React, { PropTypes , Component} from 'react'
+import { View, StyleSheet, Text, DrawerLayoutAndroid, BackAndroid } from 'react-native'
 import { UserProfileContainer, LeaderboardContainer, SwipeContainer, TakeSelfyContainer, StreamContainer } from './../../containers'
 import Drawer from './Drawer'
 
-FooterTabs.propTypes = {
-  activeFooterTab: PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
-  onTabSelect: PropTypes.func.isRequired,
+
+export default class FooterTabs extends Component {
+  static propTypes = {
+    activeFooterTab: PropTypes.string.isRequired,
+    navigator: PropTypes.object.isRequired,
+    onTabSelect: PropTypes.func.isRequired,
+  }
+
+  constructor (props) {
+    super(props)
+  }
+
+   
+    
+  render(){
+    return (
+      <StreamContainer navigator={this.props.navigator}/> 
+    )
+  }
 }
 
-export default function FooterTabs (props) {
-  const closeDrawer = () => this.drawer.closeDrawer()
-  const openDrawer = () => this.drawer.openDrawer()
-  return (
-    <DrawerLayoutAndroid
-      ref={(drawer) => this.drawer = drawer}
-      drawerWidth={290}
-      renderNavigationView={() => (
-        <Drawer
-          close={closeDrawer}
-          activeFooterTab={props.activeFooterTab}
-          onTabSelect={props.onTabSelect} />
-      )}>
-        {props.activeFooterTab === 'home' && <UserProfileContainer openDrawer={openDrawer} navigator={props.navigator}/> }
-        {props.activeFooterTab === 'leaderboard' && <LeaderboardContainer openDrawer={openDrawer} navigator={props.navigator}/>}
-        {props.activeFooterTab === 'stream' && <StreamContainer openDrawer={openDrawer} navigator={props.navigator}/>}
-        {props.activeFooterTab === 'takeSelfy' && <TakeSelfyContainer openDrawer={openDrawer} navigator={props.navigator}/>}
-        
-    </DrawerLayoutAndroid>
-  )
-}
-
-const styles = StyleSheet.create({
-
-})
+ 

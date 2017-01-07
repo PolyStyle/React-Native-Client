@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     height: 150,
     width: 150,
-    borderRadius: 75,
-    backgroundColor: '#00ffcc'
+    borderRadius: 75, 
   },
   avatarName: {
     flexDirection: 'row', 
