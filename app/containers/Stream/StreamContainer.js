@@ -134,13 +134,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   leftNavButton:{
-    marginTop: (Platform.OS === 'android' ? 20 : 0),
+    marginTop: (Platform.OS === 'android' ? 22 : 0),
+
   },
   leftNavButtonText: {
+    fontFamily: 'AvenirNextLTW01RegularRegular',
+    fontSize: (Platform.OS === 'android' ? 14 : 12),
+    color: '#000000',
+    marginLeft: 10
   },
   textTitle: {
       marginTop: (Platform.OS === 'android' ? 15 : 0),
-      fontFamily: 'AvenirNext-Bold'
+      fontSize: (Platform.OS === 'android' ? 19 : 17),
+      fontFamily: 'AvenirNextLTW01BoldRegular',
+      color: '#000000'
   },
   header: {
       width: width,
@@ -165,10 +172,6 @@ const styles = StyleSheet.create({
     height: height-160,
     padding: 0
   },
-  leftNavButtonText: {
-    fontSize: 12,
-    marginLeft: 10
-  }
 })
 
 
