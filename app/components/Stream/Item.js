@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -170,7 +170,10 @@ updatedAt:"2016-12-25T20:26:19.000Z"
     return (
       <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
         <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
-          <Image onPress={this._navigateToPost.bind(this)} source={{uri:this.props.picture}} style={{ width: this.state.width, height: this.state.height }} />
+          <ScaledImage 
+            id={this.props.ImageId}
+            width={width}
+          />
         </TouchableOpacity>
         <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
           <View style={styles.avatarContainerView}>

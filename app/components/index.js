@@ -30,6 +30,7 @@ import FilterLabel from './Stream/FilterLabel'
 import Item from './Stream/Item'
 import ProductItem from './Stream/ProductItem'
 import UserItem from './Stream/UserItem'
+import ScaledImage from './ScaledImage/ScaledImage'
 
 export {
 	Splash,
@@ -63,5 +64,6 @@ export {
 	FilterLabel,
 	Item,
 	ProductItem,
-	UserItem 
+	UserItem,
+	ScaledImage
 }

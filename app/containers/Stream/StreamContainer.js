@@ -135,6 +135,8 @@ const styles = StyleSheet.create({
   },
   leftNavButton:{
     marginTop: (Platform.OS === 'android' ? 22 : 0),
+    height: 35,
+    alignItems: 'center'
 
   },
   leftNavButtonText: {
