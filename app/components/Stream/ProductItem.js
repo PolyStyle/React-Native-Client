@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots} from './../../components'
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -83,17 +83,13 @@ class ProductItem extends Component {
     this.state = {
       active: props.active,
     }
+    console.log('----------');
+    console.log(this.props);
+        console.log('----------');
   }
   componentDidMount() {
     // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
-    Image.getSize(this.props.picture, (srcWidth, srcHeight) => {
-      const maxHeight = Dimensions.get('window').height; // or something else
-      const maxWidth = Dimensions.get('window').width;
-      const imageRatio = srcWidth/srcHeight;
-      this.setState({ width: width, height: width/imageRatio });
-    }, error => {
-      console.log('error:', error);
-    });
+
   }
 
   onPress = () =>{ 
@@ -155,22 +151,28 @@ class ProductItem extends Component {
 
 
   render(){
-    return (
-      <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-        <TouchableHighlight onPress={this._navigateToProduct.bind(this)}>
-          <Image onPress={this._navigateToPost.bind(this)} source={{uri:this.props.picture}} style={{ width: this.state.width, height: this.state.height }} />
-        </TouchableHighlight>
-       <View style={styles.descriptions}>
-        <View style={styles.iconContainer}>
-          <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>
-          <MoreDots style={styles.addIcon} />
+    if (this.props.ImageId) {
+      return (
+        <View style={styles.container}>
+          <TouchableOpacity onPress={this._navigateToProduct.bind(this)}>
+            <ScaledImage 
+              setNativeProps
+              id={this.props.ImageId}
+              width={width}
+            />
+          </TouchableOpacity>
+         <View style={styles.descriptions}>
+          <View style={styles.iconContainer}>
+            <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>
+            <MoreDots style={styles.addIcon} />
+          </View>
+          <View style={styles.separationLine} />
+          <Text style={styles.descriptionText}> {this.props.productCode} This is a detail description of something long.</Text>   
+         </View>
         </View>
-        <View style={styles.separationLine} />
-        <Text style={styles.descriptionText}>This is a detail description of something long.</Text>   
-       </View>
-      </View>
-
-    )
+      )
+    }
+    return (<Text> Loading ... {this.props} </Text>)
   }
 }
 

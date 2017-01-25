@@ -8,8 +8,7 @@ import { colors } from './../../styles'
 class MoreDots extends Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
- 
-    onPress: PropTypes.func.isRequired,
+    onPress: PropTypes.func,
   };
 
   static defaultProps = {

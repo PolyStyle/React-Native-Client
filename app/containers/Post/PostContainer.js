@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, View, Text, StyleSheet, Image, ListView, Dimensions, TouchableOpacity, InteractionManager} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots} from './../../components';
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components';
 import { fetchPost } from './../../redux/modules/posts';
 
 const { height,width } = Dimensions.get('window');
@@ -201,8 +201,10 @@ class PostContainer extends Component {
     return (
       <ScrollView style={styles.container}>
        <TouchableOpacity onPress={this.onPress.bind(this)}> 
-        <Image shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} source={{uri:this.props.picture }} style={{ width: this.props.width, height: this.props.height }}>
-        </Image>
+        <ScaledImage 
+            id={this.props.ImageId}
+            width={width}
+          />
        </TouchableOpacity>
        <View style={styles.descriptions}>
         <View style={styles.iconContainer}>

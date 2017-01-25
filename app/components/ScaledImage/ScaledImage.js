@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { Text, Image, View, Dimensions } from 'react-native'
+import { Text, Image, View, Dimensions, PixelRatio } from 'react-native'
 const { height,width } = Dimensions.get('window');
 
 class ScaledImage extends Component {
@@ -7,6 +7,7 @@ class ScaledImage extends Component {
     super(props);
     this.state = {
       url: '',
+      debug: 'init',
     };
   }
   static propTypes = {
@@ -18,12 +19,18 @@ class ScaledImage extends Component {
 
   componentDidMount() {
     console.log(this.props.id && this.props.width);
+        this.setState({
+          debug: this.state.debug + ' DM{'+this.props.id+','+this.props.width+'}'
+        });
     if (this.props.id && this.props.width) {
       this.renderImage(this.props);
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    this.setState({
+          debug: this.state.debug + ' RP:{'+nextProps.id+','+nextProps.width+'}'
+        });
     if (nextProps.id && nextProps.width) {
       if (nextProps.id !== this.props.id) {
         this.renderImage(nextProps);
@@ -32,12 +39,21 @@ class ScaledImage extends Component {
   }
 
   renderImage(props) {
-    const url = `http://localhost:3000/images/${props.id}/${props.width}`;
-    const fetchImage = fetch(url);
+    const postRetinaWidth = Math.floor(width * PixelRatio.get());
+    const url = 'http://192.168.1.102:3000/images/' + props.id +'/' + postRetinaWidth ;
     const self = this;
-    fetchImage.then((response) => response.json())
+        this.setState({
+          debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
+        });
+    fetch(url,{method: 'GET'}).then((response) => {
+        self.setState({
+          debug: this.state.debug + ' RES{'+props.id+','+props.width+'}'
+        });
+        return response.json()
+        }
+      )
       .then((responseJson) => {
-        
+        console.log('Trying to load', responseJson.url);
         const pictureWidth = responseJson.width;
         const pictureHeight = responseJson.height;
         const pictureRatio = pictureHeight/pictureWidth;
@@ -46,6 +62,7 @@ class ScaledImage extends Component {
           url: responseJson.url,
           width: width,
           height: width*pictureRatio,
+          debug: this.state.debug + ' RV '
         });
       })
   }
@@ -57,10 +74,16 @@ class ScaledImage extends Component {
   render() {
     if(this.state.url){
       return (
-          <Image  style={{width: this.state.width, height: this.state.height}} className={this.props.styles} source={{uri:this.state.url}} />
+          <Image 
+            shouldRasterizeIOS={true}
+            renderToHardwareTextureAndroid={true}
+            style={{width: this.state.width, height: this.state.height}}
+            className={this.props.styles}
+            source={{uri:this.state.url}} 
+          />
       );
     }
-    return (<Text>Loading</Text>)
+    return (<Text style={{color: '#ffffff'}}>Loading {this.props.width} {this.props.id} {this.state.debug}</Text>)
   }
 }
 
