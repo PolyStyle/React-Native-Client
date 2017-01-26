@@ -28,9 +28,9 @@ class AppContainer extends Component {
     // and the session is still available (no need to go through the auth process)
     
     // TODO FACEBOOK LOGIN : ADD THE FOLLOWING LINE BACK
-    //this.props.dispatch(handleAuthRemotely())
+    this.props.dispatch(handleAuthRemotely())
     // TODO FACEBOOK LOGIN : REMOVE THE FOLLOWING DISPATCH
-    this.props.dispatch(onAuthChange({id: 0}))
+    // this.props.dispatch(onAuthChange({id: 0}))
 
   }
   handleHideNotification = () => {
@@ -42,7 +42,7 @@ class AppContainer extends Component {
         <StatusBar
           hidden={true}
         />
-        {this.props.isAuthenticating === true
+        {this.props.isAuthenticating
             ? <PreSplash />
             // TODO FACEBOOK LOGIN REMOVE THE TRUE BOOLEAN VARIABLE FROM isAuthed condition
             : <AppNavigator isNew={this.props.isNew} isAuthed={this.props.isAuthed} />}

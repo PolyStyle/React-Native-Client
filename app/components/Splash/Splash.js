@@ -11,9 +11,9 @@ Splash.propTypes = {
 export default function Splash (props) {
   return (
     <View style={styles.container}>
-      <Image source={ require('../../images/openingBackground.jpg')} resizeMode='cover' style={styles.backgroundColorContainer}>  
+      <View style={styles.backgroundColorContainer}>  
         <View>
-          <Image style={styles.image} source={require('../../images/logoType.png')} />
+          <Image style={styles.image} source={require('../../images/logoType.jpg')} />
         </View>
         <View style={styles.loginContainer}>
           <LoginButton
@@ -28,7 +28,7 @@ export default function Splash (props) {
             Don't worry. We don't post anything.
           </Text>
         </View>
-      </Image>
+      </View>
     </View>
   )
 }
@@ -36,16 +36,15 @@ export default function Splash (props) {
 const styles = StyleSheet.create({
   backgroundColorContainer: {
     flex: 1,
-    width: undefined,
-    height: undefined,
+    width: width,
+    height: height,
     backgroundColor:'transparent',
     flexDirection:'column',
     alignItems:'center',
-    justifyContent:'center'
   },
   container: {
     flex: 1,
-    backgroundColor:'#713ef1',
+    backgroundColor:'#fdfdfd',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -56,20 +55,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    marginLeft: 10,
-    marginRight: 10,
-    width: width-20,
+    marginLeft: 0,
+    marginRight: 0,
+    width: width,
     resizeMode: 'contain',
-    height: height * .4 > 300 ? 300 : height * .4
+    marginTop: height/10,
+    height: height * .4 > 300 ? 300 : height * .6
   },
   loginContainer: {
     paddingLeft: 30,
     paddingRight: 30,
+    paddingTop: 20,
     alignItems: 'center',
   },
   assuranceText: {
-    color: '#ffffff',
-    fontSize: fontSizes.secondary,
+    color: '#666',
+    fontSize: 14,
     textAlign: 'center',
   },
 })

@@ -11,7 +11,7 @@ export default class PreSplash extends Component {
       <View style={styles.container}>
         <Image
           style={[styles.image]}
-          source={require('../../images/logoLoading.png')} />
+          source={require('../../images/logoType.jpg')} />
       </View>
     )
   }
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    marginLeft: 10,
-    marginRight: 10,
-    width: width-20,
+    marginLeft: 0,
+    marginRight: 0,
+    width: width,
     resizeMode: 'contain',
   }
 })

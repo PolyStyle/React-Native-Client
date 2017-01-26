@@ -109,7 +109,7 @@ export function userOnboarded(){
 
 // this state is for isNew. 
 const initialState = {
-  isNew: true,
+  isNew: false,
 }
 
 export default function users (state = {}, action) { 
