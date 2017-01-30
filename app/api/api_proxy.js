@@ -26,6 +26,9 @@ export function getPosts() {
 				});
 			}
 			return res.json();
+  }).catch((error) => {
+    console.log('something went wrong here');
+     console.error(error);
   });
 };
 
