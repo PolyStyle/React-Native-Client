@@ -7,6 +7,7 @@ var onAuthStateChangedCallbacks = [];
 export var selfie;
 
 export function getAccessToken () {
+  console.log('get access token', AccessToken.getCurrentAccessToken());
   // TODO RIPRISTINATE THE JS ACCESS TOKEN PART
   return AccessToken.getCurrentAccessToken()
 }

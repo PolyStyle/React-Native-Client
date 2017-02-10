@@ -1,4 +1,6 @@
-import { getAccessToken, authWithToken, updateUser, logout, getFriends, getSubscribing } from './../../api/auth'
+import { updateUser, logout, getFriends, getSubscribing } from './../../api/auth'
+
+import { getAccessToken, authWithFacebook } from './../../api/api_proxy'
 import { fetchSettings } from './../../api/settings'
 import { addSettingsTimerDuration, addSettingsRestDuration } from './../../redux/modules/settings'
 import { addUser, subscribing, friends } from './users'
@@ -39,13 +41,15 @@ function loggingOut () {
 
 
 export function handleAuthRemotely () { 
+  console.log('login');
   return function (dispatch, getState) {
     dispatch(authenticating()) 
     return getAccessToken()
       .then(function (accessToken) {
+        console.log('promised resolve, access token, ',accessToken);
         if(accessToken){
           // I have an access token
-          return authWithToken(accessToken.accessToken) 
+          return authWithFacebook(accessToken.accessToken) 
         } else {
           // I don't have an access token, I need to relogin via facebook
           dispatch(notAuthed())

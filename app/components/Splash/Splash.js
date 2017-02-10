@@ -20,7 +20,7 @@ export default function Splash (props) {
             readPermissions={['email','public_profile']}
             style={{
               height: 30,
-              width: 180,
+              width: 200,
               marginBottom: 15,
             }}
             onLoginFinished={props.onLoginFinished}/>

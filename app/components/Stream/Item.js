@@ -89,14 +89,6 @@ class Item extends Component {
   componentDidMount() {
     // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
     // TODO THIS IS TOOO TIME CONSUMING. 
-    Image.getSize(this.props.picture, (srcWidth, srcHeight) => {
-      const maxHeight = Dimensions.get('window').height; // or something else
-      const maxWidth = Dimensions.get('window').width;
-      const imageRatio = srcWidth/srcHeight;
-      this.setState({ width: width, height: width/imageRatio });
-    }, error => {
-      console.log('error:', error);
-    });
   }
 
   onPress = () =>{ 
@@ -177,8 +169,12 @@ updatedAt:"2016-12-25T20:26:19.000Z"
         </TouchableOpacity>
         <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
           <View style={styles.avatarContainerView}>
-              <Text style={styles.avatarName}> {this.props.User.displayName} </Text>
-              <Image style={styles.avatar} source={{uri:this.props.User.avatar}} /> 
+              <Text style={styles.avatarName}> {this.props.User.firstName} {this.props.User.lastName} </Text>
+              <ScaledImage
+                styles={styles.avatar}
+                id={this.props.User.ImageId}
+                width={50}
+              />
           </View>
         </TouchableOpacity>
        <View style={styles.descriptions}>

@@ -10,12 +10,16 @@ class ScaledImage extends Component {
       debug: 'init',
     };
   }
+  static defaultProps = {
+    styles: {}
+  }
+
+
   static propTypes = {
-    styles: PropTypes.string,
+    styles: PropTypes.object,
     id: PropTypes.number,
     width: PropTypes.number,
   }
-
 
   componentDidMount() {
     console.log(this.props.id && this.props.width);
@@ -39,8 +43,8 @@ class ScaledImage extends Component {
   }
 
   renderImage(props) {
-    const postRetinaWidth = Math.floor(width * PixelRatio.get());
-    const url = 'http://192.168.1.102:3000/images/' + props.id +'/' + postRetinaWidth ;
+    const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
+    const url = 'http://localhost:3000/images/' + props.id +'/' + postRetinaWidth ;
     const self = this;
         this.setState({
           debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
@@ -60,8 +64,8 @@ class ScaledImage extends Component {
 
         self.setState({
           url: responseJson.url,
-          width: width,
-          height: width*pictureRatio,
+          width: props.width,
+          height: props.width*pictureRatio,
           debug: this.state.debug + ' RV '
         });
       })
@@ -77,8 +81,7 @@ class ScaledImage extends Component {
           <Image 
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
-            style={{width: this.state.width, height: this.state.height}}
-            className={this.props.styles}
+            style={[this.props.styles,{'width': this.state.width, 'height': this.state.height}]}
             source={{uri:this.state.url}} 
           />
       );

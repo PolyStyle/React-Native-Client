@@ -1,8 +1,10 @@
 'use strict';
- 
+import { AccessToken, LoginManager } from 'react-native-fbsdk';
+var onAuthStateChangedCallbacks = [];
  /* proxy for all the api calls on the node server */
 
-var baseUrl = 'http://192.168.1.102:3000'
+// var baseUrl = 'https://104.155.46.72/api/v1'
+var baseUrl = 'http://localhost:3000'
 
 
 function isSuccess(code) {
@@ -201,6 +203,48 @@ export function getSameProducts(id) {
       return res.json();
   });
 };
+
+/* authentication part */
+export function getAccessToken () {
+  console.log('get access token', AccessToken.getCurrentAccessToken());
+  // TODO RIPRISTINATE THE JS ACCESS TOKEN PART
+  //LoginManager.logOut();
+  return AccessToken.getCurrentAccessToken()
+}
+
+
+export function onAuthStateChanged(callback) { 
+  onAuthStateChangedCallbacks.push(callback);
+}
+
+export function authWithFacebook(accessToken) {
+  var endpoint = baseUrl + '/users/login/facebook';
+  console.log('endpoint', endpoint);
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({accessToken: accessToken})
+  })
+  .then((response) => {
+    console.log('receive response', response)
+    return response.json();
+  })
+  .then((user) => {
+    console.log('json ', user);
+    for (var i = onAuthStateChangedCallbacks.length - 1; i >= 0; i--) {
+        // we callback all the subscriber to this event.
+      onAuthStateChangedCallbacks[i](user);
+    }
+    return user;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+};
+
 
 
 
