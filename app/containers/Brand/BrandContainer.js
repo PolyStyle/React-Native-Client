@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity} from 'react-native';
-import { ProductItem, FilterLabel }  from './../../components'
+import { ProductItem, FilterLabel, ScaledImage }  from './../../components'
 import { connect } from 'react-redux';
 import { fetchBrand, fetchBrandStream} from './../../redux/modules/brands';
 const { height,width } = Dimensions.get('window')
@@ -21,18 +21,21 @@ const styles = StyleSheet.create({
   },
   backgroundHeader: {
     width: width,
-    height: 290
+    height: 290,
+    position: 'absolute',
   },
   containerHeader: {
     width: width,
     backgroundColor: "#ffffff",
-    height: 290
+    minHeight: 290
   },
   avatar: {
     flexDirection: 'row', 
     height: 150,
     width: 150,
-    borderRadius: 75, 
+    borderRadius: 75,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   avatarName: {
     flexDirection: 'row', 
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   sectionHeaderContainer: {
-        flexDirection: 'row',
+    flexDirection: 'row',
     padding: 5,
     paddingTop: 20,
     paddingBottom: 20,
@@ -123,20 +126,28 @@ class BrandContainer extends Component{
   _renderHeader(){
    return ( 
     <View style={styles.containerHeader}>
-    <Image style={styles.backgroundHeader} shouldRasterizeIOS={true} 
-        renderToHardwareTextureAndroid={true} 
-        source={{uri: this.props.brand.headerBackground}} >
-       <View style={styles.avatarContainer} >
-      <Image style={styles.avatar} source={{uri:this.props.brand.picture}} /> 
+      <ScaledImage 
+        id={this.props.brand.BackgroundImageId}
+        width={width}
+        styles={styles.backgroundHeader} 
+      />
+      <View style={styles.avatarContainer}>
+        <ScaledImage 
+          id={this.props.brand.AvatarImageId}
+          width={width}
+          styles={styles.avatar} 
+        />
       </View>
-    </Image>
-
       <View style={styles.separationLine} />
     </View>
     )
   }
 
   _renderSectionHeader(){
+    console.log(this.state.filterDataStore);
+    if(this.state.filterDataStore.length <= 0){
+      return;
+    }
     return ( 
     <View style={styles.sectionHeaderContainer}>
            <ListView horizontal={true}

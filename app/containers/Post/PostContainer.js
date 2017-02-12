@@ -16,7 +16,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 5,
     paddingBottom: 30,
-    paddingRight: 10
+    paddingRight: 10,
+    flex: 1,
+    flexDirection: 'column',
   },
   separationLine: {
     borderColor: '#dddddd',
@@ -29,13 +31,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
-    marginTop: 5
+    marginTop: 5,
+    maxHeight: 30,
   },
   heartIcon: {
     flexDirection: 'row',
+    height: 30,
   },
   addIcon: {
     flexDirection: 'row',
+    height: 30,
     justifyContent: 'flex-end'
   },
   descriptionText: {
@@ -150,10 +155,15 @@ class PostContainer extends Component {
         itemDataSources.push(ds.cloneWithRows(dictionary[key]));
       }
 
+      var allProducts = [];
+      for(var i = 0; i<this.props.post.Products.length; i++){
+        allProducts.push(this.props.post.Products[i]);
+      } 
 
       this.setState({
         keys: keys,
         dataSource: itemDataSources,
+        allProducts: ds.cloneWithRows(allProducts),
       });
        
     } 
@@ -226,27 +236,31 @@ class PostContainer extends Component {
             return <TagLabel onPress={this._navigateToBrand.bind(this, brand)} key={i} description={brand.displayName} />
           }, this)}
         </View>
-        
-        {this.state.dataSource && this.state.dataSource.map(function(dataSourceEntry, i){
-          return  (<View key={i}>
-            <View style={styles.separationLine} />
-            <Text style={styles.tagTitle}>{this.state.keys[i] + ':'} </Text>
-            <ListView horizontal={true}
+        <View style={styles.separationLine} />
+        <Text style={styles.tagTitle}>In this post: </Text>
+        {this.state.allProducts && <ListView horizontal={true}
             showsHorizontalScrollIndicator={false}
               style={styles.productHolder}
-              dataSource={dataSourceEntry}
+              dataSource={this.state.allProducts}
               renderRow={(rowData) => <View>
                   <TouchableOpacity onPress={this._navigateToProduct.bind(this, rowData)} style={styles.productItem}>
-                    <Image style={styles.roundedProduct} source={{uri:rowData.picture }} />
-                    <Image style={styles.roundedBrand} source={{uri:rowData.Brand.picture }} />
+                   <ScaledImage
+                      styles={styles.roundedProduct}
+                      id={rowData.ImageId}
+                      width={120}
+                    />
+                     <ScaledImage
+                      styles={styles.roundedBrand}
+                      id={rowData.Brand.AvatarImageId}
+                      width={40}
+                    />
                   </TouchableOpacity>
                 </View>}
               />
-            </View>)
-        }, this)}
+        }
+        <View style={styles.separationLine} />
        </View> 
       </ScrollView>
-
     )
   }
 }

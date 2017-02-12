@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { ScrollView, View, Text, StyleSheet, Image, ListView, Dimensions, TouchableOpacity, InteractionManager} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 import { fetchProduct, fetchSameProducts } from './../../redux/modules/products';
 import { connect } from 'react-redux';
 
@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000000',
     paddingBottom: 30,
+    height: height,
+    width: width,
+
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -77,7 +80,7 @@ const styles = StyleSheet.create({
 
   productHolder: { 
     height: 90,
-    flex: 1,
+    width: width,
     marginTop: 10,
     marginBottom: 10
   },
@@ -112,6 +115,7 @@ class ProductContainer extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      currentImage: this.props.ImageId,
       active: false,
     };
   }
@@ -119,22 +123,9 @@ class ProductContainer extends Component {
   componentDidMount() {
     this.props.dispatch(fetchProduct(this.props.id));
     this.props.dispatch(fetchSameProducts(this.props.id));
-    // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
-    // TODO: too time consuming, needs to be refactored.
-       Image.getSize(this.props.picture, (srcWidth, srcHeight) => {
-        const maxHeight = Dimensions.get('window').height; // or something else
-        const maxWidth = Dimensions.get('window').width;
-        const imageRatio = srcWidth/srcHeight;
-        this.setState({
-        currentImage: this.props.itemPicture,
-         width: width, height: width/imageRatio });
-      }, error => {
-        console.log('error:', error);
-      });
   }
 
   componentDidUpdate(prevProps, prevState){
-    console.log(this.props);
     if(!this.props.sameProductsList || 
         this.props.sameProductsList.length == 0) {
       return
@@ -161,9 +152,10 @@ class ProductContainer extends Component {
       this.props.onPress()
     } 
   }
+
   _selectProduct(rowData){
     this.setState({
-      currentImage: rowData.picture
+      currentImage: rowData.ImageId
     })
   }
 
@@ -181,8 +173,10 @@ class ProductContainer extends Component {
     if( this.props.product){
       return (
         <ScrollView style={styles.container}>
-         <Image shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} source={{uri: this.state.currentImage || this.props.picture }} style={{ width: this.state.width, height: this.state.height }}>
-         </Image>
+          <ScaledImage
+            id={this.state.currentImage}
+            width={width}
+          />
          <View>
             {this.state.dataSource &&
               <ListView horizontal={true}
@@ -193,7 +187,12 @@ class ProductContainer extends Component {
               renderRow={(rowData) => 
                   <TouchableOpacity style={styles.productItem} onPress={this._selectProduct.bind(this,rowData)}> 
                   <View style={styles.productItem}>
-                    <Image style={styles.roundedProduct} source={{uri:rowData.picture }} />
+                     <ScaledImage
+                        style={styles.roundedProduct}
+                        styles={styles.roundedProduct}
+                        id={rowData.ImageId}
+                        width={90}
+                      />
                   </View>
                   </TouchableOpacity>
                 }

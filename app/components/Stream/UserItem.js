@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#00ffcc'
+    backgroundColor: '#000000'
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -157,9 +157,12 @@ class UserItem extends Component {
   render(){
     return (
       <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-        <TouchableHighlight onPress={this._navigateToPost.bind(this)}>
-          <Image source={{uri:this.props.picture}} style={{ width: this.state.width, height: this.state.height }} />
-        </TouchableHighlight>
+        <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
+          <ScaledImage
+            id={this.props.ImageId}
+            width={width}
+          />
+        </TouchableOpacity>
        <View style={styles.descriptions}>
         <View style={styles.iconContainer}>
           <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>

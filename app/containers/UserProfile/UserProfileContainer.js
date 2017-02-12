@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { ScrollView, View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, InteractionManager, ListView} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots, UserItem, FollowButton} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, UserItem, FollowButton, ScaledImage} from './../../components'
 import { fetchUser,fetchUserStream} from './../../redux/modules/users';
 import { connect } from 'react-redux';
 
@@ -111,6 +111,7 @@ const styles = StyleSheet.create({
     height: 110,
   },
   backgroundHeader: {
+    backgroundColor: '#000',
     width: width,
     height: 210
   },
@@ -145,14 +146,6 @@ class UserProfileContainer extends Component {
   componentDidMount() {
     this.props.dispatch(fetchUser(this.props.id));
     this.props.dispatch(fetchUserStream(this.props.id));
-
-    Image.getSize(this.props.avatar, (srcWidth, srcHeight) => {
-      const maxHeight = Dimensions.get('window').height; // or something else
-      const maxWidth = Dimensions.get('window').width;
-      const imageRatio = srcWidth/srcHeight;
-      this.setState({ width: width, height: width/imageRatio });
-    }, error => {
-    });
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -188,14 +181,19 @@ class UserProfileContainer extends Component {
 
   _renderHeader(){
    return ( 
-    <Image style={styles.backgroundHeader} shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} source={{uri:'https://s-media-cache-ak0.pinimg.com/474x/11/bc/0f/11bc0f45fb59d504151d6cd7f8d4c3ce.jpg'}} >
+    <View style={styles.backgroundHeader} >
       <View style={styles.avatarContainer} >
-      <Image style={styles.avatar} source={{uri: this.props.avatar}} /> 
-      </View>
-            <View style={styles.followUser}>
-      <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
-      </View>
-    </Image>
+        <ScaledImage
+          styles={styles.avatar}
+          id={this.props.user.ImageId}
+          width={150}
+        />
+
+        </View>
+              <View style={styles.followUser}>
+        <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
+        </View>
+    </View>
 
     )
   }
@@ -212,7 +210,11 @@ class UserProfileContainer extends Component {
             renderRow={(rowData) => 
               <TouchableOpacity style={styles.productViewItem}  > 
               <View style={styles.productViewItem}>
-                <Image style={styles.roundedProduct} source={{uri:'https://s-media-cache-ak0.pinimg.com/564x/2b/ec/48/2bec48e780adf4de0139984ff956c2b6.jpg' }} />
+                <ScaledImage
+                  styles={styles.roundedProduct}
+                  id={this.props.user.ImageId}
+                  width={100}
+                />
                 <Text style={styles.productText}> Last Week Likes </Text>
               </View>
               </TouchableOpacity>

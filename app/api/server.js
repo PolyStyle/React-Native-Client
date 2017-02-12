@@ -1,6 +1,6 @@
 'use strict';
  
-var baseUrl = 'https://104.155.46.72/api/v1/'
+var baseUrl = 'https://192.168.0.5/api/v1/'
 /*
 fetch(baseUrl + '/users/1/profile')
 	.then(function(res) {
