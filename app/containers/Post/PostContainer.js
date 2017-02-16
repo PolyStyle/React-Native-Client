@@ -95,12 +95,21 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     position: 'absolute',
     top: 0,
-    right: 0
+    right: 0,
+    zIndex: 20
   },
-  productItem: {
+  productItemHolder: {
     width: 120,
     height: 120,
     marginRight: 20, 
+    borderRadius: 60,
+  },
+  brandItemHolder: {
+    width: 40,
+    height: 40,
+    right: 0,
+    position: 'absolute',
+    zIndex: 20,
   }
 });
 
@@ -211,7 +220,7 @@ class PostContainer extends Component {
     return (
       <ScrollView style={styles.container}>
        <TouchableOpacity onPress={this.onPress.bind(this)}> 
-        <ScaledImage 
+          <ScaledImage 
             id={this.props.ImageId}
             width={width}
           />
@@ -243,13 +252,15 @@ class PostContainer extends Component {
               style={styles.productHolder}
               dataSource={this.state.allProducts}
               renderRow={(rowData) => <View>
-                  <TouchableOpacity onPress={this._navigateToProduct.bind(this, rowData)} style={styles.productItem}>
+                  <TouchableOpacity onPress={this._navigateToProduct.bind(this, rowData)} style={styles.productItemHolder}>
                    <ScaledImage
                       styles={styles.roundedProduct}
                       id={rowData.ImageId}
                       width={120}
                     />
-                     <ScaledImage
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={this._navigateToBrand.bind(this, rowData.Brand)} style={styles.brandItemHolder}>
+                    <ScaledImage
                       styles={styles.roundedBrand}
                       id={rowData.Brand.AvatarImageId}
                       width={40}

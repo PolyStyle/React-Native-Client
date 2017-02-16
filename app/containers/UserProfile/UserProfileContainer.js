@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
   productHolder: { 
     flexDirection: 'row',
     width: width,
-    height: 115,
+    height: 75,
 
   },
   roundedProduct: { 
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   roundedBrand: { 
     width: 40,
@@ -97,9 +97,9 @@ const styles = StyleSheet.create({
     right: 0
   },
   productViewItem: {
-    width: 110,
-    height: 130,
-    marginRight: 5, 
+    width: 100,
+    height: 100,
+    marginRight: 0, 
     alignItems: 'center',
   },
   productText: {
@@ -137,7 +137,8 @@ class UserProfileContainer extends Component {
 
 
   constructor(props) {
-    super(props);    this.state = {
+    super(props);    
+    this.state = {
       dataSource: null
     }
     this._renderList();
@@ -154,7 +155,6 @@ class UserProfileContainer extends Component {
 
   _renderList(){
     if(!this.props.userStream) return;
-
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     const newDataStore = ds.cloneWithRows(this.props.userStream);
     if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
@@ -180,47 +180,55 @@ class UserProfileContainer extends Component {
   }
 
   _renderHeader(){
-   return ( 
-    <View style={styles.backgroundHeader} >
-      <View style={styles.avatarContainer} >
-        <ScaledImage
-          styles={styles.avatar}
-          id={this.props.user.ImageId}
-          width={150}
-        />
+    console.log('_renderHeader', this.props.user);
+    if(!this.props.user){
+      return (<View />); 
+    }
+    return ( 
+      <View style={styles.backgroundHeader} >
+        <View style={styles.avatarContainer} >
+          <ScaledImage
+            styles={styles.avatar}
+            id={this.props.user.ImageId}
+            width={150}
+          />
 
-        </View>
-              <View style={styles.followUser}>
-        <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
-        </View>
-    </View>
-
+          </View>
+                <View style={styles.followUser}>
+          <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
+          </View>
+      </View>
     )
   }
 
   _renderSectionHeader(){
+    console.log('_renderSectionHeader', this.props.user);
+    if(!this.props.user){
+      return (<View />); 
+    }
     return ( 
     <View style={styles.sectionHeaderContainer}>
-          <ListView horizontal={true}
-            style={styles.productHolder}
-            removeClippedSubviews={false}
-            initialListSize ={10}
-            showsHorizontalScrollIndicator={false}
-            dataSource={this.state.dataSource}
-            renderRow={(rowData) => 
-              <TouchableOpacity style={styles.productViewItem}  > 
-              <View style={styles.productViewItem}>
-                <ScaledImage
-                  styles={styles.roundedProduct}
-                  id={this.props.user.ImageId}
-                  width={100}
-                />
-                <Text style={styles.productText}> Last Week Likes </Text>
-              </View>
-              </TouchableOpacity>
-            }
-          />
-    </View>)
+      <ListView horizontal={true}
+        style={styles.productHolder}
+        removeClippedSubviews={false}
+        initialListSize ={10}
+        showsHorizontalScrollIndicator={false}
+        dataSource={this.state.dataSource}
+        renderRow={(rowData) => 
+          <TouchableOpacity style={styles.productViewItem}  > 
+          <View style={styles.productViewItem}>
+            <ScaledImage
+              styles={styles.roundedProduct}
+              id={this.props.user.ImageId}
+              width={100}
+            />
+            <Text style={styles.productText}> Last Week Likes </Text>
+          </View>
+          </TouchableOpacity>
+        }
+      />
+    </View>
+    )
   }
 
   render() {

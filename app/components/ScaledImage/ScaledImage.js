@@ -6,7 +6,7 @@ class ScaledImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: '',
+      url: null,
       debug: 'init',
     };
   }
@@ -44,6 +44,7 @@ class ScaledImage extends Component {
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
     const url = 'http://192.168.0.5:3000/images/' + props.id +'/' + postRetinaWidth ;
+    console.log('loading url:', url);
     const self = this;
         this.setState({
           debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
