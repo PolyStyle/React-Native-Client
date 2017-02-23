@@ -6,7 +6,7 @@ class ScaledImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: '',
+      url: null,
       debug: 'init',
     };
   }

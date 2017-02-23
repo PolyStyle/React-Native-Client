@@ -86,14 +86,6 @@ class UserItem extends Component {
   }
   componentDidMount() {
     // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
-    Image.getSize(this.props.picture, (srcWidth, srcHeight) => {
-      const maxHeight = Dimensions.get('window').height; // or something else
-      const maxWidth = Dimensions.get('window').width;
-      const imageRatio = srcWidth/srcHeight;
-      this.setState({ width: width, height: width/imageRatio });
-    }, error => {
-      console.log('error:', error);
-    });
   }
 
   onPress = () =>{ 
@@ -155,6 +147,9 @@ class UserItem extends Component {
 
 
   render(){
+    if(this.props){
+      console.log('trying to load', this.props.ImageId);
+    }
     return (
       <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
         <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
