@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity} from 'react-native';
-import { ProductItem, FilterLabel, ScaledImage }  from './../../components'
+import { ProductItem, FilterLabel, ScaledImage, FollowButton }  from './../../components'
 import { connect } from 'react-redux';
-import { fetchBrand, fetchBrandStream} from './../../redux/modules/brands';
+import { fetchBrand, fetchBrandStream, followBrand} from './../../redux/modules/brands';
 const { height,width } = Dimensions.get('window')
 
 
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     minHeight: 290
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 150,
     width: 150,
     borderRadius: 75,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 2
   },
-  avatarContainer: { 
+  avatarContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -63,17 +63,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
- 
+
   sectionHeaderNameText: {
     paddingLeft: 10,
     fontWeight: "700",
     fontSize: 12,
     color: '#333',
   },
+  followUser: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
 });
 
 class BrandContainer extends Component{
- 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -105,7 +110,7 @@ class BrandContainer extends Component{
         } else {
           filters[tag.displayName].quantity++;
         }
-      } 
+      }
     }
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -113,7 +118,7 @@ class BrandContainer extends Component{
     const newFilterDataStore = ds.cloneWithRows(filters);
     if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
       this.setState({
-        filterDataStore :newFilterDataStore, 
+        filterDataStore :newFilterDataStore,
         dataSource: newDataStore,
       });
     }
@@ -123,20 +128,32 @@ class BrandContainer extends Component{
     //this.props.handlerSelection(id,active);
   }
 
+
+  handleFollowing(){
+    var isFollowing = this.state.isFollowing;
+    isFollowing = !isFollowing;
+    this.setState({
+      isFollowing: isFollowing
+    })
+    this.props.dispatch(followBrand(this.props.id));
+  }
   _renderHeader(){
-   return ( 
+   return (
     <View style={styles.containerHeader}>
-      <ScaledImage 
+      <ScaledImage
         id={this.props.brand.BackgroundImageId}
         width={width}
-        styles={styles.backgroundHeader} 
+        styles={styles.backgroundHeader}
       />
       <View style={styles.avatarContainer}>
-        <ScaledImage 
+        <ScaledImage
           id={this.props.brand.AvatarImageId}
           width={width}
-          styles={styles.avatar} 
+          styles={styles.avatar}
         />
+        <View style={styles.followUser}>
+        <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
+        </View>
       </View>
       <View style={styles.separationLine} />
     </View>
@@ -148,19 +165,19 @@ class BrandContainer extends Component{
     if(this.state.filterDataStore.length <= 0){
       return;
     }
-    return ( 
+    return (
     <View style={styles.sectionHeaderContainer}>
            <ListView horizontal={true}
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={false}
             dataSource={this.state.filterDataStore}
             renderRow={(rowData) => <View>
-                <TouchableOpacity> 
+                <TouchableOpacity>
                   <FilterLabel quantity={rowData.quantity} description={rowData.displayName} />
                 </TouchableOpacity>
               </View>}
           />
-    </View>) 
+    </View>)
   }
 
   _navigateToProduct(rowData){
@@ -173,16 +190,16 @@ class BrandContainer extends Component{
 
   render() {
     if( this.props.brand && this.state.dataSource){
-      return ( 
-          <ListView 
+      return (
+          <ListView
             renderHeader={this._renderHeader.bind(this)}
-            renderSectionHeader={this._renderSectionHeader.bind(this)} 
+            renderSectionHeader={this._renderSectionHeader.bind(this)}
             initialListSize ={2}
-            removeClippedSubviews={true} 
+            removeClippedSubviews={true}
             style={styles.container}
             dataSource={this.state.dataSource}
             renderRow={(data) => <ProductItem navigator={this.props.navigator} {...data} active={false}  />}
-          /> 
+          />
       );
     } else {
       return (<View/>)
@@ -193,7 +210,7 @@ class BrandContainer extends Component{
 function mapStateToProps ({brands}) {
   console.log('CALLED MAP STATE TO PROPS on BRANDS')
   console.log(brands)
-  return { 
+  return {
     brand: brands.currentBrand,
     brandStream: brands.currentBrandStream
   }

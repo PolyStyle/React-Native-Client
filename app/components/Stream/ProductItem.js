@@ -5,7 +5,7 @@ const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#00ffcc'
+    backgroundColor: '#000000'
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -38,13 +38,13 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 50,
     width: 50,
     borderRadius: 25,
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     right: 5,
     top: 5,
-    position: 'absolute' 
+    position: 'absolute'
   },
   tagList:{
     marginTop: 8,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   tagTitle: {
     fontSize: 12
   }
- 
+
 });
 
 
@@ -92,14 +92,14 @@ class ProductItem extends Component {
 
   }
 
-  onPress = () =>{ 
+  onPress = () =>{
     const newState = !this.state.active;
     this.setState({
           active: newState
         }, function(){
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
 
   });
   }
@@ -155,7 +155,7 @@ class ProductItem extends Component {
       return (
         <View style={styles.container}>
           <TouchableOpacity onPress={this._navigateToProduct.bind(this)}>
-            <ScaledImage 
+            <ScaledImage
               setNativeProps
               id={this.props.ImageId}
               width={width}
@@ -167,7 +167,7 @@ class ProductItem extends Component {
             <MoreDots style={styles.addIcon} />
           </View>
           <View style={styles.separationLine} />
-          <Text style={styles.descriptionText}> {this.props.productCode} This is a detail description of something long.</Text>   
+          <Text style={styles.descriptionText}> {this.props.productCode} This is a detail description of something long.</Text>
          </View>
         </View>
       )

@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
     height: 290
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 150,
     width: 150,
     borderRadius: 75,
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 2
   },
-  avatarContainer: { 
+  avatarContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -77,18 +77,18 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
   },
-  productHolder: { 
+  productHolder: {
     flexDirection: 'row',
     width: width,
     height: 115,
 
   },
-  roundedProduct: { 
+  roundedProduct: {
     width: 100,
     height: 100,
     borderRadius: 50,
   },
-  roundedBrand: { 
+  roundedBrand: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   productViewItem: {
     width: 110,
     height: 130,
-    marginRight: 5, 
+    marginRight: 5,
     alignItems: 'center',
   },
   productText: {
@@ -165,10 +165,10 @@ class UserProfileContainer extends Component {
   }
 
 
-  onPress = () =>{ 
+  onPress = () =>{
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
   }
 
   handleFollowing(){
@@ -180,7 +180,7 @@ class UserProfileContainer extends Component {
   }
 
   _renderHeader(){
-   return ( 
+   return (
     <View style={styles.backgroundHeader} >
       <View style={styles.avatarContainer} >
         <ScaledImage
@@ -199,7 +199,7 @@ class UserProfileContainer extends Component {
   }
 
   _renderSectionHeader(){
-    return ( 
+    return (
     <View style={styles.sectionHeaderContainer}>
           <ListView horizontal={true}
             style={styles.productHolder}
@@ -207,8 +207,8 @@ class UserProfileContainer extends Component {
             initialListSize ={10}
             showsHorizontalScrollIndicator={false}
             dataSource={this.state.dataSource}
-            renderRow={(rowData) => 
-              <TouchableOpacity style={styles.productViewItem}  > 
+            renderRow={(rowData) =>
+              <TouchableOpacity style={styles.productViewItem}  >
               <View style={styles.productViewItem}>
                 <ScaledImage
                   styles={styles.roundedProduct}
@@ -225,14 +225,14 @@ class UserProfileContainer extends Component {
 
   render() {
     if( this.props.user && this.state.dataSource){
-    return ( 
-        <ListView 
+    return (
+        <ListView
           renderHeader={this._renderHeader.bind(this)}
-          renderSectionHeader={this._renderSectionHeader.bind(this)} 
+          renderSectionHeader={this._renderSectionHeader.bind(this)}
           style={styles.container}
           dataSource={this.state.dataSource}
           renderRow={(data) => <UserItem navigator={this.props.navigator} {...data} active={false}  />}
-        /> 
+        />
     )
     } else {
       return (<View/>)
@@ -240,7 +240,7 @@ class UserProfileContainer extends Component {
   }
 }
 function mapStateToProps ({users}) {
-  return { 
+  return {
     user: users.currentUser,
     userStream: users.currentUserStream
   }

@@ -4,22 +4,22 @@ import Icon from 'react-native-vector-icons/Ionicons'
 
 const styles = StyleSheet.create({
   default:{
-    flex: 1, 
+    flex: 1,
     padding: 5,
   },
   active: {
-    borderRadius: 3, 
+    borderRadius: 3,
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 3,
     paddingBottom: 3,
     borderRadius: 3,
-    borderColor: '#dfdfdf',
+    borderColor: '#111',
     borderWidth: 1,
-    backgroundColor: '#111111',
+    backgroundColor: '#222',
   },
   disable:{
-    borderRadius: 3, 
+    borderRadius: 3,
     paddingLeft: 5,
     paddingRight: 5,
     paddingTop: 3,
@@ -27,19 +27,19 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderColor: '#555555',
     borderWidth: 1,
-    backgroundColor: '#111111',
+    backgroundColor: '#444444',
   },
   activeText: {
-    fontSize: 10,
-    color: '#dfdfdf',
+    fontSize: 13,
+    color: '#fff',
   },
   disableText: {
-    fontSize: 10,
-    color: '#555555'
+    fontSize: 13,
+    color: '#dfdfdf'
   }
 });
 
- 
+
 
 class FollowButton extends Component {
   static propTypes = {
@@ -54,7 +54,7 @@ class FollowButton extends Component {
   onPress() {
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
   }
 
    render(){

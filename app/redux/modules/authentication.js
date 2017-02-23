@@ -31,7 +31,7 @@ function isAuthed (id) {
     type: IS_AUTHED,
     id,
   }
-} 
+}
 
 function loggingOut () {
   return {
@@ -40,16 +40,26 @@ function loggingOut () {
 }
 
 
-export function handleAuthRemotely () { 
+export function handleAuthRemotely () {
   console.log('login');
   return function (dispatch, getState) {
-    dispatch(authenticating()) 
+    dispatch(authenticating())
     return getAccessToken()
       .then(function (accessToken) {
         console.log('promised resolve, access token, ',accessToken);
         if(accessToken){
           // I have an access token
-          return authWithFacebook(accessToken.accessToken) 
+          var authResults = authWithFacebook(accessToken.accessToken);
+          console.log('AUTH RESULTS');
+
+         authResults.then((responseJson) => {
+            console.log('JSON RESPONSE', responseJson);
+            return responseJson
+        }).catch(function(error) {
+          console.log('10 There has been a problem with your fetch operation: ' + error.message);
+           // ADD THIS THROW error
+            throw error;
+          });
         } else {
           // I don't have an access token, I need to relogin via facebook
           dispatch(notAuthed())
@@ -60,11 +70,12 @@ export function handleAuthRemotely () {
 }
 
 
- 
+
 
 
 export function onAuthChange (user) {
-  return function (dispatch) { 
+  console.log('RECEIVED USER', user);
+  return function (dispatch) {
     if (!user) {
       dispatch(notAuthed())
     } else {
@@ -77,8 +88,7 @@ export function onAuthChange (user) {
       //dispatch(subscribing());
       //dispatch(friends());
 
-      fetchSettings(id)
-      .then(() => dispatch(isAuthed(id)))
+      dispatch(isAuthed(id));
     }
   }
 }
@@ -93,10 +103,10 @@ export function handleUnauth () {
 const initialState = {
   isAuthed: false,
   isAuthenticating: false,
-  id: -1, 
+  id: -1,
 }
 
-export default function authentication (state = initialState, action) { 
+export default function authentication (state = initialState, action) {
   switch (action.type) {
     case AUTHENTICATING :
       return {
@@ -113,7 +123,7 @@ export default function authentication (state = initialState, action) {
       return {
         isAuthed: true,
         isAuthenticating: false,
-        id: action.id, 
+        id: action.id,
       }
     default :
       return state

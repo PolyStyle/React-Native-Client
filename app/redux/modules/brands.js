@@ -1,4 +1,4 @@
-import { getBrand,getBrandStream } from './../../api/api_proxy'
+import { getBrand,getBrandStream,followBrand as followBrandAPI} from './../../api/api_proxy'
 
 const ADD_BRAND = 'ADD_BRAND'
 const SET_CURRENT_BRAND = 'SET_CURRENT_BRAND'
@@ -34,6 +34,13 @@ export function fetchBrand(id){
   }
 }
 
+export function followBrand(id){
+  return function(dispatch){
+    return followBrandAPI(id).then(function(brand){
+    })
+  }
+}
+
 export function fetchBrandStream(id){
   return function(dispatch){
     return getBrandStream(id).then(function(brandStream){
@@ -52,15 +59,14 @@ function setCurrentBrand( brand ) {
   }
 }
 
- 
+
 const initialState = {
   isFetching: false,
   brands: [],
   currentBrand: null
 }
 
-export default function brands (state = initialState, action) { 
-  console.log(action)
+export default function brands (state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_BRAND_STREAM:
       return {

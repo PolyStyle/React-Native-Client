@@ -1,8 +1,8 @@
 import { getPosts,getPost } from './../../api/api_proxy'
 
 const ADD_POST = 'ADD_POST'
-const ADD_POSTS = 'ADD_POSTS' 
-const IS_FATCHING = 'IS_FATCHING' 
+const ADD_POSTS = 'ADD_POSTS'
+const IS_FATCHING = 'IS_FATCHING'
 const SET_CURRENT_POST = 'SET_CURRENT_POST'
 
 function addPost( post ) {
@@ -31,7 +31,7 @@ function setCurrentPost( post ) {
 
 export function fetchAllPosts() {
   console.log('called fetch all posts ------');
-    return function (dispatch) { 
+    return function (dispatch) {
     console.log('DISPATCH ')
     return getPosts().then(function (posts) {
       console.log('RETURNED --- ', posts)
@@ -51,14 +51,13 @@ export function fetchPost(id){
   }
 }
 
- 
+
 const initialState = {
   isFetching: false,
   posts: []
 }
 
-export default function posts (state = initialState, action) { 
-  console.log(action)
+export default function posts (state = initialState, action) {
   switch (action.type) {
     case ADD_POST:
       return {
