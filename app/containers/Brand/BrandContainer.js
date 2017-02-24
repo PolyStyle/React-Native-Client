@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity} from 'react-native';
 import { ProductItem, FilterLabel, ScaledImage, FollowButton }  from './../../components'
 import { connect } from 'react-redux';
-import { fetchBrand, fetchBrandStream, followBrand} from './../../redux/modules/brands';
+import { fetchBrand, fetchBrandStream, followBrand, unfollowBrand} from './../../redux/modules/brands';
 const { height,width } = Dimensions.get('window')
 
 
@@ -131,11 +131,18 @@ class BrandContainer extends Component{
 
   handleFollowing(){
     var isFollowing = this.state.isFollowing;
+
+    if(isFollowing){
+      // remove the follow
+      this.props.dispatch(unfollowBrand(this.props.id));
+    } else {
+      // add the follow
+      this.props.dispatch(followBrand(this.props.id));
+    }
     isFollowing = !isFollowing;
     this.setState({
       isFollowing: isFollowing
     })
-    this.props.dispatch(followBrand(this.props.id));
   }
   _renderHeader(){
    return (

@@ -1,10 +1,16 @@
 import {getFriends, getSubscribing } from './../../api/auth'
-import { getUser,getUserStream } from './../../api/api_proxy'
+import {
+  getUser,
+  getUserStream,
+  followUser as followUserAPI,
+  unfollowUser as unfollowUserAPI,
+  isFollowingUser as isFollowingUserAPI
+} from './../../api/api_proxy'
 
 
 
 
-// OLD PART 
+// OLD PART
 const ADD_USER = 'ADD_USER'
 const ADD_MULTIPLE_USERS = 'ADD_MULTIPLE_USERS'
 const USER_ONBOARDED = 'USER_ONBOARDED'
@@ -63,14 +69,37 @@ export function addUser(id, user) {
   }
 }
 
+export function unfollowUser(id){
+  return function(dispatch){
+    return unfollowUserAPI(id).then(function(result){
+      return result;
+    })
+  }
+}
 
-function updateFriends(friends){ 
+export function followUser(id){
+  return function(dispatch){
+    return followUserAPI(id).then(function(result){
+      return result;
+    })
+  }
+}
+
+export function isFollowingUser(id){
+  return function(dispatch){
+    return isFollowingUserAPI(id).then(function(result){
+      return result;
+    })
+  }
+}
+
+function updateFriends(friends){
   return {
     type: UPDATE_FRIENDS,
     friends
   }
 }
-function updateSubscribing(subscribing){  
+function updateSubscribing(subscribing){
   return {
     type: UPDATE_SUBSCRIBING,
     subscribing
@@ -78,18 +107,18 @@ function updateSubscribing(subscribing){
 }
 
 export function friends(){
-  return  function (dispatch) { 
+  return  function (dispatch) {
     return getFriends()
-      .then(function(friends){ 
+      .then(function(friends){
         dispatch(updateFriends(friends));
       })
   }
 }
 
 export function subscribing(){
-  return function (dispatch) {  
+  return function (dispatch) {
     return getSubscribing()
-      .then(function(subscribing){ 
+      .then(function(subscribing){
         dispatch(updateSubscribing(subscribing));
       })
   }
@@ -107,12 +136,12 @@ export function userOnboarded(){
   }
 }
 
-// this state is for isNew. 
+// this state is for isNew.
 const initialState = {
   isNew: false,
 }
 
-export default function users (state = {}, action) { 
+export default function users (state = {}, action) {
   switch (action.type) {
      case SET_CURRENT_USER_STREAM:
      console.log('+++++')
@@ -131,7 +160,8 @@ export default function users (state = {}, action) {
     case SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: action.user
+        currentUser: action.user,
+        [action.user.id]: action.user,
       }
     case UPDATE_FRIENDS:
       return {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
 import { AppContainer } from './containers'
- 
+
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
@@ -9,7 +9,8 @@ import reducers from './redux'
 import devTools from 'remote-redux-devtools'
 import { LOGGING_OUT } from './redux/modules/authentication'
 import { USER_ONBOARDED } from './redux/modules/users'
- 
+import { composeWithDevTools } from 'remote-redux-devtools';
+
 const appReducer = reducers
 
 function rootReducer (state, action) {
@@ -19,12 +20,11 @@ function rootReducer (state, action) {
 
   return appReducer(state, action)
 }
- 
+
 const store = createStore(
   rootReducer,
-  compose(
-    applyMiddleware(thunk),
-    devTools()
+  composeWithDevTools(
+    applyMiddleware(thunk)
   )
 )
 
@@ -35,7 +35,7 @@ export default class RNFashion extends Component {
         <AppContainer/>
       </Provider>
     )
-  } 
+  }
 }
 
 const styles = StyleSheet.create({

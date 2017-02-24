@@ -1,4 +1,9 @@
-import { getBrand,getBrandStream,followBrand as followBrandAPI} from './../../api/api_proxy'
+import {
+  getBrand,
+  getBrandStream,
+  followBrand as followBrandAPI,
+  unfollowBrand as unfollowBrandAPI
+} from './../../api/api_proxy'
 
 const ADD_BRAND = 'ADD_BRAND'
 const SET_CURRENT_BRAND = 'SET_CURRENT_BRAND'
@@ -34,12 +39,20 @@ export function fetchBrand(id){
   }
 }
 
-export function followBrand(id){
+export function unfollowBrand(id){
   return function(dispatch){
-    return followBrandAPI(id).then(function(brand){
+    return unfollowBrandAPI(id).then(function(result){
     })
   }
 }
+
+export function followBrand(id){
+  return function(dispatch){
+    return followBrandAPI(id).then(function(result){
+    })
+  }
+}
+
 
 export function fetchBrandStream(id){
   return function(dispatch){

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { ScrollView, View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, InteractionManager, ListView} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, UserItem, FollowButton, ScaledImage} from './../../components'
-import { fetchUser,fetchUserStream} from './../../redux/modules/users';
+import { fetchUser,fetchUserStream, unfollowUser, followUser, isFollowingUser} from './../../redux/modules/users';
 import { connect } from 'react-redux';
 
 
@@ -148,6 +148,7 @@ class UserProfileContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(fetchUser(this.props.id));
+    this.props.dispatch(isFollowingUser(this.props.id));
     this.props.dispatch(fetchUserStream(this.props.id));
   }
 
@@ -175,6 +176,13 @@ class UserProfileContainer extends Component {
 
   handleFollowing(){
     var isFollowing = this.state.isFollowing;
+    if(isFollowing){
+      // remove the follow
+      this.props.dispatch(unfollowUser(this.props.id));
+    } else {
+      // add the follow
+      this.props.dispatch(followUser(this.props.id));
+    }
     isFollowing = !isFollowing;
     this.setState({
       isFollowing: isFollowing

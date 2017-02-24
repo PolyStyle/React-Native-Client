@@ -87,7 +87,28 @@ export function getBrand(id) {
 
 export function followBrand(id) {
   var self = this;
-  var endpoint = baseUrl + '/followBrand/' +id;
+  var endpoint = baseUrl + '/brands/' +id+ '/follow';
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + AppAuthToken
+    }
+  }).then(function(res) {
+      if(!isSuccess(res.status)){
+        return res.json().then(function(json) {
+          return Promise.reject(json);
+        });
+      }
+      return res.json();
+  })
+};
+
+export function unfollowBrand(id) {
+  var self = this;
+  var endpoint = baseUrl + '/brands/' +id+ '/unfollow';
   return fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -107,6 +128,69 @@ export function followBrand(id) {
 };
 
 
+export function isFollowingUser(id) {
+  var self = this;
+  var endpoint = baseUrl + '/users/' +id + '/follow';
+  return fetch(endpoint, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + AppAuthToken
+    }
+  }).then(function(res) {
+      if(!isSuccess(res.status)){
+        return res.json().then(function(json) {
+          return Promise.reject(json);
+        });
+      }
+      return res.json();
+  })
+};
+
+
+export function followUser(id) {
+  var self = this;
+  var endpoint = baseUrl + '/users/' +id + '/follow';
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + AppAuthToken
+    }
+  }).then(function(res) {
+      if(!isSuccess(res.status)){
+        return res.json().then(function(json) {
+          return Promise.reject(json);
+        });
+      }
+      return res.json();
+  })
+};
+
+export function unfollowUser(id) {
+  var self = this;
+  var endpoint = baseUrl + '/users/' +id + '/unfollow';
+  return fetch(endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + AppAuthToken
+    }
+  }).then(function(res) {
+      if(!isSuccess(res.status)){
+        return res.json().then(function(json) {
+          return Promise.reject(json);
+        });
+      }
+      return res.json();
+  })
+};
 
 
 export function getBrandStream(id) {
