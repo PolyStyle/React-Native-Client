@@ -8,7 +8,6 @@ export default class AppNavigator extends Component {
     isNew: PropTypes.bool.isRequired
   }
 
-  
 
   renderScene = (route, navigator) => {
     
@@ -36,6 +35,10 @@ export default class AppNavigator extends Component {
     return Navigator.SceneConfigs.FloatFromRight
   }
   render () {
+      console.log('-------------');
+  console.log(this.props.isAuthed);
+  console.log(this.props.isNew);
+  console.log('-------------');
     return (
        <View style={{flex: 1}}>
         <Navigator

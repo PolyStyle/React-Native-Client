@@ -45,7 +45,7 @@ class AppContainer extends Component {
         {this.props.isAuthenticating
             ? <PreSplash />
             // TODO FACEBOOK LOGIN REMOVE THE TRUE BOOLEAN VARIABLE FROM isAuthed condition
-            : <AppNavigator isNew={this.props.isNew} isAuthed={this.props.isAuthed} />}
+            : <AppNavigator isNew={this.props.currentUser.isNew} isAuthed={this.props.isAuthed} />}
         {this.props.showFlashNotification === true
           ? <FlashNotification
               permanent={this.props.flashNotificationIsPermanent}
@@ -61,9 +61,9 @@ class AppContainer extends Component {
 function mapStateToProps ({authentication, flashNotification, users}) {
  
   return {
+    currentUser : users.currentUser,
     isAuthenticating: authentication.isAuthenticating,
     isAuthed: authentication.isAuthed,
-    isNew: users.isNew || false,
     flashNotificationIsPermanent: flashNotification.permanent,
     flashNotificationLocation: flashNotification.location,
     flashNotificationText: flashNotification.text,

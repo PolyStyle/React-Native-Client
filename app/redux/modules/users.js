@@ -146,11 +146,11 @@ export function userOnboarded(){
 // this state is for isNew.
 const initialState = {
   currentUser : {
-    isNew: false,
+    isNew: true,
   }
 }
 
-export default function users (state = {}, action) {
+export default function users (state = initialState, action) {
   switch (action.type) {
      case SET_CURRENT_USER_STREAM:
      console.log('+++++')
@@ -202,6 +202,7 @@ export default function users (state = {}, action) {
         ...action.users,
       }
     case USER_ONBOARDED:
+      console.log('ONBOARDED FINISHED')
       return {
         ...state,
         currentUser : {

@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'column',
   },
   header: {
   	width: width,
-  	flex: 1,
   	height: 60,
     justifyContent: 'center',
   	borderColor: '#111111',
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
   },
   footer: {
   	width: width,
-  	flex: 1,
-  	height: 60,
+  	height: 120,
   	borderColor: '#111111',
   	borderTopWidth: 1,
   	alignItems: 'center',
