@@ -3,7 +3,7 @@ import { updateUser, logout, getFriends, getSubscribing } from './../../api/auth
 import { getAccessToken, authWithFacebook } from './../../api/api_proxy'
 import { fetchSettings } from './../../api/settings'
 import { addSettingsTimerDuration, addSettingsRestDuration } from './../../redux/modules/settings'
-import { addUser, subscribing, friends } from './users'
+import { addUser, subscribing, friends, setCurrentUser } from './users'
 
 
 
@@ -82,8 +82,8 @@ export function onAuthChange (user) {
       // I'm now autenticated. Star fatching all the information needed.
       const { id } = user
       // We have a user.
-      dispatch(addUser(id, user));
-
+      dispatch(addUser(user));
+      dispatch(setCurrentUser(user))
       // TODO LOGIN FACEBOOK : COMMENT OUT THE FOLLOWIGN TWO LINES
       //dispatch(subscribing());
       //dispatch(friends());

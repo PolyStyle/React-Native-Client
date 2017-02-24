@@ -15,18 +15,18 @@ const ADD_USER = 'ADD_USER'
 const ADD_MULTIPLE_USERS = 'ADD_MULTIPLE_USERS'
 const USER_ONBOARDED = 'USER_ONBOARDED'
 const UPDATE_FRIENDS = 'UPDATE_FRIENDS'
-const UPDATE_SUBSCRIBING = 'UPDATE_SUBSCRIBING'
 
 const SET_CURRENT_USER = 'SET_CURRENT_USER'
 const SET_CURRENT_USER_STREAM = 'SET_CURRENT_USER_STREAM'
 const ADD_USER_STREAM = 'ADD_USER_STREAM'
 
+const UPDATE_IS_FOLLOW = 'UPDATE_IS_FOLLOW'
 
 
 export function fetchUser(id){
   return function(dispatch){
     return getUser(id).then(function(user){
-      dispatch(setCurrentUser(user))
+      dispatch(addUser(user))
     })
   }
 }
@@ -54,24 +54,35 @@ function setCurrentUserStream(userStream) {
 }
 
 
-function setCurrentUser( user ) {
+export function setCurrentUser( user ) {
   return {
     type: SET_CURRENT_USER,
     user: user
   }
 }
 
-export function addUser(id, user) {
+function updateIsFollowing( id, isFollowing) {
+  return {
+    type: UPDATE_IS_FOLLOW,
+    id,
+    isFollowing
+  }
+}
+
+export function addUser(user) {
   return {
     type: ADD_USER,
-    id,
     user,
   }
 }
 
+
 export function unfollowUser(id){
   return function(dispatch){
     return unfollowUserAPI(id).then(function(result){
+      if(result){
+        dispatch(updateIsFollowing(id, false));
+      }
       return result;
     })
   }
@@ -80,6 +91,10 @@ export function unfollowUser(id){
 export function followUser(id){
   return function(dispatch){
     return followUserAPI(id).then(function(result){
+      // TODO IMPROVE THE QUALITY OF THE RESPONSE (CHECK IF IT DOES ACTUALLY CHANGED)
+      if(result){
+        dispatch(updateIsFollowing(id, true));
+      }
       return result;
     })
   }
@@ -88,7 +103,12 @@ export function followUser(id){
 export function isFollowingUser(id){
   return function(dispatch){
     return isFollowingUserAPI(id).then(function(result){
-      return result;
+      console.log('UPDATE IS FOLLOW');
+      console.log(result)
+      if(result){
+        dispatch(updateIsFollowing(id, true));
+      }
+
     })
   }
 }
@@ -99,12 +119,7 @@ function updateFriends(friends){
     friends
   }
 }
-function updateSubscribing(subscribing){
-  return {
-    type: UPDATE_SUBSCRIBING,
-    subscribing
-  }
-}
+
 
 export function friends(){
   return  function (dispatch) {
@@ -115,14 +130,6 @@ export function friends(){
   }
 }
 
-export function subscribing(){
-  return function (dispatch) {
-    return getSubscribing()
-      .then(function(subscribing){
-        dispatch(updateSubscribing(subscribing));
-      })
-  }
-}
 
 export function addMultipleUsers (users) {
   return {
@@ -138,7 +145,9 @@ export function userOnboarded(){
 
 // this state is for isNew.
 const initialState = {
-  isNew: false,
+  currentUser : {
+    isNew: false,
+  }
 }
 
 export default function users (state = {}, action) {
@@ -157,28 +166,35 @@ export default function users (state = {}, action) {
         ...state,
         userStreams: [action.userStream]
       }
+    case UPDATE_IS_FOLLOW:
+      console.log('update the state');
+      console.log(state[action.id]);
+      return {
+        ...state,
+        [action.id] : {
+          ...state[action.id],
+          isFollowing: action.isFollowing
+        }
+      }
     case SET_CURRENT_USER:
       return {
         ...state,
-        currentUser: action.user,
-        [action.user.id]: action.user,
+        currentUser: {
+          ...state.currentUser,
+          ...action.user,
+        }
       }
     case UPDATE_FRIENDS:
       return {
         ...state,
         friends: action.friends
       }
-    case UPDATE_SUBSCRIBING:{
-      return {
-        ...state,
-        subscribing: action.subscribing
-      }
-    }
     case ADD_USER :
       return {
         ...state,
-        [action.id]: action.user,
-        isNew: false,
+        [action.user.id]: {
+          ...state[action.user.id],
+          ...action.user},
       }
     case ADD_MULTIPLE_USERS :
       return {
@@ -188,7 +204,10 @@ export default function users (state = {}, action) {
     case USER_ONBOARDED:
       return {
         ...state,
-        isNew: false
+        currentUser : {
+          ...state.currentUser,
+          isNew: false,
+        }
       }
     default :
       return state

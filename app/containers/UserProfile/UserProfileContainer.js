@@ -175,7 +175,7 @@ class UserProfileContainer extends Component {
   }
 
   handleFollowing(){
-    var isFollowing = this.state.isFollowing;
+    var isFollowing = this.props.users[this.props.id].isFollowing;
     if(isFollowing){
       // remove the follow
       this.props.dispatch(unfollowUser(this.props.id));
@@ -183,14 +183,10 @@ class UserProfileContainer extends Component {
       // add the follow
       this.props.dispatch(followUser(this.props.id));
     }
-    isFollowing = !isFollowing;
-    this.setState({
-      isFollowing: isFollowing
-    })
   }
 
   _renderHeader(){
-    if(!this.props.user){
+    if(!this.props.users[this.props.id]){
       return (<View />);
     }
     return (
@@ -198,12 +194,15 @@ class UserProfileContainer extends Component {
         <View style={styles.avatarContainer} >
           <ScaledImage
             styles={styles.avatar}
-            id={this.props.user.ImageId}
+            id={this.props.users[this.props.id].ImageId}
             width={150}
           />
           </View>
                 <View style={styles.followUser}>
-          <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
+          {this.props.users.currentUser.id != this.props.id &&
+            <FollowButton
+              cta={"Following"} active={this.props.users[this.props.id].isFollowing}
+              onPress={this.handleFollowing.bind(this)} /> }
           </View>
       </View>
     )
@@ -211,7 +210,7 @@ class UserProfileContainer extends Component {
 
   _renderSectionHeader(){
 
-    if(!this.props.user){
+    if(!this.props.users[this.props.id]){
       return (<View />);
     }
     return (
@@ -227,7 +226,7 @@ class UserProfileContainer extends Component {
           <View style={styles.productViewItem}>
             <ScaledImage
               styles={styles.roundedProduct}
-              id={this.props.user.ImageId}
+              id={this.props.users[this.props.id].ImageId}
               width={100}
             />
             <Text style={styles.productText}> Last Week Likes </Text>
@@ -240,7 +239,7 @@ class UserProfileContainer extends Component {
   }
 
   render() {
-    if( this.props.user && this.state.dataSource){
+    if(this.props.users[this.props.id] && this.state.dataSource){
     return (
         <ListView
           renderHeader={this._renderHeader.bind(this)}
@@ -257,7 +256,7 @@ class UserProfileContainer extends Component {
 }
 function mapStateToProps ({users}) {
   return {
-    user: users.currentUser,
+    users: users,
     userStream: users.currentUserStream
   }
 }

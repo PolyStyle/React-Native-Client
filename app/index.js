@@ -21,9 +21,9 @@ function rootReducer (state, action) {
   return appReducer(state, action)
 }
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
+
     applyMiddleware(thunk)
   )
 )
