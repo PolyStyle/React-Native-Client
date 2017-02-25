@@ -10,6 +10,9 @@ import devTools from 'remote-redux-devtools'
 import { LOGGING_OUT } from './redux/modules/authentication'
 import { USER_ONBOARDED } from './redux/modules/users'
 import { composeWithDevTools } from 'remote-redux-devtools';
+import {persistStore, autoRehydrate} from 'redux-persist'
+import {AsyncStorage} from 'react-native'
+
 
 const appReducer = reducers
 
@@ -23,10 +26,15 @@ function rootReducer (state, action) {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
-
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
+    autoRehydrate()
   )
 )
+
+
+persistStore(store, {storage: AsyncStorage}, () => {
+  console.log('++++ RESTORED STORE ++++')
+})
 
 export default class RNFashion extends Component {
   render(){

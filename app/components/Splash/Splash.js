@@ -13,7 +13,7 @@ export default function Splash (props) {
     <View style={styles.container}>
       <View style={styles.backgroundColorContainer}>  
         <View>
-          <Image style={styles.image} source={require('../../images/logoType.jpg')} />
+          <Image style={styles.image} source={require('../../images/logoType.png')} />
         </View>
         <View style={styles.loginContainer}>
           <LoginButton

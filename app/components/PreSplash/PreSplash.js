@@ -11,7 +11,7 @@ export default class PreSplash extends Component {
       <View style={styles.container}>
         <Image
           style={[styles.image]}
-          source={require('../../images/logoType.jpg')} />
+          source={require('../../images/logoType.png')} />
       </View>
     )
   }
