@@ -182,6 +182,7 @@ export default function users (state = initialState, action) {
         currentUser: {
           ...state.currentUser,
           ...action.user,
+          isNew: action.user.createdAt === action.user.updatedAt
         }
       }
     case UPDATE_FRIENDS:
