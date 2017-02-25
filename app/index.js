@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
 import { AppContainer } from './containers'
-
+import { PreSplash } from './components'
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
@@ -31,18 +31,37 @@ const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
   )
 )
 
-
-persistStore(store, {storage: AsyncStorage}, () => {
-  console.log('++++ RESTORED STORE ++++')
-})
-
 export default class RNFashion extends Component {
+   constructor(props) {
+    super(props)
+    this.state = {
+      restoredPersistentStore: false
+    }
+  }
+
+  componentDidMount () {
+      console.log('Component Mounted');
+      _self = this;
+      var persistor = persistStore(store, {storage: AsyncStorage}, () => {
+        console.log('Rehydrated');
+        this.setState({
+          restoredPersistentStore: true
+        })
+    
+    }).purge()
+  }
+
   render(){
-    return (
-      <Provider store={store}>
-        <AppContainer/>
-      </Provider>
-    )
+    if(this.state.restoredPersistentStore){
+      return (
+        <Provider store={store}>
+          <AppContainer/>
+        </Provider>
+      )
+    } else {
+      return(<PreSplash/>)
+    }
+    
   }
 }
 

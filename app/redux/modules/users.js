@@ -56,9 +56,10 @@ function setCurrentUserStream(userStream) {
 
 
 export function setCurrentUser( user ) {
+  console.log('SEt current user', user)
   return {
     type: SET_CURRENT_USER,
-    user: user
+    user
   }
 }
 
@@ -71,6 +72,7 @@ function updateIsFollowing( id, isFollowing) {
 }
 
 export function addUser(user) {
+  console.log('ADD USER ', user);
   return {
     type: ADD_USER,
     user,
@@ -153,16 +155,7 @@ const initialState = {
 
 export default function users (state = initialState, action) {
   switch (action.type) {
-    case REHYDRATE:
-      console.log('RECEIVED REHYDRATE FROM user')
-      var incoming = action.payload.myReducer
-       console.log(incoming)
-      if (incoming) return {...state, ...incoming, specialKey: processSpecial(incoming.specialKey)}
-
-      return state
      case SET_CURRENT_USER_STREAM:
-     console.log('+++++')
-     console.log(action.userStream);
       return {
         ...state,
         currentUserStream: action.userStream
@@ -185,7 +178,6 @@ export default function users (state = initialState, action) {
         }
       }
     case SET_CURRENT_USER:
-      console.log(action.user.createdAt,action.user.updatedAt)
       return {
         ...state,
         currentUser: {

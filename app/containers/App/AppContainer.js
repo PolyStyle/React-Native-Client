@@ -26,11 +26,39 @@ class AppContainer extends Component {
     // on bootstrap try to handle an automatic authentication
     // for the time being is handling the case of being logged in with Facebook
     // and the session is still available (no need to go through the auth process)
-    
-    // TODO FACEBOOK LOGIN : ADD THE FOLLOWING LINE BACK
-    this.props.dispatch(handleAuthRemotely())
-    // TODO FACEBOOK LOGIN : REMOVE THE FOLLOWING DISPATCH
-    // this.props.dispatch(onAuthChange({id: 0}))
+
+    // IMPORTANT: by the time this component is loaded, you have a rehydrated reducer with whatever
+    // Was saved in the local storage
+
+    // now the options are:
+    // A: there is no user.currentUser.accessToken. I need to go through the standard authentication process.
+    // B: there is a user.currentUser.accessToken. I don't need to login.
+
+
+    // in case of A the expectations are:
+    // authentication.isAuthed = false
+    // authentication.isAuthenticating = false
+    // currentUser = null
+
+
+    // in case of B, the expectations are that the store looks like
+    // authentication.isAuthenticating = false
+    // authentication.isAuthed = true
+    // I can therefore either decide to go through onboarding, if currentUser.isNew, or straight to the app.
+
+
+    // TODO: verify that accessToken is not empty
+    console.log('+++ app mounted info +++')
+    console.log(this.props.currentUser)
+    if(this.props.currentUser && this.props.currentUser.accessToken && this.props.currentUser.accessToken.accessToken){
+      // CASE B. All's good ... move on
+    } else {
+
+      //  I don't need this, yet.
+      // this.props.dispatch(handleAuthRemotely())
+    }
+    // START HANDLING OUT REMOTELY
+
 
   }
   handleHideNotification = () => {
@@ -42,10 +70,10 @@ class AppContainer extends Component {
         <StatusBar
           hidden={true}
         />
-        {this.props.isAuthenticating
-            ? <PreSplash />
-            // TODO FACEBOOK LOGIN REMOVE THE TRUE BOOLEAN VARIABLE FROM isAuthed condition
-            : <AppNavigator isNew={this.props.currentUser.isNew} isAuthed={this.props.isAuthed} />}
+        <AppNavigator 
+          isNew={this.props.currentUser.isNew} 
+          isAuthed={this.props.isAuthed} 
+        />
         {this.props.showFlashNotification === true
           ? <FlashNotification
               permanent={this.props.flashNotificationIsPermanent}

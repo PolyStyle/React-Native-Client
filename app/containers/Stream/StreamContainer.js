@@ -76,7 +76,7 @@ class StreamContainer extends Component {
                routeMapper={NavigationBarRouteMapper} />} 
 
 
-          initialRoute={{ title: 'Stream', name: 'Stream', index: 0 }}
+          initialRoute={{ title: 'Feed', name: 'Stream', index: 0 }}
           renderScene={(route, navigator) => {
             if(route.name == 'Stream'){
               return (  

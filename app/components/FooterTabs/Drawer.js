@@ -18,7 +18,7 @@ export default function Drawer (props) {
     <View style={styles.container}>
       <DrawerHeader />
       <DrawerTab
-        title='Stream'
+        title='Feed'
         selected={props.activeFooterTab === 'stream'}
         onPress={() => {
           props.onTabSelect('stream')

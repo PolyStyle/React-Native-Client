@@ -1,4 +1,4 @@
-import Splash from './Splash/Splash'
+import LogIn from './LogIn/LogIn'
 import PreSplash from './PreSplash/PreSplash'
 import FooterTabs from './FooterTabs/FooterTabs'
 import Home from './Home/Home'
@@ -33,7 +33,7 @@ import UserItem from './Stream/UserItem'
 import ScaledImage from './ScaledImage/ScaledImage'
 
 export {
-	Splash,
+	LogIn,
 	PreSplash,
 	FooterTabs,
 	Home,

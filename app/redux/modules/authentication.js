@@ -4,7 +4,7 @@ import { getAccessToken, authWithFacebook } from './../../api/api_proxy'
 import { fetchSettings } from './../../api/settings'
 import { addSettingsTimerDuration, addSettingsRestDuration } from './../../redux/modules/settings'
 import { addUser, subscribing, friends, setCurrentUser } from './users'
-
+import {REHYDRATE} from 'redux-persist/constants'
 
 
 const AUTHENTICATING = 'AUTHENTICATING'
@@ -39,19 +39,22 @@ function loggingOut () {
   }
 }
 
+export function facebookToken() {
+  return getAccessToken()
+}
 
-export function handleAuthRemotely () {
+export function handleAuthRemotely() {
   console.log('login');
   return function (dispatch, getState) {
     dispatch(authenticating())
-    return getAccessToken()
+    return facebookToken()
       .then(function (accessToken) {
         console.log('promised resolve, access token, ',accessToken);
         if(accessToken){
           // I have an access token
           var authResults = authWithFacebook(accessToken.accessToken);
           console.log('AUTH RESULTS');
-
+          console.log(authResults)
          authResults.then((responseJson) => {
             console.log('JSON RESPONSE', responseJson);
             return responseJson
@@ -102,12 +105,19 @@ export function handleUnauth () {
 
 const initialState = {
   isAuthed: false,
-  isAuthenticating: false,
+  isAuthenticating: true,
   id: -1,
 }
 
 export default function authentication (state = initialState, action) {
   switch (action.type) {
+    case REHYDRATE:
+      var incoming = action.payload.authentication
+      if (incoming) return {
+        ...state, 
+        ...incoming, 
+      }
+      return state;
     case AUTHENTICATING :
       return {
         ...state,
