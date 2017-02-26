@@ -23,18 +23,13 @@ class ScaledImage extends Component {
   }
 
   componentDidMount() {
-        this.setState({
-          debug: this.state.debug + ' DM{'+this.props.id+','+this.props.width+'}'
-        });
     if (this.props.id && this.props.width) {
       this.renderImage(this.props);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-          debug: this.state.debug + ' RP:{'+nextProps.id+','+nextProps.width+'}'
-        });
+
     if (nextProps.id && nextProps.width) {
       if (nextProps.id !== this.props.id) {
         this.renderImage(nextProps);
@@ -45,17 +40,11 @@ class ScaledImage extends Component {
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
     const url = 'http://104.155.46.72/api/v1/images/' + props.id +'/' + postRetinaWidth ;
-    console.log(url);
     const self = this;
-        this.setState({
-          debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
-        });
+
     fetch(url,{method: 'GET'}).then((response) => {
-      console.log('response')
-      console.log(response);
-        self.setState({
-          debug: this.state.debug + ' RES{'+props.id+','+props.width+'}'
-        });
+
+
         return response.json()
         }
       )

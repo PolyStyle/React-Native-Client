@@ -4,7 +4,7 @@ var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
 // var baseUrl = 'https://104.155.46.72/api/v1'
-var baseUrl = 'http://104.155.46.72/api/v1'
+var baseUrl = 'http://127.0.0.1:3000'
 
 var AppAuthToken = null;
 
@@ -58,9 +58,77 @@ export function getPost(id) {
         // ADD THIS THROW error
         throw error;
     });
-
 };
 
+// LIKE POSTS
+
+export function hasLikedPost(id) {
+    console.log('GET LIKE  LIKE POST')
+    console.log(AppAuthToken);
+    var self = this;
+    var endpoint = baseUrl + '/posts/' + id + '/like';
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+
+export function likePost(id) {
+    console.log('CALLING LIKE POST')
+    console.log(AppAuthToken);
+    var self = this;
+    var endpoint = baseUrl + '/posts/' + id + '/like';
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+export function unlikePost(id) {
+    var self = this;
+    var endpoint = baseUrl + '/posts/' + id + '/unlike';
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
 
 export function getBrand(id) {
     var self = this;
@@ -214,6 +282,10 @@ export function unfollowUser(id) {
         return res.json();
     })
 };
+
+
+
+
 
 
 export function getBrandStream(id) {

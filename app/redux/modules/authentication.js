@@ -55,7 +55,7 @@ export function handleAuthRemotely() {
           var authResults = authWithFacebook(accessToken.accessToken);
           console.log('AUTH RESULTS');
           console.log(authResults)
-         authResults.then((responseJson) => {
+         return authResults.then((responseJson) => {
             console.log('JSON RESPONSE', responseJson);
             return responseJson
         }).catch(function(error) {
@@ -76,7 +76,7 @@ export function handleAuthRemotely() {
 
 
 
-export function onAuthChange (user) {
+export function onAuthChange(user) {
   console.log('RECEIVED USER', user);
   return function (dispatch) {
     if (!user) {
@@ -90,7 +90,6 @@ export function onAuthChange (user) {
       // TODO LOGIN FACEBOOK : COMMENT OUT THE FOLLOWIGN TWO LINES
       //dispatch(subscribing());
       //dispatch(friends());
-
       dispatch(isAuthed(id));
     }
   }
@@ -114,8 +113,9 @@ export default function authentication (state = initialState, action) {
     case REHYDRATE:
       var incoming = action.payload.authentication
       if (incoming) return {
-        ...state, 
-        ...incoming, 
+        ...state,
+        ...incoming,
+        isAuthed: false, //ALWAYS START WITH THE ASSUMPTION THIS IS FALSE
       }
       return state;
     case AUTHENTICATING :

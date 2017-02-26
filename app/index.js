@@ -47,7 +47,7 @@ export default class RNFashion extends Component {
         this.setState({
           restoredPersistentStore: true
         })
-    
+
     })
   }
 
@@ -61,7 +61,7 @@ export default class RNFashion extends Component {
     } else {
       return(<PreSplash/>)
     }
-    
+
   }
 }
 

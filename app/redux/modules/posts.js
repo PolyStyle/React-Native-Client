@@ -1,9 +1,16 @@
-import { getPosts,getPost } from './../../api/api_proxy'
+import {
+  getPosts,
+  getPost,
+  hasLikedPost as hasLikedPostAPI,
+  likePost as likePostAPI,
+  unlikePost as unlikePostAPI
+} from './../../api/api_proxy'
 
 const ADD_POST = 'ADD_POST'
 const ADD_POSTS = 'ADD_POSTS'
 const IS_FATCHING = 'IS_FATCHING'
 const SET_CURRENT_POST = 'SET_CURRENT_POST'
+const UPDATE_POST_LIKE = 'UPDATE_POST_LIKE'
 
 function addPost( post ) {
   return {
@@ -46,10 +53,47 @@ export function fetchPost(id){
       console.log('POST REDUX ')
       console.log(post)
       dispatch(addPost(post))
-      dispatch(setCurrentPost(post))
     })
   }
 }
+
+export function hasLikedPost(id){
+  return function(dispatch){
+    return hasLikedPostAPI(id).then(function(result){
+
+      if(result){
+        dispatch(updateIsLiking(id, true));
+      } else {
+        dispatch(updateIsLiking(id, false));
+      }
+    })
+  }
+}
+
+export function likePost(id){
+  return function(dispatch){
+    return likePostAPI(id).then(function(result){
+      dispatch(updateIsLiking(id, true));
+    })
+  }
+}
+
+export function unlikePost(id){
+  return function(dispatch){
+    return unlikePostAPI(id).then(function(result){
+      dispatch(updateIsLiking(id, false));
+    })
+  }
+}
+
+function updateIsLiking( id, isLiking) {
+  return {
+    type: UPDATE_POST_LIKE,
+    id,
+    isLiking
+  }
+}
+
 
 
 const initialState = {
@@ -60,10 +104,29 @@ const initialState = {
 export default function posts (state = initialState, action) {
   switch (action.type) {
     case ADD_POST:
+      console.log('TRYING TO ADD A SINGLE POST ' ,action.post)
+      var posts = [];
+      posts[action.post.id] = action.post;
+
       return {
         ...state,
         isFetching: false,
-        // posts: [action.post]
+        posts: {
+          ...state.posts,
+          ...posts
+        }
+      }
+    case UPDATE_POST_LIKE:
+      console.log('redux updates ', action.id, action.isLiking)
+      return {
+        ...state,
+        posts : {
+          ...state.posts,
+          [action.id] : {
+            ...state.posts[action.id],
+            isLiking: action.isLiking
+          }
+        }
       }
     case SET_CURRENT_POST:
       return {
@@ -72,10 +135,19 @@ export default function posts (state = initialState, action) {
         currentPost: action.post
       }
     case ADD_POSTS :
+      // TODO REWRITE THIS WITH A MAP
+      var posts = [];
+      for (var i =0; i< action.posts.length; i++) {
+        posts[action.posts[i].id] = action.posts[i];
+      }
       return {
         ...state,
         isFetching: false,
-        posts: action.posts
+        posts : {
+          ...state.posts,
+          ...posts
+        }
+
       }
     case IS_FATCHING:
       return {

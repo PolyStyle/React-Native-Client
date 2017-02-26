@@ -1,6 +1,9 @@
 import React, { PropTypes, Component } from 'react'
+import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
+
+import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -37,13 +40,13 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 50,
     width: 50,
     borderRadius: 25
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -57,10 +60,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   avatarContainer: {
-    
+
     right: 5,
     top: 5,
-    position: 'absolute' 
+    position: 'absolute'
   },
   tagList:{
     marginTop: 8,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
   tagTitle: {
     fontSize: 12
   }
- 
+
 });
 
 
@@ -82,25 +85,33 @@ class Item extends Component {
   }
   constructor (props) {
     super(props)
-    this.state = {
-      active: props.active,
-    }
   }
   componentDidMount() {
-    // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
-    // TODO THIS IS TOOO TIME CONSUMING. 
+      this.props.dispatch(fetchPost(this.props.id));
+      this.props.dispatch(hasLikedPost(this.props.id));
   }
 
-  onPress = () =>{ 
+  onPress = () =>{
     const newState = !this.state.active;
     this.setState({
           active: newState
         }, function(){
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
 
   });
+  }
+
+  likePost(){
+    var isLiking = this.props.posts[this.props.id].isLiking;
+    if(isLiking){
+      // remove the follow
+      this.props.dispatch(unlikePost(this.props.id));
+    } else {
+      // add the follow
+      this.props.dispatch(likePost(this.props.id));
+    }
   }
 
   _navigateToPost(){
@@ -159,48 +170,69 @@ updatedAt:"2016-12-25T20:26:19.000Z"
 
 */
   render(){
-    return (
-      <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-        <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
-          <ScaledImage 
-            id={this.props.ImageId}
-            width={width}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
-          <View style={styles.avatarContainerView}>
-              <Text style={styles.avatarName}> {this.props.User.firstName} {this.props.User.lastName} </Text>
-              <ScaledImage
-                styles={styles.avatar}
-                id={this.props.User.ImageId}
-                width={50}
-              />
+    if(this.props.id && this.props.posts[this.props.id].User) {
+      const currentPost = this.props.posts[this.props.id];
+
+      console.log('trying to render',this.props.id)
+      return (
+        <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
+          <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
+            <ScaledImage
+              id={currentPost.ImageId}
+              width={width}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
+            <View style={styles.avatarContainerView}>
+                <Text style={styles.avatarName}>
+                  {currentPost.User.firstName}
+                  {currentPost.User.lastName}
+                </Text>
+                <ScaledImage
+                  styles={styles.avatar}
+                  id={currentPost.User.ImageId}
+                  width={50}
+                />
+            </View>
+          </TouchableOpacity>
+         <View style={styles.descriptions}>
+          <View style={styles.iconContainer}>
+            <Heart active={currentPost.isLiking} style={styles.heartIcon} onPress={this.likePost.bind(this)}/>
+            <MoreDots style={styles.addIcon} onPress={this.onPress.bind(this)}/>
           </View>
-        </TouchableOpacity>
-       <View style={styles.descriptions}>
-        <View style={styles.iconContainer}>
-          <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>
-          <MoreDots style={styles.addIcon} onPress={this.onPress.bind(this)}/>
+          <View style={styles.separationLine} />
+          <Text style={styles.descriptionText}>{currentPost.description}</Text>
+          {currentPost.Tags.length > 0 && <View style={styles.tagList}>
+            <Text style={styles.tagTitle}>Tags: </Text>
+            {currentPost.Tags.map(function(object, i){
+                  return <TagLabel onPress={this._navigateToCollection.bind(this, object)} description={object.displayName} key={i}/>
+            }, this)}
+          </View>}
+          {currentPost.Brands.length > 0 &&<View style={styles.tagList}>
+            <Text style={styles.tagTitle}>Brands: </Text>
+            {currentPost.Brands.map(function(object, i){
+                  return <TagLabel onPress={this._navigateToBrand.bind(this, object)} description={object.displayName} key={i} />
+            }, this)}
+          </View>
+        }
+         </View>
         </View>
-        <View style={styles.separationLine} />
-        <Text style={styles.descriptionText}>{this.props.description}</Text>
-        {this.props.Tags.length > 0 && <View style={styles.tagList}>
-          <Text style={styles.tagTitle}>Tags: </Text>
-          {this.props.Tags.map(function(object, i){
-                return <TagLabel onPress={this._navigateToCollection.bind(this, object)} description={object.displayName} key={i}/>
-          }, this)}
-        </View>} 
-        {this.props.Brands.length > 0 &&<View style={styles.tagList}>
-          <Text style={styles.tagTitle}>Brands: </Text>
-          {this.props.Brands.map(function(object, i){
-                return <TagLabel onPress={this._navigateToBrand.bind(this, object)} description={object.displayName} key={i} /> 
-          }, this)}
-        </View>
-      }
-       </View>
-      </View>
-    )
+      )
+    } else {
+      return (<View />)
+    }
   }
 }
 
-export default Item
+
+
+function mapStateToProps ({posts}) {
+  return {
+    posts: posts.posts
+  }
+}
+
+
+export default connect(mapStateToProps)(Item)
+
+

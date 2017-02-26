@@ -1,34 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { View, ListView, StyleSheet, Text, BackAndroid } from 'react-native';
+import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
 import Item from './Item';
 
+import { fetchAllPosts } from './../../redux/modules/posts'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000'
+    backgroundColor: '#ffffff'
   },
 });
 
 class StreamListView extends React.Component {
 
-   
+
 
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-     
-
     this.state = {
-      dataSource: ds.cloneWithRows(this.props.posts),
+      dataSource: null,
     };
-  
+
   }
+
 
   componentDidMount() {
         BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-    }
+  }
 
     componentWillUnmount() {
         BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
@@ -45,38 +44,63 @@ class StreamListView extends React.Component {
     }
 
 
- 
-  componentDidUpdate(props){
+  orderByTimeDesc(a,b) {
+    if (a.createdAt < b.createdAt)
+      return 1;
+    if (a.createdAt > b.createdAt)
+      return -1;
+    return 0;
+  }
+
+  componentDidMount(props){
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const newDataStore = ds.cloneWithRows(this.props.posts);
+    var dataList = [];
+    console.log('FOR OFFFF')
+    console.log(this.props.posts);
+    // ORDER BY createdAT
+    for (var key in this.props.posts) {
+      dataList.push(this.props.posts[key])
+    }
+    dataList = dataList.sort(this.orderByTimeDesc)
+    // NOW THE DATA IS ORDER
+    const newDataStore = ds.cloneWithRows(dataList);
+    console.log(newDataStore);
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
-    if(this.state.dataSource._cachedRowCount !=  newDataStore._cachedRowCount){
+
+    if(!this.state.dataSource || this.state.dataSource._cachedRowCount !=  newDataStore._cachedRowCount){
+      console.log('I NEED TO RE RENDER')
       this.setState({
         dataSource: newDataStore,
       });
     }
-     
-  } 
+
+  }
   handlerSelection(id,active){
     //this.props.handlerSelection(id,active);
   }
 
 
   render() {
-    return ( 
-      <ListView 
-        removeClippedSubviews={true} 
+    if(!this.state.dataSource){
+      return(<View />)
+    }
+    return (
+      <ListView
+
+        removeClippedSubviews={true}
         style={styles.container}
+        enableEmptySections={true}
         dataSource={this.state.dataSource}
         renderRow={(data) => <Item navigator={this.props.navigator} {...data} active={false} onPress={this.handlerSelection.bind(this)} />}
-      /> 
+      />
     );
   }
 }
 
 function mapStateToProps ({posts}) {
-  return { 
-    posts: posts.posts,
+  console.log(posts)
+  return {
+    posts: posts.posts
   }
 }
 

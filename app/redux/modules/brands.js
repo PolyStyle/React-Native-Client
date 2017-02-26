@@ -41,6 +41,19 @@ export function fetchBrand(id){
   }
 }
 
+export function isFollowingBrand(id){
+  return function(dispatch){
+    return isFollowingBrandAPI(id).then(function(result){
+
+      if(result){
+        dispatch(updateIsFollowing(id, true));
+      } else {
+        dispatch(updateIsFollowing(id, false));
+      }
+    })
+  }
+}
+
 export function unfollowBrand(id){
   return function(dispatch){
     return unfollowBrandAPI(id).then(function(result){
@@ -57,18 +70,6 @@ export function followBrand(id){
   }
 }
 
-export function isFollowingBrand(id){
-  return function(dispatch){
-    return isFollowingBrandAPI(id).then(function(result){
-
-      if(result){
-        dispatch(updateIsFollowing(id, true));
-      }
-    })
-  }
-}
-
-
 export function fetchBrandStream(id){
   return function(dispatch){
     return getBrandStream(id).then(function(brandStream){
@@ -77,8 +78,6 @@ export function fetchBrandStream(id){
     })
   }
 }
-
-
 
 function setCurrentBrand( brand ) {
   return {
