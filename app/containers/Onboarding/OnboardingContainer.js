@@ -37,7 +37,7 @@ class OnboardingContainer extends Component {
     		<View style={styles.header}>
     			{this.state.needed > 0 &&
     				<Text style={{fontFamily: 'AvenirNext-Bold'}}> Select {this.state.needed} more categor{this.state.needed == 1 ? 'y' : 'ies'}</Text>
-    				|| 
+    				||
     				<Text style={{fontFamily: 'AvenirNext-Bold'}}> Add more categories, press Next when done</Text>
     			}
     		</View>
@@ -62,16 +62,16 @@ const styles = StyleSheet.create({
   },
   header: {
   	width: width,
-  	height: 60,
+  	height: 50,
     justifyContent: 'center',
   	borderColor: '#111111',
-  	borderBottomWidth: 1,    
+  	borderBottomWidth: 1,
   	alignItems: 'center',
     justifyContent: 'center',
   },
   footer: {
   	width: width,
-  	height: 120,
+  	height: 80,
   	borderColor: '#111111',
   	borderTopWidth: 1,
   	alignItems: 'center',
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   categoriesList: {
   	flex: 1,
   	width: width,
-    height: height-120,
+    height: height-100,
   }
 })
 

@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 import { Text, Image, View, Dimensions, PixelRatio } from 'react-native'
+import FadeInImage  from './FadeInImage'
 const { height,width } = Dimensions.get('window');
+
 
 class ScaledImage extends Component {
   constructor(props) {
@@ -42,12 +44,15 @@ class ScaledImage extends Component {
 
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
-    const url = 'http://192.168.0.5:3000/images/' + props.id +'/' + postRetinaWidth ;
+    const url = 'http://104.155.46.72/api/v1/images/' + props.id +'/' + postRetinaWidth ;
+    console.log(url);
     const self = this;
         this.setState({
           debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
         });
     fetch(url,{method: 'GET'}).then((response) => {
+      console.log('response')
+      console.log(response);
         self.setState({
           debug: this.state.debug + ' RES{'+props.id+','+props.width+'}'
         });
@@ -65,7 +70,9 @@ class ScaledImage extends Component {
           height: props.width*pictureRatio,
           debug: this.state.debug + ' RV '
         });
-      })
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 
 
@@ -75,15 +82,16 @@ class ScaledImage extends Component {
   render() {
     if(this.state.url){
       return (
-          <Image
+          <FadeInImage
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
             style={[{'width': this.state.width, 'height': this.state.height},this.props.styles]}
             source={{uri:this.state.url}}
           />
       );
+    } else {
+      return(<View/>)
     }
-    return (<Text style={{color: '#ffffff'}}>Loading {this.props.width} {this.props.id} {this.state.debug}</Text>)
   }
 }
 

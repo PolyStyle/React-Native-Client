@@ -49,7 +49,7 @@ class StreamContainer extends Component {
                 onPress={() => { if (index > 0) { navigator.pop() } }}>
               <Text style={ styles.leftNavButtonText }>Back</Text>
             </TouchableHighlight>
-        )} 
+        )}
         else { return null }
       },
       RightButton(route, navigator, index, navState) {
@@ -61,7 +61,7 @@ class StreamContainer extends Component {
                                   </TouchableHighlight> )
       },
       Title(route, navigator, index, navState) {
-        return <Text style={ styles.textTitle }>{route.title}</Text>
+        return <View style={styles.titleHolder}><Text style={ styles.textTitle }>{route.title}</Text></View>
       }
     };
 
@@ -71,15 +71,15 @@ class StreamContainer extends Component {
         <Navigator
 
           navigationBar={
-             <Navigator.NavigationBar 
-               style={ styles.header } 
-               routeMapper={NavigationBarRouteMapper} />} 
+             <Navigator.NavigationBar
+               style={ styles.header }
+               routeMapper={NavigationBarRouteMapper} />}
 
 
           initialRoute={{ title: 'Feed', name: 'Stream', index: 0 }}
           renderScene={(route, navigator) => {
             if(route.name == 'Stream'){
-              return (  
+              return (
                 <View style={styles.categoriesList}>
                   <StreamListView navigator={navigator}  handlerSelection={this.handlerSelection.bind(this)}/>
                 </View>
@@ -122,7 +122,7 @@ class StreamContainer extends Component {
             }
           }}
            />
-        
+
         </View>
     )
   }
@@ -145,15 +145,20 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginLeft: 10
   },
+  titleHolder: {
+    //backgroundColor: '#00ffcc',
+    width: width-140,
+    alignItems: 'center'
+  },
   textTitle: {
       marginTop: (Platform.OS === 'android' ? 15 : 0),
-      fontSize: (Platform.OS === 'android' ? 19 : 17),
-      fontFamily: 'AvenirNextLTW01BoldRegular',
+      fontSize: (Platform.OS === 'android' ? 18 : 17),
+      fontFamily: (Platform.OS === 'android' ? 'AvenirNextLTW01RegularRegular' :'AvenirNextLTW01BoldRegular'),
       color: '#000000'
   },
   header: {
       width: width,
-      height: (Platform.OS === 'android' ? 60 : 60),
+      height: 60,
       borderColor: '#000000',
       borderBottomWidth: 1,
 
@@ -178,7 +183,7 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps ({posts}) {
-  return { 
+  return {
     posts: posts.posts,
   }
 }
