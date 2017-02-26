@@ -95,16 +95,16 @@ class BrandContainer extends Component{
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      
+
       this.props.dispatch(fetchBrand(this.props.id));
       this.props.dispatch(fetchBrandStream(this.props.id));
       this.props.dispatch(isFollowingBrand(this.props.id));
     });
   }
-     
+
 
   _renderList(){
-    
+
       if(!this.props.brandStream) return;
 
       var filters = [];
@@ -170,8 +170,10 @@ class BrandContainer extends Component{
   }
 
   _renderSectionHeader(){
-    if(this.state.filterDataStore.length <= 0){
-      return;
+    console.log(this.state.filterDataStore);
+    if(this.state.filterDataStore.rowIdentities[0].length <= 0){
+
+      return <View />;
     }
     return (
     <View style={styles.sectionHeaderContainer}>

@@ -7,12 +7,10 @@ import {
 class FadeInImage extends Component {
   static propTypes = {
     source: React.PropTypes.object.isRequired,
-    backgroundColor: React.PropTypes.string.isRequired,
     style: React.PropTypes.any,
   };
 
   static defaultProps = {
-    backgroundColor: '#000',
     style: {},
   };
 
@@ -34,7 +32,7 @@ class FadeInImage extends Component {
   }
 
   render() {
-    const style = [this.props.style, { opacity: this.state.opacity, backgroundColor: this.props.backgroundColor }];
+    const style = [this.props.style, { opacity: this.state.opacity}];
 
     return (
         <Animated.Image

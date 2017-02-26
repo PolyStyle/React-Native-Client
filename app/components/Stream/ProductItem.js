@@ -5,7 +5,7 @@ const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000'
+    backgroundColor: '#ffffff'
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -66,6 +66,9 @@ const styles = StyleSheet.create({
   },
   tagTitle: {
     fontSize: 12
+  },
+  imageContainer: {
+    minHeight: 350,
   }
 
 });
@@ -151,7 +154,7 @@ class ProductItem extends Component {
     if (this.props.ImageId) {
       return (
         <View style={styles.container}>
-          <TouchableOpacity onPress={this._navigateToProduct.bind(this)}>
+          <TouchableOpacity style={styles.imageContainer} onPress={this._navigateToProduct.bind(this)}>
             <ScaledImage
               setNativeProps
               id={this.props.ImageId}
