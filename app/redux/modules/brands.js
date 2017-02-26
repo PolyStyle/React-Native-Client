@@ -2,7 +2,8 @@ import {
   getBrand,
   getBrandStream,
   followBrand as followBrandAPI,
-  unfollowBrand as unfollowBrandAPI
+  unfollowBrand as unfollowBrandAPI,
+  isFollowingBrand as isFollowingBrandAPI
 } from './../../api/api_proxy'
 
 const ADD_BRAND = 'ADD_BRAND'
@@ -10,6 +11,7 @@ const SET_CURRENT_BRAND = 'SET_CURRENT_BRAND'
 const IS_FATCHING = 'IS_FATCHING'
 const ADD_BRAND_STREAM = 'ADD_BRAND_STREAM'
 const SET_CURRENT_BRAND_STREAM = 'SET_CURRENT_BRAND_STREAM'
+const UPDATE_BRAND_FOLLOW = 'UPDATE_BRAND_FOLLOW'
 
 function addBrand( brand ) {
   return {
@@ -42,6 +44,7 @@ export function fetchBrand(id){
 export function unfollowBrand(id){
   return function(dispatch){
     return unfollowBrandAPI(id).then(function(result){
+      dispatch(updateIsFollowing(id, false));
     })
   }
 }
@@ -49,6 +52,18 @@ export function unfollowBrand(id){
 export function followBrand(id){
   return function(dispatch){
     return followBrandAPI(id).then(function(result){
+      dispatch(updateIsFollowing(id, true));
+    })
+  }
+}
+
+export function isFollowingBrand(id){
+  return function(dispatch){
+    return isFollowingBrandAPI(id).then(function(result){
+
+      if(result){
+        dispatch(updateIsFollowing(id, true));
+      }
     })
   }
 }
@@ -72,6 +87,13 @@ function setCurrentBrand( brand ) {
   }
 }
 
+function updateIsFollowing( id, isFollowing) {
+  return {
+    type: UPDATE_BRAND_FOLLOW,
+    id,
+    isFollowing
+  }
+}
 
 const initialState = {
   isFetching: false,
@@ -86,6 +108,14 @@ export default function brands (state = initialState, action) {
         ...state,
         currentBrandStream: action.brandStream
       }
+    case UPDATE_BRAND_FOLLOW:
+      return {
+        ...state,
+        [action.id] : {
+          ...state[action.id],
+          isFollowing: action.isFollowing
+        }
+      }
     case ADD_BRAND_STREAM:
       // TODO : needs to be added to an array, not just reinizialed every time
       // ideally using the brand id as key to access the dictionary
@@ -96,9 +126,11 @@ export default function brands (state = initialState, action) {
     case ADD_BRAND:
       return {
         ...state,
-        isFetching: false,
-        brands: [action.brand]
+        [action.brand.id]: {
+          ...state[action.brand.id],
+          ...action.brand},
       }
+
     case SET_CURRENT_BRAND:
       return {
         ...state,

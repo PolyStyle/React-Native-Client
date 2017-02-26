@@ -219,6 +219,7 @@ class UserProfileContainer extends Component {
         style={styles.productHolder}
         removeClippedSubviews={false}
         initialListSize ={10}
+        enableEmptySections={true}
         showsHorizontalScrollIndicator={false}
         dataSource={this.state.dataSource}
         renderRow={(rowData) =>
@@ -242,6 +243,7 @@ class UserProfileContainer extends Component {
     if(this.props.users[this.props.id] && this.state.dataSource){
     return (
         <ListView
+          enableEmptySections={true}
           renderHeader={this._renderHeader.bind(this)}
           renderSectionHeader={this._renderSectionHeader.bind(this)}
           style={styles.container}

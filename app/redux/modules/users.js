@@ -20,7 +20,7 @@ const SET_CURRENT_USER = 'SET_CURRENT_USER'
 const SET_CURRENT_USER_STREAM = 'SET_CURRENT_USER_STREAM'
 const ADD_USER_STREAM = 'ADD_USER_STREAM'
 
-const UPDATE_IS_FOLLOW = 'UPDATE_IS_FOLLOW'
+const UPDATE_USER_FOLLOW = 'UPDATE_USER_FOLLOW'
 import {REHYDRATE} from 'redux-persist/constants'
 
 
@@ -65,7 +65,7 @@ export function setCurrentUser( user ) {
 
 function updateIsFollowing( id, isFollowing) {
   return {
-    type: UPDATE_IS_FOLLOW,
+    type: UPDATE_USER_FOLLOW,
     id,
     isFollowing
   }
@@ -111,7 +111,6 @@ export function isFollowingUser(id){
       if(result){
         dispatch(updateIsFollowing(id, true));
       }
-
     })
   }
 }
@@ -167,7 +166,7 @@ export default function users (state = initialState, action) {
         ...state,
         userStreams: [action.userStream]
       }
-    case UPDATE_IS_FOLLOW:
+    case UPDATE_USER_FOLLOW:
       console.log('update the state');
       console.log(state[action.id]);
       return {

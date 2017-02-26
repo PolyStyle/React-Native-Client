@@ -8,9 +8,6 @@ import { connect } from 'react-redux'
 const { height,width } = Dimensions.get('window')
 
 class LogIn extends Component {
-  static propTypes = {
-    onLoginFinished: PropTypes.func.isRequired,
-  }
 
   constructor(props) {
     super(props)

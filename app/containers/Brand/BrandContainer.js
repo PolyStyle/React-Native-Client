@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
-import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity} from 'react-native';
+import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity, InteractionManager} from 'react-native';
 import { ProductItem, FilterLabel, ScaledImage, FollowButton }  from './../../components'
 import { connect } from 'react-redux';
-import { fetchBrand, fetchBrandStream, followBrand, unfollowBrand} from './../../redux/modules/brands';
+import { fetchBrand, fetchBrandStream, followBrand, unfollowBrand,isFollowingBrand} from './../../redux/modules/brands';
 const { height,width } = Dimensions.get('window')
 
 
@@ -84,44 +84,51 @@ class BrandContainer extends Component{
     this.state = {
       dataSource: null
     }
-    this._renderList();
   }
 
 
   componentDidUpdate(prevProps, prevState){
-    this._renderList();
+    InteractionManager.runAfterInteractions(() => {
+      this._renderList();
+     });
   }
 
   componentDidMount() {
-    this.props.dispatch(fetchBrand(this.props.id));
-    this.props.dispatch(fetchBrandStream(this.props.id));
+    InteractionManager.runAfterInteractions(() => {
+      
+      this.props.dispatch(fetchBrand(this.props.id));
+      this.props.dispatch(fetchBrandStream(this.props.id));
+      this.props.dispatch(isFollowingBrand(this.props.id));
+    });
   }
+     
 
   _renderList(){
-    if(!this.props.brandStream) return;
+    
+      if(!this.props.brandStream) return;
 
-    var filters = [];
+      var filters = [];
 
-    for(var i=0; i<this.props.brandStream.length; i++){
-      for(var j=0; j<this.props.brandStream[i].Tags.length; j++){
-        var tag = this.props.brandStream[i].Tags[j];
-        if(filters[tag.displayName] == null){
-          filters[tag.displayName] = {displayName: tag.displayName, id: tag.id, quantity: 1}
-        } else {
-          filters[tag.displayName].quantity++;
+      for(var i=0; i<this.props.brandStream.length; i++){
+        for(var j=0; j<this.props.brandStream[i].Tags.length; j++){
+          var tag = this.props.brandStream[i].Tags[j];
+          if(filters[tag.displayName] == null){
+            filters[tag.displayName] = {displayName: tag.displayName, id: tag.id, quantity: 1}
+          } else {
+            filters[tag.displayName].quantity++;
+          }
         }
       }
-    }
 
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const newDataStore = ds.cloneWithRows(this.props.brandStream);
-    const newFilterDataStore = ds.cloneWithRows(filters);
-    if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
-      this.setState({
-        filterDataStore :newFilterDataStore,
-        dataSource: newDataStore,
-      });
-    }
+      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      const newDataStore = ds.cloneWithRows(this.props.brandStream);
+      const newFilterDataStore = ds.cloneWithRows(filters);
+      if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
+        this.setState({
+          filterDataStore :newFilterDataStore,
+          dataSource: newDataStore,
+        });
+      }
   }
   handlerSelection(id,active){
     console.log('bubble up')
@@ -130,8 +137,7 @@ class BrandContainer extends Component{
 
 
   handleFollowing(){
-    var isFollowing = this.state.isFollowing;
-
+    var isFollowing = this.props.brands[this.props.id].isFollowing;
     if(isFollowing){
       // remove the follow
       this.props.dispatch(unfollowBrand(this.props.id));
@@ -139,27 +145,23 @@ class BrandContainer extends Component{
       // add the follow
       this.props.dispatch(followBrand(this.props.id));
     }
-    isFollowing = !isFollowing;
-    this.setState({
-      isFollowing: isFollowing
-    })
   }
   _renderHeader(){
    return (
     <View style={styles.containerHeader}>
       <ScaledImage
-        id={this.props.brand.BackgroundImageId}
+        id={this.props.brands[this.props.id].BackgroundImageId}
         width={width}
         styles={styles.backgroundHeader}
       />
       <View style={styles.avatarContainer}>
         <ScaledImage
-          id={this.props.brand.AvatarImageId}
+          id={this.props.brands[this.props.id].AvatarImageId}
           width={width}
           styles={styles.avatar}
         />
         <View style={styles.followUser}>
-        <FollowButton  cta={"Following"} active={this.state.isFollowing} onPress={this.handleFollowing.bind(this)} />
+        <FollowButton  cta={"Following"} active={this.props.brands[this.props.id].isFollowing} onPress={this.handleFollowing.bind(this)} />
         </View>
       </View>
       <View style={styles.separationLine} />
@@ -168,7 +170,6 @@ class BrandContainer extends Component{
   }
 
   _renderSectionHeader(){
-    console.log(this.state.filterDataStore);
     if(this.state.filterDataStore.length <= 0){
       return;
     }
@@ -178,6 +179,7 @@ class BrandContainer extends Component{
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={false}
             dataSource={this.state.filterDataStore}
+            enableEmptySections={true}
             renderRow={(rowData) => <View>
                 <TouchableOpacity>
                   <FilterLabel quantity={rowData.quantity} description={rowData.displayName} />
@@ -196,13 +198,14 @@ class BrandContainer extends Component{
   }
 
   render() {
-    if( this.props.brand && this.state.dataSource){
+    if( this.props.brands && this.state.dataSource){
       return (
           <ListView
             renderHeader={this._renderHeader.bind(this)}
             renderSectionHeader={this._renderSectionHeader.bind(this)}
             initialListSize ={2}
             removeClippedSubviews={true}
+            enableEmptySections={true}
             style={styles.container}
             dataSource={this.state.dataSource}
             renderRow={(data) => <ProductItem navigator={this.props.navigator} {...data} active={false}  />}
@@ -215,10 +218,8 @@ class BrandContainer extends Component{
 }
 
 function mapStateToProps ({brands}) {
-  console.log('CALLED MAP STATE TO PROPS on BRANDS')
-  console.log(brands)
   return {
-    brand: brands.currentBrand,
+    brands: brands,
     brandStream: brands.currentBrandStream
   }
 }

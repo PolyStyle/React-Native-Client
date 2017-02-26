@@ -48,7 +48,7 @@ export default class RNFashion extends Component {
           restoredPersistentStore: true
         })
     
-    }).purge()
+    })
   }
 
   render(){

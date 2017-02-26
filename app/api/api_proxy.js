@@ -4,7 +4,7 @@ var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
 // var baseUrl = 'https://104.155.46.72/api/v1'
-var baseUrl = 'http://127.0.0.1:3000'
+var baseUrl = 'http://192.168.0.5:3000'
 
 var AppAuthToken = null;
 
@@ -83,6 +83,28 @@ export function getBrand(id) {
         // ADD THIS THROW error
         throw error;
     });
+};
+
+
+export function isFollowingBrand(id) {
+    var self = this;
+    var endpoint = baseUrl + '/brands/' + id + '/follow';
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
 };
 
 
@@ -374,6 +396,11 @@ export function onAuthStateChanged(callback) {
     onAuthStateChangedCallbacks.push(callback);
 }
 
+export function setAuthToken(token){
+  AppAuthToken = token;
+  console.log('set auth token');
+  console.log(AppAuthToken)
+}
 export function authWithFacebook(accessToken) {
     var endpoint = baseUrl + '/users/login/facebook';
     console.log('endpoint', endpoint);
@@ -397,7 +424,7 @@ export function authWithFacebook(accessToken) {
             }
 
             // SAVE THE TOKEN FOR FUTURE CALLS
-            AppAuthToken = user.accessToken.accessToken;
+            setAuthToken(user.accessToken.accessToken);
             return user;
         })
         .catch((error) => {

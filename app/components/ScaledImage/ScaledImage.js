@@ -21,7 +21,6 @@ class ScaledImage extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.id && this.props.width);
         this.setState({
           debug: this.state.debug + ' DM{'+this.props.id+','+this.props.width+'}'
         });
@@ -43,7 +42,7 @@ class ScaledImage extends Component {
 
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
-    const url = 'http://127.0.0.1:3000/images/' + props.id +'/' + postRetinaWidth ;
+    const url = 'http://192.168.0.5:3000/images/' + props.id +'/' + postRetinaWidth ;
     const self = this;
         this.setState({
           debug: this.state.debug + ' REQ{'+props.id+','+props.width+'}'
@@ -56,7 +55,6 @@ class ScaledImage extends Component {
         }
       )
       .then((responseJson) => {
-        console.log('Trying to load', responseJson.url);
         const pictureWidth = responseJson.width;
         const pictureHeight = responseJson.height;
         const pictureRatio = pictureHeight/pictureWidth;

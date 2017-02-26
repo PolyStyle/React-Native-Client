@@ -7,6 +7,7 @@ import { onAuthStateChanged } from './../../api/api_proxy'
 import { onAuthChange, handleAuthRemotely } from './../../redux/modules/authentication'
 import { hideFlashNotification } from './../../redux/modules/flashNotification'
 import { userOnboarded } from './../../redux/modules/users'
+import {  setAuthToken  } from './../../api/api_proxy'
 // import { notifications } from  './../../api/notifications'
 console.disableYellowBox = true
 
@@ -45,13 +46,14 @@ class AppContainer extends Component {
     // authentication.isAuthenticating = false
     // authentication.isAuthed = true
     // I can therefore either decide to go through onboarding, if currentUser.isNew, or straight to the app.
-
+    // Be sure to register the accessToken with the API PROXY
 
     // TODO: verify that accessToken is not empty
     console.log('+++ app mounted info +++')
     console.log(this.props.currentUser)
     if(this.props.currentUser && this.props.currentUser.accessToken && this.props.currentUser.accessToken.accessToken){
       // CASE B. All's good ... move on
+      setAuthToken(this.props.currentUser.accessToken.accessToken)
     } else {
 
       //  I don't need this, yet.

@@ -83,9 +83,6 @@ class ProductItem extends Component {
     this.state = {
       active: props.active,
     }
-    console.log('----------');
-    console.log(this.props);
-        console.log('----------');
   }
   componentDidMount() {
     // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 class FilterLabel extends Component {
   static propTypes = {
     description: PropTypes.string.isRequired,
-    quantity: PropTypes.string,
+    quantity: PropTypes.number,
     onPress: PropTypes.func,
   };
 
