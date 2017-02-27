@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 50,
     width: 50,
     borderRadius: 25,
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -78,18 +78,18 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
 
-  productHolder: { 
+  productHolder: {
     height: 120,
     flex: 1,
     marginTop: 20,
     marginBottom: 20
   },
-  roundedProduct: { 
+  roundedProduct: {
     width: 120,
     height: 120,
     borderRadius: 60,
   },
-  roundedBrand: { 
+  roundedBrand: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   productItemHolder: {
     width: 120,
     height: 120,
-    marginRight: 20, 
+    marginRight: 20,
     borderRadius: 60,
   },
   brandItemHolder: {
@@ -120,7 +120,7 @@ class PostContainer extends Component {
     onPress: PropTypes.func
   }
   constructor (props) {
-    super(props) 
+    super(props)
     this.state = {
         active: false,
       };
@@ -145,6 +145,8 @@ class PostContainer extends Component {
      } catch(e){}
      */
     // update only if you have a post Id and if you didn't have generate already a datasource.
+
+    /*. TODO NICOLA: temporary removed from our
     if((this.props.post.id && this.state.dataSource == undefined) || (this.props.post.id != this.props.id)){
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       // this.props.post.Products.PostProduct.category
@@ -155,7 +157,7 @@ class PostContainer extends Component {
           dictionary[this.props.post.Products[i].PostProduct.category] = [];
         }
         dictionary[this.props.post.Products[i].PostProduct.category].push(this.props.post.Products[i]);
-      } 
+      }
 
       var itemDataSources = [];
       var keys = [];
@@ -167,29 +169,29 @@ class PostContainer extends Component {
       var allProducts = [];
       for(var i = 0; i<this.props.post.Products.length; i++){
         allProducts.push(this.props.post.Products[i]);
-      } 
+      }
 
       this.setState({
         keys: keys,
         dataSource: itemDataSources,
         allProducts: ds.cloneWithRows(allProducts),
       });
-       
-    } 
+
+    } */
   }
 
 
-  onPress = () =>{ 
+  onPress = () =>{
     const newState = !this.state.active;
     this.setState({
           active: newState
         }, function(){
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
     });
   }
-  
+
   _navigateToBrand(brandData){
   this.props.navigator.push({
       name: 'Brand',
@@ -216,12 +218,14 @@ class PostContainer extends Component {
   }
 
 
-  render(){ 
+  render(){
+    const currentPost = this.props.posts[this.props.id];
+
     return (
       <ScrollView style={styles.container}>
-       <TouchableOpacity onPress={this.onPress.bind(this)}> 
-          <ScaledImage 
-            id={this.props.ImageId}
+       <TouchableOpacity onPress={this.onPress.bind(this)}>
+          <ScaledImage
+            id={currentPost.ImageId}
             width={width}
           />
        </TouchableOpacity>
@@ -231,17 +235,17 @@ class PostContainer extends Component {
           <MoreDots style={styles.addIcon} onPress={this.onPress.bind(this)}/>
         </View>
         <View style={styles.separationLine} />
-        <Text style={styles.descriptionText}>Posted by: {this.props.User.displayName} </Text>
+        <Text style={styles.descriptionText}>Posted by: {currentPost.User.displayName} </Text>
         <Text style={styles.descriptionText}>This is a detail description of something long.</Text>
         <View style={styles.tagList}>
           <Text style={styles.tagTitle}>Tags: </Text>
-          {this.props.post && this.props.post.Tags.map(function(tag, i){
+          {currentPost.Tags.map(function(tag, i){
             return <TagLabel onPress={this._navigateToCollection.bind(this, tag)} key={i} description={tag.displayName} />
           }, this)}
         </View>
         <View style={styles.tagList}>
           <Text style={styles.tagTitle}>Brands: </Text>
-           {this.props.post && this.props.post.Brands.map(function(brand, i){
+           {currentPost.Brands.map(function(brand, i){
             return <TagLabel onPress={this._navigateToBrand.bind(this, brand)} key={i} description={brand.displayName} />
           }, this)}
         </View>
@@ -270,17 +274,17 @@ class PostContainer extends Component {
               />
         }
         <View style={styles.separationLine} />
-       </View> 
+       </View>
       </ScrollView>
     )
   }
 }
 
-//onPress={this._navigateToProduct.bind(this,rowData)}> 
+//onPress={this._navigateToProduct.bind(this,rowData)}>
 
 function mapStateToProps ({posts}) {
-  return { 
-    post: posts.currentPost,
+  return {
+    posts: posts.posts,
   }
 }
 

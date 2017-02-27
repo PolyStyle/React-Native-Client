@@ -174,6 +174,7 @@ updatedAt:"2016-12-25T20:26:19.000Z"
       const currentPost = this.props.posts[this.props.id];
 
       console.log('trying to render',this.props.id)
+      console.log(currentPost)
       return (
         <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
           <TouchableOpacity onPress={this._navigateToPost.bind(this)}>

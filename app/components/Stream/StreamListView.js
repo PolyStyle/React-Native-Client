@@ -7,9 +7,13 @@ import { fetchAllPosts } from './../../redux/modules/posts'
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff'
+    height: 100,
+    backgroundColor: '#ffffff',
+    paddingTop: 46,
   },
+  listViewStyle: {
+    paddingTop: 46,
+  }
 });
 
 class StreamListView extends React.Component {
@@ -25,34 +29,38 @@ class StreamListView extends React.Component {
   }
 
   _onRefresh() {
-    this.setState({refreshing: true});
-    this.props.dispatch(fetchAllPosts());
+    this.setState({refreshing: true}, function(){
+        this.props.dispatch(fetchAllPosts());
+
+    });
+
   }
 
   componentWillUpdate(){
     if(this.state.refreshing){
       console.log('KILL the refreshing');
-      this.setState({refreshing: false});
+      this.setState({refreshing: false}, function(){
+        console.log(this.state.refreshing);
+      });
     }
   }
   componentDidMount() {
-        BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-        this.updateListView(this.props);
+    BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    this.updateListView(this.props);
   }
 
-    componentWillUnmount() {
-        BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-    }
+  componentWillUnmount() {
+      BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+  }
 
-    handleBackButton() {
-      console.log('Handle navigator ', this.props.navigator)
-        if (this.props.navigator) {
-          console.log('need to pop out something ')
-            this.props.navigator.pop();
-            return true;
-        }
-        return true;
-    }
+  handleBackButton() {
+      if (this.props.navigator) {
+        console.log('need to pop out something ')
+          this.props.navigator.pop();
+          return true;
+      }
+      return true;
+  }
 
 
   orderByTimeDesc(a,b) {
@@ -63,7 +71,7 @@ class StreamListView extends React.Component {
     return 0;
   }
 
-  updateListView(props){
+  updateListView(){
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataList = [];
     console.log('FOR OFFFF')
@@ -104,9 +112,8 @@ class StreamListView extends React.Component {
             title="Loading..."
             titleColor="#00ff00"
           />}
-        removeClippedSubviews={true}
+
         style={styles.container}
-        enableEmptySections={true}
         dataSource={this.state.dataSource}
         renderRow={(data) => <Item navigator={this.props.navigator} {...data} active={false} onPress={this.handlerSelection.bind(this)} />}
       />
@@ -115,7 +122,6 @@ class StreamListView extends React.Component {
 }
 
 function mapStateToProps ({posts}) {
-  console.log(posts)
   return {
     posts: posts.posts
   }

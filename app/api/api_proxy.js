@@ -4,7 +4,7 @@ var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
 // var baseUrl = 'https://104.155.46.72/api/v1'
-var baseUrl = 'http://127.0.0.1:3000'
+var baseUrl = 'http://10.48.28.150:3000'
 
 var AppAuthToken = null;
 
@@ -454,6 +454,78 @@ export function getSameProducts(id) {
         throw error;
     });
 };
+
+
+// LIKE PRODUCT
+
+export function hasLikedProduct(id) {
+    var self = this;
+    var endpoint = baseUrl + '/products/' + id + '/like';
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+
+export function likeProduct(id) {
+    console.log('CALLING LIKE POST')
+    console.log(AppAuthToken);
+    var self = this;
+    var endpoint = baseUrl + '/products/' + id + '/like';
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+export function unlikeProduct(id) {
+    var self = this;
+    var endpoint = baseUrl + '/products/' + id + '/unlike';
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AppAuthToken
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+
+
 
 /* authentication part */
 export function getAccessToken() {

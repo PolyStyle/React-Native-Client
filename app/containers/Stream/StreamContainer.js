@@ -182,4 +182,11 @@ const styles = StyleSheet.create({
 })
 
 
+function mapStateToProps ({posts}) {
+  return {
+    posts: posts,
+  }
+}
+
+
 export default connect()(StreamContainer)
