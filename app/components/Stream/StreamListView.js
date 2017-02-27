@@ -20,13 +20,24 @@ class StreamListView extends React.Component {
     super(props);
     this.state = {
       dataSource: null,
+      refreshing: false,
     };
-
   }
 
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this.props.dispatch(fetchAllPosts());
+  }
 
+  componentWillUpdate(){
+    if(this.state.refreshing){
+      console.log('KILL the refreshing');
+      this.setState({refreshing: false});
+    }
+  }
   componentDidMount() {
         BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+        this.updateListView(this.props);
   }
 
     componentWillUnmount() {
@@ -52,7 +63,7 @@ class StreamListView extends React.Component {
     return 0;
   }
 
-  componentDidMount(props){
+  updateListView(props){
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataList = [];
     console.log('FOR OFFFF')
@@ -86,7 +97,13 @@ class StreamListView extends React.Component {
     }
     return (
       <ListView
-
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+            title="Loading..."
+            titleColor="#00ff00"
+          />}
         removeClippedSubviews={true}
         style={styles.container}
         enableEmptySections={true}
