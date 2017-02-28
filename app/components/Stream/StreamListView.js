@@ -20,7 +20,7 @@ class StreamListView extends React.Component {
 
   constructor(props) {
     super(props);
-   
+
     var self = this
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id || r1.updatedAt !== r2.updatedAt});
      this.state = {
@@ -79,12 +79,11 @@ class StreamListView extends React.Component {
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
     console.log(this.state.dataSource.getRowCount());
     console.log(newDataStore.getRowCount());
-     if(this.state.dataSource.getRowCount() !=  newDataStore.getRowCount()){
       this.setState({
         dataSource: newDataStore,
       });
-    }
-  
+
+
 
   }
   handlerSelection(id,active){
@@ -104,7 +103,7 @@ class StreamListView extends React.Component {
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
             title="Loading..."
-            titleColor="#00ff00"
+            titleColor="#000000"
           />}
         enableEmptySections={true}
         style={styles.container}

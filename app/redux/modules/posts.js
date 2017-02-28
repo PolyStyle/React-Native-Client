@@ -1,6 +1,7 @@
 import {
   getPosts,
   getPost,
+  getFeed,
   hasLikedPost as hasLikedPostAPI,
   likePost as likePostAPI,
   unlikePost as unlikePostAPI
@@ -40,7 +41,7 @@ export function fetchFeed() {
   console.log('called fetch all posts ------');
     return function (dispatch) {
     console.log('DISPATCH ')
-    return getPosts().then(function (posts) {
+    return getFeed().then(function (posts) {
       console.log('RETURNED --- ', posts)
       dispatch(setFeed(posts))
     })
@@ -104,7 +105,7 @@ export default function posts (state = initialState, action) {
   let currentIndex;
   let i;
   switch (action.type) {
-    case ADD_POST: 
+    case ADD_POST:
       currentIndex = -1;
       i = state.posts.length - 1;
       for (; i >= 0; i -= 1) {
@@ -147,7 +148,7 @@ export default function posts (state = initialState, action) {
       if(currentIndex > -1){
         return {
           ...state,
-          posts: 
+          posts:
             state.posts.slice(0, currentIndex)
             .concat([
               {

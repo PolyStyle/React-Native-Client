@@ -89,12 +89,16 @@ class Item extends Component {
   }
   componentDidMount() {
       console.log('INVOKING COMPONENT DID MOUNT ON ITEM')
+    this.props.dispatch(fetchPost(this.props.id));
+    this.props.dispatch(hasLikedPost(this.props.id));
+  }
+  componentWillReceiveProps(nextProps){
+    console.log('RECEIVE NEW PPROPS ', nextProps)
+    if((this.props.id !== nextProps.id) || (this.props.updatedAt !== nextProps.updatedAt)){
       this.props.dispatch(fetchPost(this.props.id));
       this.props.dispatch(hasLikedPost(this.props.id));
-  }
-  componentDidUpdate() {
-    //this.props.dispatch(fetchPost(this.props.id));
-    //this.props.dispatch(hasLikedPost(this.props.id));
+    }
+
   }
   onPress = () =>{
     const newState = !this.state.active;
@@ -109,6 +113,7 @@ class Item extends Component {
   }
 
   likePost(){
+    console.log(this.props.posts);
     var isLiking = this.props.posts[this.props.id].isLiking;
     if(isLiking){
       // remove the follow
@@ -154,26 +159,6 @@ class Item extends Component {
     })
   }
 
-
-/*
-Array[0]
-Products
-:
-Array[0]
-Tags
-:
-Array[0]
-UserId
-:
-1
-createdAt
-:
-"2016-12-25T20:26:19.000Z"description:"Marcos favorite outfit"
-id:20
-picture:"https://s-media-cache-ak0.pinimg.com/474x/1a/eb/2e/1aeb2eff3242f5884a8a23e4bdb7946f.jpg"
-updatedAt:"2016-12-25T20:26:19.000Z"
-
-*/
   render(){
 
     let currentPost = null;

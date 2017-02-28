@@ -3,8 +3,8 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-var baseUrl = 'http://104.155.46.72/api/v1'
-// var baseUrl = 'http://10.48.28.150:3000'
+//var baseUrl = 'http://104.155.46.72/api/v1'
+ var baseUrl = 'http://127.0.0.1:3000'
 
 var AppAuthToken = null;
 
@@ -35,9 +35,6 @@ export function getPosts() {
         console.error(error);
     });
 };
-
-/* The feed is a list of all the posts that the user sees in the home screen
-*/
 export function getFeed() {
     var self = this;
     var endpoint = baseUrl + '/posts/feed';
@@ -59,7 +56,6 @@ export function getFeed() {
         console.error(error);
     });
 };
-
 
 
 export function getPost(id) {
