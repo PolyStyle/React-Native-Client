@@ -21,8 +21,7 @@ function addPost( post ) {
 }
 
 function setFeed( posts ) {
-  console.log('received all the posts ')
-  console.log(posts)
+
   return {
     type: FETCH_FEED,
     posts: posts
@@ -38,11 +37,8 @@ function setCurrentPost( post ) {
 
 
 export function fetchFeed() {
-  console.log('called fetch all posts ------');
-    return function (dispatch) {
-    console.log('DISPATCH ')
+  return function (dispatch) {
     return getFeed().then(function (posts) {
-      console.log('RETURNED --- ', posts)
       dispatch(setFeed(posts))
     })
   }
@@ -51,7 +47,6 @@ export function fetchFeed() {
 export function fetchPost(id){
   return function(dispatch){
     return getPost(id).then(function(post){
-
       dispatch(addPost(post))
     })
   }
@@ -60,7 +55,6 @@ export function fetchPost(id){
 export function hasLikedPost(id){
   return function(dispatch){
     return hasLikedPostAPI(id).then(function(result){
-
       if(result){
         dispatch(updateIsLiking(id, true));
       } else {
@@ -113,7 +107,6 @@ export default function posts (state = initialState, action) {
           currentIndex = i;
         }
       }
-      console.log('I FOUND THE INDEX', currentIndex)
       if(currentIndex > -1){
         //the object already exists, just update it.
         return {
@@ -138,12 +131,10 @@ export default function posts (state = initialState, action) {
       currentIndex = -1;
       i = state.posts.length - 1;
       for (; i >= 0; i -= 1) {
-        console.log('SEARCHING FOR THE ITEM TO ADD IS LIKED', state.posts[i].id , action.id)
         if (state.posts[i].id == action.id) {
           currentIndex = i;
         }
       }
-      console.log('INDEX ', currentIndex);
 
       if(currentIndex > -1){
         return {

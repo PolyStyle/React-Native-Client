@@ -84,22 +84,38 @@ class Item extends Component {
     navigator: PropTypes.object
   }
   constructor (props) {
-    console.log('CREATED ITEM', props)
     super(props)
+    this.state = {
+      currentIndexInPosts: -1,
+    };
   }
   componentDidMount() {
-      console.log('INVOKING COMPONENT DID MOUNT ON ITEM')
     this.props.dispatch(fetchPost(this.props.id));
     this.props.dispatch(hasLikedPost(this.props.id));
   }
   componentWillReceiveProps(nextProps){
-    console.log('RECEIVE NEW PPROPS ', nextProps)
     if((this.props.id !== nextProps.id) || (this.props.updatedAt !== nextProps.updatedAt)){
+      // retrive new props in case there has been a change in the information about this item
+      // usualing coming from the container
       this.props.dispatch(fetchPost(this.props.id));
       this.props.dispatch(hasLikedPost(this.props.id));
     }
 
+
+    let currentPost = null;
+    let index = -1;
+    for(var i = 0; i < this.props.posts.length; i++){
+      if(this.props.posts[i].id == this.props.id){
+        index = i;
+      }
+    }
+
+    this.setState({
+      currentIndexInPosts : index,
+    })
+
   }
+
   onPress = () =>{
     const newState = !this.state.active;
     this.setState({
@@ -113,9 +129,7 @@ class Item extends Component {
   }
 
   likePost(){
-    console.log(this.props.posts);
-    var isLiking = this.props.posts[this.props.id].isLiking;
-    if(isLiking){
+    if(this.props.posts[this.state.currentIndexInPosts].isLiking){
       // remove the follow
       this.props.dispatch(unlikePost(this.props.id));
     } else {
@@ -160,14 +174,10 @@ class Item extends Component {
   }
 
   render(){
-
-    let currentPost = null;
-    for(var i = 0; i < this.props.posts.length; i++){
-      if(this.props.posts[i].id == this.props.id){
-        currentPost = this.props.posts[i];
-      }
+    let currentPost;
+    if(this.state.currentIndexInPosts > -1){
+      currentPost = this.props.posts[this.state.currentIndexInPosts];
     }
-    console.log(' CURRENT POST ', currentPost)
     if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
         <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
