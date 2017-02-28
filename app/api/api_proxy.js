@@ -36,6 +36,31 @@ export function getPosts() {
     });
 };
 
+/* The feed is a list of all the posts that the user sees in the home screen
+*/
+export function getFeed() {
+    var self = this;
+    var endpoint = baseUrl + '/posts/feed';
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + 'TOKEN'
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    }).catch((error) => {
+
+        console.error(error);
+    });
+};
+
+
 
 export function getPost(id) {
     var self = this;
