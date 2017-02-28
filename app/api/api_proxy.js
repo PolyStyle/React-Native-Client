@@ -3,8 +3,8 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-// var baseUrl = 'https://104.155.46.72/api/v1'
-var baseUrl = 'http://10.48.28.150:3000'
+var baseUrl = 'http://104.155.46.72/api/v1'
+// var baseUrl = 'http://10.48.28.150:3000'
 
 var AppAuthToken = null;
 

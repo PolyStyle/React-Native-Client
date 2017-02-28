@@ -84,13 +84,18 @@ class Item extends Component {
     navigator: PropTypes.object
   }
   constructor (props) {
+    console.log('CREATED ITEM', props)
     super(props)
   }
   componentDidMount() {
+      console.log('INVOKING COMPONENT DID MOUNT ON ITEM')
       this.props.dispatch(fetchPost(this.props.id));
       this.props.dispatch(hasLikedPost(this.props.id));
   }
-
+  componentDidUpdate() {
+    //this.props.dispatch(fetchPost(this.props.id));
+    //this.props.dispatch(hasLikedPost(this.props.id));
+  }
   onPress = () =>{
     const newState = !this.state.active;
     this.setState({
@@ -170,11 +175,15 @@ updatedAt:"2016-12-25T20:26:19.000Z"
 
 */
   render(){
-    if(this.props.id && this.props.posts[this.props.id].User) {
-      const currentPost = this.props.posts[this.props.id];
 
-      console.log('trying to render',this.props.id)
-      console.log(currentPost)
+    let currentPost = null;
+    for(var i = 0; i < this.props.posts.length; i++){
+      if(this.props.posts[i].id == this.props.id){
+        currentPost = this.props.posts[i];
+      }
+    }
+    console.log(' CURRENT POST ', currentPost)
+    if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
         <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
           <TouchableOpacity onPress={this._navigateToPost.bind(this)}>

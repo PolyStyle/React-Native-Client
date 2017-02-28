@@ -7,7 +7,7 @@ import {
 } from './../../api/api_proxy'
 
 const ADD_POST = 'ADD_POST'
-const ADD_POSTS = 'ADD_POSTS'
+const FETCH_FEED = 'FETCH_STREAM'
 const IS_FATCHING = 'IS_FATCHING'
 const SET_CURRENT_POST = 'SET_CURRENT_POST'
 const UPDATE_POST_LIKE = 'UPDATE_POST_LIKE'
@@ -19,11 +19,11 @@ function addPost( post ) {
   }
 }
 
-function addPosts( posts ) {
+function setFeed( posts ) {
   console.log('received all the posts ')
   console.log(posts)
   return {
-    type: ADD_POSTS,
+    type: FETCH_FEED,
     posts: posts
   }
 }
@@ -36,13 +36,13 @@ function setCurrentPost( post ) {
 }
 
 
-export function fetchAllPosts() {
+export function fetchFeed() {
   console.log('called fetch all posts ------');
     return function (dispatch) {
     console.log('DISPATCH ')
     return getPosts().then(function (posts) {
       console.log('RETURNED --- ', posts)
-      dispatch(addPosts(posts))
+      dispatch(setFeed(posts))
     })
   }
 }
@@ -50,8 +50,7 @@ export function fetchAllPosts() {
 export function fetchPost(id){
   return function(dispatch){
     return getPost(id).then(function(post){
-      console.log('POST REDUX ')
-      console.log(post)
+
       dispatch(addPost(post))
     })
   }
@@ -102,52 +101,84 @@ const initialState = {
 }
 
 export default function posts (state = initialState, action) {
+  let currentIndex;
+  let i;
   switch (action.type) {
-    case ADD_POST:
-      console.log('TRYING TO ADD A SINGLE POST ' ,action.post)
-      var posts = [];
-      posts[action.post.id] = action.post;
+    case ADD_POST: 
+      currentIndex = -1;
+      i = state.posts.length - 1;
+      for (; i >= 0; i -= 1) {
+        if (state.posts[i].id === action.post.id) {
+          currentIndex = i;
+        }
+      }
+      console.log('I FOUND THE INDEX', currentIndex)
+      if(currentIndex > -1){
+        //the object already exists, just update it.
+        return {
+          ...state,
+          posts:
+            state.posts.slice(0, currentIndex)
+            .concat([{
+              ...state.posts[currentIndex],
+              ...action.post
+            }])
+            .concat(state.posts.slice(currentIndex + 1)),
+        };
+      } else {
+        return {
+          ...state,
+          posts: state.posts.concat([action.post])
+        }
 
-      return {
-        ...state,
-        isFetching: false,
-        posts: {
-          ...state.posts,
-          ...posts
-        }
       }
+      break;
     case UPDATE_POST_LIKE:
-      console.log('redux updates ', action.id, action.isLiking)
-      return {
-        ...state,
-        posts : {
-          ...state.posts,
-          [action.id] : {
-            ...state.posts[action.id],
-            isLiking: action.isLiking
-          }
+      currentIndex = -1;
+      i = state.posts.length - 1;
+      for (; i >= 0; i -= 1) {
+        console.log('SEARCHING FOR THE ITEM TO ADD IS LIKED', state.posts[i].id , action.id)
+        if (state.posts[i].id == action.id) {
+          currentIndex = i;
         }
       }
+      console.log('INDEX ', currentIndex);
+
+      if(currentIndex > -1){
+        return {
+          ...state,
+          posts: 
+            state.posts.slice(0, currentIndex)
+            .concat([
+              {
+                ...state.posts[currentIndex],
+                isLiking: action.isLiking
+              }
+            ])
+            .concat(state.posts.slice(currentIndex + 1)),
+        }
+      } else {
+        return {
+          ...state,
+          posts: state.posts.concat([{
+            id: action.id,
+            isLiking: action.isLiking
+          }])
+        }
+      }
+      break;
     case SET_CURRENT_POST:
       return {
         ...state,
         isFetching: false,
         currentPost: action.post
       }
-    case ADD_POSTS :
+    case FETCH_FEED:
       // TODO REWRITE THIS WITH A MAP
-      var posts = [];
-      for (var i =0; i< action.posts.length; i++) {
-        posts[action.posts[i].id] = action.posts[i];
-      }
       return {
         ...state,
         isFetching: false,
-        posts : {
-          ...state.posts,
-          ...posts
-        }
-
+        feed : action.posts
       }
     case IS_FATCHING:
       return {

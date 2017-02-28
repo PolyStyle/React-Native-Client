@@ -3,16 +3,14 @@ import { connect } from 'react-redux'
 import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
 import Item from './Item';
 
-import { fetchAllPosts } from './../../redux/modules/posts'
+import { fetchFeed } from './../../redux/modules/posts'
 
 const styles = StyleSheet.create({
   container: {
     height: 100,
     backgroundColor: '#ffffff',
-    paddingTop: 46,
   },
   listViewStyle: {
-    paddingTop: 46,
   }
 });
 
@@ -22,15 +20,21 @@ class StreamListView extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      dataSource: null,
+   
+    var self = this
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id || r1.updatedAt !== r2.updatedAt});
+     this.state = {
+      dataSource: ds.cloneWithRows([]),
       refreshing: false,
     };
+    this.props.dispatch(fetchFeed()).then(function(){
+      self.updateListView();
+    })
   }
 
   _onRefresh() {
     this.setState({refreshing: true}, function(){
-        this.props.dispatch(fetchAllPosts());
+        this.props.dispatch(fetchFeed());
 
     });
 
@@ -41,6 +45,7 @@ class StreamListView extends React.Component {
       console.log('KILL the refreshing');
       this.setState({refreshing: false}, function(){
         console.log(this.state.refreshing);
+        this.updateListView()
       });
     }
   }
@@ -63,35 +68,23 @@ class StreamListView extends React.Component {
   }
 
 
-  orderByTimeDesc(a,b) {
-    if (a.createdAt < b.createdAt)
-      return 1;
-    if (a.createdAt > b.createdAt)
-      return -1;
-    return 0;
-  }
+
 
   updateListView(){
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataList = [];
-    console.log('FOR OFFFF')
-    console.log(this.props.posts);
-    // ORDER BY createdAT
-    for (var key in this.props.posts) {
-      dataList.push(this.props.posts[key])
-    }
-    dataList = dataList.sort(this.orderByTimeDesc)
+    console.log('UPDATE LIST VIEW ')
+    if(!this.props.posts) return;
     // NOW THE DATA IS ORDER
-    const newDataStore = ds.cloneWithRows(dataList);
+    const newDataStore = this.state.dataSource.cloneWithRows(this.props.posts);
     console.log(newDataStore);
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
-
-    if(!this.state.dataSource || this.state.dataSource._cachedRowCount !=  newDataStore._cachedRowCount){
-      console.log('I NEED TO RE RENDER')
+    console.log(this.state.dataSource.getRowCount());
+    console.log(newDataStore.getRowCount());
+     if(this.state.dataSource.getRowCount() !=  newDataStore.getRowCount()){
       this.setState({
         dataSource: newDataStore,
       });
     }
+  
 
   }
   handlerSelection(id,active){
@@ -107,12 +100,13 @@ class StreamListView extends React.Component {
       <ListView
         refreshControl={
           <RefreshControl
+            enableEmptySections={true}
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
             title="Loading..."
             titleColor="#00ff00"
           />}
-
+        enableEmptySections={true}
         style={styles.container}
         dataSource={this.state.dataSource}
         renderRow={(data) => <Item navigator={this.props.navigator} {...data} active={false} onPress={this.handlerSelection.bind(this)} />}
@@ -123,7 +117,7 @@ class StreamListView extends React.Component {
 
 function mapStateToProps ({posts}) {
   return {
-    posts: posts.posts
+    posts: posts.feed
   }
 }
 
