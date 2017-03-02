@@ -51,11 +51,13 @@ class StreamListView extends React.Component {
   }
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-    this.updateListView(this.props);
+    this.updateListView();
+
   }
 
   componentWillUnmount() {
       BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+          this.updateListView();
   }
 
   handleBackButton() {
