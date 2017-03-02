@@ -11,6 +11,7 @@ import products from './modules/products';
 import brands from './modules/brands';
 import tags from './modules/tags';
 import images from './modules/images';
+import feed from './modules/feed';
 
 export default combineReducers({
 	authentication,
@@ -23,5 +24,6 @@ export default combineReducers({
 	products,
 	brands,
 	tags,
-	images
+	images,
+	feed
 })
