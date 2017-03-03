@@ -94,12 +94,9 @@ class Item extends Component {
     this.props.dispatch(hasLikedPost(this.props.id));
   }
   componentWillReceiveProps(nextProps){
-    console.log('I RECEIVED NEW PROPS');
-    console.log(this.props.id , nextProps.id,this.props.updatedAt, nextProps.updatedAt)
     if((this.props.id !== nextProps.id) || (this.props.updatedAt !== nextProps.updatedAt)){
       // retrive new props in case there has been a change in the information about this item
       // usualing coming from the container
-      console.log('I NEED TO UPDATE THIS!!!', nextProps.id)
       this.props.dispatch(fetchPost(nextProps.id));
       this.props.dispatch(hasLikedPost(nextProps.id));
     }

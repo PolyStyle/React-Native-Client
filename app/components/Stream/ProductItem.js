@@ -132,6 +132,8 @@ class ProductItem extends Component {
   }
 
   _navigateToProduct(){
+    console.log('THIS PROPS:')
+    console.log(this.props)
   this.props.navigator.push({
       name: 'Product',
       title: 'Product Name',

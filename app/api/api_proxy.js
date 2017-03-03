@@ -3,8 +3,8 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-//var baseUrl = 'http://104.155.46.72/api/v1'
- var baseUrl = 'http://127.0.0.1:3000'
+var baseUrl = 'http://104.155.46.72/api/v1'
+// var baseUrl = 'http://127.0.0.1:3000'
 
 var AppAuthToken = null;
 
@@ -84,8 +84,7 @@ export function getPost(id) {
 // LIKE POSTS
 
 export function hasLikedPost(id) {
-    console.log('GET LIKE  LIKE POST')
-    console.log(AppAuthToken);
+
     var self = this;
     var endpoint = baseUrl + '/posts/' + id + '/like';
     return fetch(endpoint, {
@@ -108,8 +107,7 @@ export function hasLikedPost(id) {
 
 
 export function likePost(id) {
-    console.log('CALLING LIKE POST')
-    console.log(AppAuthToken);
+
     var self = this;
     var endpoint = baseUrl + '/posts/' + id + '/like';
     return fetch(endpoint, {

@@ -14,15 +14,17 @@ const SET_CURRENT_BRAND_STREAM = 'SET_CURRENT_BRAND_STREAM'
 const UPDATE_BRAND_FOLLOW = 'UPDATE_BRAND_FOLLOW'
 
 function addBrand( brand ) {
+  console.log(' ADD A BRAND')
   return {
     type: ADD_BRAND,
     brand: brand
   }
 }
-function addBrandStream( brandStream) {
+function addBrandStream(id, brandStream) {
   return {
     type: ADD_BRAND_STREAM,
-    brandStream: brandStream
+    id,
+    brandStream
   }
 }
 
@@ -36,7 +38,6 @@ export function fetchBrand(id){
   return function(dispatch){
     return getBrand(id).then(function(brand){
       dispatch(addBrand(brand))
-      dispatch(setCurrentBrand(brand))
     })
   }
 }
@@ -73,8 +74,7 @@ export function followBrand(id){
 export function fetchBrandStream(id){
   return function(dispatch){
     return getBrandStream(id).then(function(brandStream){
-      dispatch(addBrandStream(brandStream))
-      dispatch(setCurrentBrandStream(brandStream))
+      dispatch(addBrandStream(id,brandStream))
     })
   }
 }
@@ -101,6 +101,8 @@ const initialState = {
 }
 
 export default function brands (state = initialState, action) {
+  let currentIndex;
+  let i;
   switch (action.type) {
     case SET_CURRENT_BRAND_STREAM:
       return {
@@ -116,8 +118,40 @@ export default function brands (state = initialState, action) {
         }
       }
     case ADD_BRAND_STREAM:
-      // TODO : needs to be added to an array, not just reinizialed every time
-      // ideally using the brand id as key to access the dictionary
+      currentIndex = -1;
+      for (key in state.brands) {
+        console.log(state.brands[key]);
+        console.log(key);
+        if(state.brands[key].id == action.id){
+          currentIndex = key
+        }
+      }
+      if(currentIndex > -1){
+        // there is a brand with this id, add to it,
+
+        return {
+          ...state,
+          brands: {
+            ...state.brands,
+            [currentIndex]: {
+              ...state.brands[currentIndex],
+              brandStream: action.brandStream
+             }
+          }
+        }
+      } else {
+        return {
+          ...state,
+          brands: {
+            ...state.brands,
+            [currentIndex]: {
+              brandStream: action.brandStream
+            }
+          }
+        }
+      }
+
+
       return {
         ...state,
         brandStreams: [action.brandStream]
@@ -125,10 +159,13 @@ export default function brands (state = initialState, action) {
     case ADD_BRAND:
       return {
         ...state,
-        [action.brand.id]: {
-          ...state[action.brand.id],
-          ...action.brand},
-      }
+        brands: {
+          ...state.brands,
+          [action.brand.id]: {
+            ...state.brands[action.brand.id],
+            ...action.brand},
+           }
+        }
 
     case SET_CURRENT_BRAND:
       return {

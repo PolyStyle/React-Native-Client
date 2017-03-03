@@ -11,7 +11,7 @@ import products from './modules/products';
 import brands from './modules/brands';
 import tags from './modules/tags';
 import images from './modules/images';
-import feed from './modules/feed';
+import streamFeed from './modules/streamFeed';
 
 export default combineReducers({
 	authentication,
@@ -25,5 +25,5 @@ export default combineReducers({
 	brands,
 	tags,
 	images,
-	feed
+	streamFeed
 })

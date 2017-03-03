@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
 import Item from './Item';
 
-import { fetchFeed } from './../../redux/modules/posts'
+import { fetchStreamFeed } from './../../redux/modules/streamFeed'
 
 const styles = StyleSheet.create({
   container: {
@@ -27,14 +27,14 @@ class StreamListView extends React.Component {
       dataSource: ds.cloneWithRows([]),
       refreshing: false,
     };
-    this.props.dispatch(fetchFeed()).then(function(){
+    this.props.dispatch(fetchStreamFeed()).then(function(){
       self.updateListView();
     })
   }
 
   _onRefresh() {
     this.setState({refreshing: true}, function(){
-        this.props.dispatch(fetchFeed());
+        this.props.dispatch(fetchStreamFeed());
 
     });
 

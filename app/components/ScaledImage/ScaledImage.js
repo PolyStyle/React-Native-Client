@@ -40,6 +40,7 @@ class ScaledImage extends Component {
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
     const url = 'http://104.155.46.72/api/v1/images/' + props.id +'/' + postRetinaWidth ;
+    
     const self = this;
 
     fetch(url,{method: 'GET'}).then((response) => {

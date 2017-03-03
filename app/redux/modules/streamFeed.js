@@ -2,7 +2,7 @@ import {
   getFeed,
 } from './../../api/api_proxy'
 
-const FETCH_FEED = 'FETCH_STREAM'
+const FETCH_STREAM = 'FETCH_STREAM'
 
 
 
@@ -10,14 +10,14 @@ const FETCH_FEED = 'FETCH_STREAM'
 function setFeed( posts ) {
 
   return {
-    type: FETCH_FEED,
+    type: FETCH_STREAM,
     posts: posts
   }
 }
 
 
 
-export function fetchFeed() {
+export function fetchStreamFeed() {
   return function (dispatch) {
     return getFeed().then(function (posts) {
       dispatch(setFeed(posts))
@@ -36,7 +36,7 @@ export default function posts (state = initialState, action) {
   let currentIndex;
   let i;
   switch (action.type) {
-    case FETCH_FEED:
+    case FETCH_STREAM:
       // TODO REWRITE THIS WITH A MAP
       return {
         ...state,

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Navbar, StreamListView , CustomButton, Gear}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
 import { PostContainer, UserProfileContainer, ProductContainer, BrandContainer, CollectionContainer} from  './../../containers'
-import { fetchFeed } from './../../redux/modules/posts'
 
 const { height,width } = Dimensions.get('window')
 

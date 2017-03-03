@@ -2,10 +2,13 @@ import React, { PropTypes, Component } from 'react';
 import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity, InteractionManager} from 'react-native';
 import { ProductItem, FilterLabel, ScaledImage, FollowButton }  from './../../components'
 import { connect } from 'react-redux';
-import { fetchBrand, fetchBrandStream, followBrand, unfollowBrand,isFollowingBrand} from './../../redux/modules/brands';
+import { fetchBrand, followBrand, fetchBrandStream, unfollowBrand,isFollowingBrand} from './../../redux/modules/brands';
+
+
 const { height,width } = Dimensions.get('window')
 
-
+const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+const ds2 = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 const styles = StyleSheet.create({
   container: {
@@ -87,31 +90,26 @@ class BrandContainer extends Component{
   }
 
 
-  componentDidUpdate(prevProps, prevState){
-    InteractionManager.runAfterInteractions(() => {
-      this._renderList();
-     });
+  componentDidUpdate(prevProps, prevState){ 
+    this._renderList();
   }
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-
       this.props.dispatch(fetchBrand(this.props.id));
       this.props.dispatch(fetchBrandStream(this.props.id));
       this.props.dispatch(isFollowingBrand(this.props.id));
-    });
   }
 
 
   _renderList(){
 
-      if(!this.props.brandStream) return;
+      if(!this.props.brands[this.props.id].brandStream) return;
 
       var filters = [];
-
-      for(var i=0; i<this.props.brandStream.length; i++){
-        for(var j=0; j<this.props.brandStream[i].Tags.length; j++){
-          var tag = this.props.brandStream[i].Tags[j];
+      var stream = this.props.brands[this.props.id].brandStream;
+      for(var i=0; i<stream.length; i++){
+        for(var j=0; j<stream[i].Tags.length; j++){
+          var tag = stream[i].Tags[j];
           if(filters[tag.displayName] == null){
             filters[tag.displayName] = {displayName: tag.displayName, id: tag.id, quantity: 1}
           } else {
@@ -119,10 +117,18 @@ class BrandContainer extends Component{
           }
         }
       }
+      var filtersArray = [];
+      for (key in filters) {
+        filtersArray.push(filters[key]);
+      }
 
-      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      const newDataStore = ds.cloneWithRows(this.props.brandStream);
-      const newFilterDataStore = ds.cloneWithRows(filters);
+      filtersArray = filtersArray.sort(function(a, b) {
+        return a.quantity > b.quantity ? -1 : 1;
+      });
+
+      const newDataStore = ds.cloneWithRows(stream);
+      const newFilterDataStore = ds2.cloneWithRows(filtersArray);
+
       if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
         this.setState({
           filterDataStore :newFilterDataStore,
@@ -131,7 +137,6 @@ class BrandContainer extends Component{
       }
   }
   handlerSelection(id,active){
-    console.log('bubble up')
     //this.props.handlerSelection(id,active);
   }
 
@@ -146,6 +151,7 @@ class BrandContainer extends Component{
       this.props.dispatch(followBrand(this.props.id));
     }
   }
+
   _renderHeader(){
    return (
     <View style={styles.containerHeader}>
@@ -170,9 +176,7 @@ class BrandContainer extends Component{
   }
 
   _renderSectionHeader(){
-    console.log(this.state.filterDataStore);
     if(this.state.filterDataStore.rowIdentities[0].length <= 0){
-
       return <View />;
     }
     return (
@@ -191,13 +195,7 @@ class BrandContainer extends Component{
     </View>)
   }
 
-  _navigateToProduct(rowData){
-    this.props.navigator.push({
-        name: 'Product',
-        title: 'Product',
-        passProps: rowData,
-    })
-  }
+
 
   render() {
     if( this.props.brands && this.state.dataSource){
@@ -221,8 +219,7 @@ class BrandContainer extends Component{
 
 function mapStateToProps ({brands}) {
   return {
-    brands: brands,
-    brandStream: brands.currentBrandStream
+    brands: brands.brands,
   }
 }
 
