@@ -2,7 +2,7 @@ import React, { PropTypes,Component } from 'react'
 import { View, StyleSheet, Text, Image, Dimensions } from 'react-native'
 import { LoginButton } from 'react-native-fbsdk'
 import { colors, fontSizes } from './../../styles'
-import { onAuthChange, handleAuthRemotely, facebookToken } from './../../redux/modules/authentication'
+import { onAuthChange, handleAuthRemotely, facebookToken, alreadySignedIn } from './../../redux/modules/authentication'
 import { connect } from 'react-redux'
 
 const { height,width } = Dimensions.get('window')
@@ -19,7 +19,21 @@ class LogIn extends Component {
   componentDidMount() {
     var _self = this; 
     // try to se if there is a login token from facebook SDK
-    facebookToken()
+    var currentUser = null;
+    if(this.props.authentication){
+      currentUser = this.props.authentication.id;
+    }
+    var preSavedAuthToken = null;
+    if(currentUser) {
+      if(this.props.users[currentUser] && this.props.users[currentUser].accessToken.accessToken){
+        preSavedAuthToken = this.props.users[currentUser].accessToken.accessToken;
+      }
+    }
+    if(preSavedAuthToken){ 
+      _self.props.dispatch(alreadySignedIn(this.props.authentication.id))
+    } else {
+      // I don't have an app token, let's go through fb.
+      facebookToken()
       .then(function (accessToken) {
         if(accessToken){
           _self.setState({
@@ -28,6 +42,7 @@ class LogIn extends Component {
           _self.props.dispatch(handleAuthRemotely())
         }
       });
+    }
   }
 
   handleLoginFinished = (error, result) => {
@@ -67,7 +82,15 @@ class LogIn extends Component {
   }
 }
 
-export default connect()(LogIn)
+function mapStateToProps ({authentication, users}) {
+  return {
+    authentication: authentication,
+    users: users,
+  }
+}
+
+
+export default connect(mapStateToProps)(LogIn)
 
 
 const styles = StyleSheet.create({

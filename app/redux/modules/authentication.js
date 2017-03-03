@@ -43,6 +43,12 @@ export function facebookToken() {
   return getAccessToken()
 }
 
+export function alreadySignedIn(id){
+  return function (dispatch) {
+    dispatch(isAuthed(id));
+  }
+}
+
 export function handleAuthRemotely() {
   console.log('login');
   return function (dispatch, getState) {
