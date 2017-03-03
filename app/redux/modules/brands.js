@@ -110,11 +110,34 @@ export default function brands (state = initialState, action) {
         currentBrandStream: action.brandStream
       }
     case UPDATE_BRAND_FOLLOW:
-      return {
+      currentIndex = -1;
+      for (key in state.brands) {
+        console.log(state.brands[key]);
+        console.log(key);
+        if(state.brands[key].id == action.id){
+          currentIndex = key
+        }
+      }
+      if(currentIndex > -1){
+        return {
         ...state,
-        [action.id] : {
-          ...state[action.id],
-          isFollowing: action.isFollowing
+          brands: {
+            ...state.brands,
+            [currentIndex]: {
+              ...state.brands[currentIndex],
+              isFollowing: action.isFollowing
+             }
+          }
+        }
+      } else {
+        return {
+          ...state,
+          brands: {
+            ...state.brands,
+            [action.id]: {
+              isFollowing: action.isFollowing
+            }
+          }
         }
       }
     case ADD_BRAND_STREAM:
@@ -144,7 +167,7 @@ export default function brands (state = initialState, action) {
           ...state,
           brands: {
             ...state.brands,
-            [currentIndex]: {
+            [action.id]: {
               brandStream: action.brandStream
             }
           }
