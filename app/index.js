@@ -45,7 +45,6 @@ export default class RNFashion extends Component {
         this.setState({
           restoredPersistentStore: true
         })
-
     })
   }
 

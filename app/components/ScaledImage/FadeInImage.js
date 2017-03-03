@@ -37,6 +37,7 @@ class FadeInImage extends Component {
     return (
         <Animated.Image
           style={style}
+          resizeMode={this.props.resizeMode}
           source={this.props.source}
           onLoad={this.onLoad}
         />

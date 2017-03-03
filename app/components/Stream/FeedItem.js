@@ -8,6 +8,8 @@ const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
+    minHeight: 400,
+    backgroundColor: '#ffffff',
   },
   descriptions: {
     backgroundColor: '#ffffff',

@@ -97,9 +97,10 @@ class BrandContainer extends Component{
 
   componentDidMount() {
       this.props.dispatch(fetchBrand(this.props.id));
-      this.props.dispatch(fetchBrandStream(this.props.id));
-      this.props.dispatch(isFollowingBrand(this.props.id));
-      InteractionManager.runAfterInteractions(() => {
+       InteractionManager.runAfterInteractions(() => {
+        this.props.dispatch(fetchBrandStream(this.props.id));
+        this.props.dispatch(isFollowingBrand(this.props.id));
+
         this._renderList();
       })
   }
@@ -161,26 +162,30 @@ class BrandContainer extends Component{
   }
 
   _renderHeader(){
-   return (
-    <View style={styles.containerHeader}>
-      <ScaledImage
-        id={this.props.brands[this.props.id].BackgroundImageId}
-        width={width}
-        styles={styles.backgroundHeader}
-      />
-      <View style={styles.avatarContainer}>
+    if(this.props.brands[this.props.id] && this.props.brands[this.props.id].AvatarImageId){
+     return (
+      <View style={styles.containerHeader}>
         <ScaledImage
-          id={this.props.brands[this.props.id].AvatarImageId}
+          id={this.props.brands[this.props.id].BackgroundImageId}
           width={width}
-          styles={styles.avatar}
+          styles={styles.backgroundHeader}
         />
-        <View style={styles.followUser}>
-        <FollowButton  cta={"Following"} active={this.props.brands[this.props.id].isFollowing} onPress={this.handleFollowing.bind(this)} />
+        <View style={styles.avatarContainer}>
+          <ScaledImage
+            id={this.props.brands[this.props.id].AvatarImageId}
+            width={width}
+            styles={styles.avatar}
+          />
+          <View style={styles.followUser}>
+          <FollowButton  cta={"Following"} active={this.props.brands[this.props.id].isFollowing} onPress={this.handleFollowing.bind(this)} />
+          </View>
         </View>
+        <View style={styles.separationLine} />
       </View>
-      <View style={styles.separationLine} />
-    </View>
-    )
+      )
+    } else {
+      return (<View style={styles.containerHeader} />)
+    }
   }
 
   _renderSectionHeader(){

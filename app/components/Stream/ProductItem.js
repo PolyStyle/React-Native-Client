@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 import { connect } from 'react-redux'
-import { fetchProduct } from './../../redux/modules/products'
+import { fetchProduct,unlikeProduct,likeProduct, hasLikedProduct } from './../../redux/modules/products'
 
 const { height,width } = Dimensions.get('window');
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     minHeight: 350,
   },
   boxContainer: {
-    minHeight: 350,
+    minHeight: 300,
     backgroundColor: '#dfdfdf',
     marginBottom: 120,
   }
@@ -99,6 +99,7 @@ class ProductItem extends Component {
 
   componentDidMount() {
     this.props.dispatch(fetchProduct(this.props.id));
+    this.props.dispatch(hasLikedProduct(this.props.id));
   }
 
   onPress = () =>{
@@ -158,6 +159,15 @@ class ProductItem extends Component {
     })
   }
 
+  likeProduct(){
+    if(this.props.products[this.props.id].isLiking){
+      // remove the follow
+      this.props.dispatch(unlikeProduct(this.props.id));
+    } else {
+      // add the follow
+      this.props.dispatch(likeProduct(this.props.id));
+    }
+  }
 
   render(){
     if (this.props.products[this.props.id] && this.props.products[this.props.id].ImageId) {
@@ -175,7 +185,7 @@ class ProductItem extends Component {
           </TouchableOpacity>
          <View style={styles.descriptions}>
           <View style={styles.iconContainer}>
-            <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>
+            <Heart active={this.props.products[this.props.id].isLiking} style={styles.heartIcon}  onPress={this.likeProduct.bind(this)}/>
             <MoreDots style={styles.addIcon} />
           </View>
           <View style={styles.separationLine} />

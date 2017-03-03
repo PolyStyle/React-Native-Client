@@ -40,7 +40,7 @@ class ScaledImage extends Component {
   renderImage(props) {
     const postRetinaWidth = Math.floor(props.width * PixelRatio.get());
     const url = 'http://104.155.46.72/api/v1/images/' + props.id +'/' + postRetinaWidth ;
-    
+
     const self = this;
 
     fetch(url,{method: 'GET'}).then((response) => {
@@ -50,9 +50,10 @@ class ScaledImage extends Component {
         }
       )
       .then((responseJson) => {
-        const pictureWidth = responseJson.width;
-        const pictureHeight = responseJson.height;
+        const pictureWidth = responseJson.width/PixelRatio.get();
+        const pictureHeight = responseJson.height/PixelRatio.get();
         const pictureRatio = pictureHeight/pictureWidth;
+
 
         self.setState({
           url: responseJson.url,
@@ -75,7 +76,8 @@ class ScaledImage extends Component {
           <FadeInImage
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
-            style={[{'width': this.state.width, 'height': this.state.height},this.props.styles]}
+            resizeMode={this.props.resizeMode}
+            style={[{'width': this.state.width, 'height': this.state.height}, this.props.styles]}
             source={{uri:this.state.url}}
           />
       );
