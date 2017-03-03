@@ -10,7 +10,6 @@ const ADD_BRAND = 'ADD_BRAND'
 const SET_CURRENT_BRAND = 'SET_CURRENT_BRAND'
 const IS_FATCHING = 'IS_FATCHING'
 const ADD_BRAND_STREAM = 'ADD_BRAND_STREAM'
-const SET_CURRENT_BRAND_STREAM = 'SET_CURRENT_BRAND_STREAM'
 const UPDATE_BRAND_FOLLOW = 'UPDATE_BRAND_FOLLOW'
 
 function addBrand( brand ) {
@@ -28,12 +27,6 @@ function addBrandStream(id, brandStream) {
   }
 }
 
-function setCurrentBrandStream( brandStream) {
-  return {
-    type: SET_CURRENT_BRAND_STREAM,
-    brandStream: brandStream
-  }
-}
 export function fetchBrand(id){
   return function(dispatch){
     return getBrand(id).then(function(brand){
@@ -104,16 +97,9 @@ export default function brands (state = initialState, action) {
   let currentIndex;
   let i;
   switch (action.type) {
-    case SET_CURRENT_BRAND_STREAM:
-      return {
-        ...state,
-        currentBrandStream: action.brandStream
-      }
     case UPDATE_BRAND_FOLLOW:
       currentIndex = -1;
       for (key in state.brands) {
-        console.log(state.brands[key]);
-        console.log(key);
         if(state.brands[key].id == action.id){
           currentIndex = key
         }

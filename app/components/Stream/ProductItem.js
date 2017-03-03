@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableWithoutFeedback} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 const { height,width } = Dimensions.get('window');
 
@@ -156,13 +156,13 @@ class ProductItem extends Component {
     if (this.props.ImageId) {
       return (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.imageContainer} onPress={this._navigateToProduct.bind(this)}>
+          <TouchableWithoutFeedback style={styles.imageContainer} onPress={this._navigateToProduct.bind(this)}>
             <ScaledImage
               setNativeProps
               id={this.props.ImageId}
               width={width}
             />
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
          <View style={styles.descriptions}>
           <View style={styles.iconContainer}>
             <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>

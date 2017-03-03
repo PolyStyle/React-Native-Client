@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight} from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 
 import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
@@ -181,13 +181,13 @@ class Item extends Component {
     if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
         <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-          <TouchableOpacity onPress={this._navigateToPost.bind(this)}>
+          <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this)}>
             <ScaledImage
               id={currentPost.ImageId}
               width={width}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
+          <TouchableOpacity activeOpacity={0.9} style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
             <View style={styles.avatarContainerView}>
                 <Text style={styles.avatarName}>
                   {currentPost.User.firstName}

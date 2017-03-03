@@ -13,7 +13,7 @@ const ds2 = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000'
+    backgroundColor: '#fff'
   },
   categoriesList: {
     marginTop: 50,
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   containerHeader: {
     width: width,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#dfdfdf",
     minHeight: 290
   },
   avatar: {
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#cdcdcd',
   },
   avatarName: {
     flexDirection: 'row',
@@ -87,10 +88,11 @@ class BrandContainer extends Component{
     this.state = {
       dataSource: null
     }
+    this._renderList();
   }
 
 
-  componentDidUpdate(prevProps, prevState){ 
+  componentDidUpdate(prevProps, prevState){
     this._renderList();
   }
 
@@ -102,11 +104,15 @@ class BrandContainer extends Component{
 
 
   _renderList(){
+      var stream;
+      if(this.props.brands[this.props.id] && this.props.brands[this.props.id].brandStream){
+        // start the rendering even if I don't have objects
+         stream = this.props.brands[this.props.id].brandStream
+      } else {
+        stream = []
 
-      if(!this.props.brands[this.props.id].brandStream) return;
-
+      }
       var filters = [];
-      var stream = this.props.brands[this.props.id].brandStream;
       for(var i=0; i<stream.length; i++){
         for(var j=0; j<stream[i].Tags.length; j++){
           var tag = stream[i].Tags[j];
