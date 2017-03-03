@@ -126,7 +126,7 @@ class ProductContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(!this.props.product.similarProduct) {
+    if(!this.props.product.similarProduct || this.props.product.similarProduct.length <= 1) {
       return
     } // Don't render similar products if this is unique
 
@@ -147,12 +147,14 @@ class ProductContainer extends Component {
 
 
   onPress = () =>{
+    this.props.dispatch(fetchProduct(this.props.id));
     if(this.props.onPress) {
       this.props.onPress()
     }
   }
 
   _selectProduct(rowData){
+
     this.setState({
       currentImage: rowData.ImageId
     })
