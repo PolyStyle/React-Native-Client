@@ -199,7 +199,7 @@ class UserProfileContainer extends Component {
           />
           </View>
                 <View style={styles.followUser}>
-          {this.props.users.currentUser.id != this.props.id &&
+          {this.props.users[this.props.id] &&
             <FollowButton
               cta={"Following"} active={this.props.users[this.props.id].isFollowing}
               onPress={this.handleFollowing.bind(this)} /> }

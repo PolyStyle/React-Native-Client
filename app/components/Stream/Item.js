@@ -147,11 +147,16 @@ class Item extends Component {
     })
   }
 
-  _navigateToUser(){
+  _navigateToUser(user){
   this.props.navigator.push({
       name: 'User',
-      title: this.props.User.displayName,
-      passProps: this.props.User,
+      title: user.displayName,
+      passProps: {
+        id: user.id,
+        users: {
+          [user.id]: user
+        }
+      },
       passState: this.state
     })
   }
@@ -181,13 +186,17 @@ class Item extends Component {
     if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
         <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-          <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this)}>
+          <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this )}>
             <ScaledImage
               id={currentPost.ImageId}
               width={width}
             />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.9} style={styles.avatarContainer} onPress={this._navigateToUser.bind(this)}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            style={styles.avatarContainer}
+            onPress={this._navigateToUser.bind(this, currentPost.User)}
+          >
             <View style={styles.avatarContainerView}>
                 <Text style={styles.avatarName}>
                   {currentPost.User.firstName}
