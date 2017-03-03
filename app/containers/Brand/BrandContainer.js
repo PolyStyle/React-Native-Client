@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#cdcdcd',
   },
   avatarName: {
     flexDirection: 'row',
@@ -88,7 +87,7 @@ class BrandContainer extends Component{
     this.state = {
       dataSource: null
     }
-    this._renderList();
+
   }
 
 
@@ -100,6 +99,9 @@ class BrandContainer extends Component{
       this.props.dispatch(fetchBrand(this.props.id));
       this.props.dispatch(fetchBrandStream(this.props.id));
       this.props.dispatch(isFollowingBrand(this.props.id));
+      InteractionManager.runAfterInteractions(() => {
+        this._renderList();
+      })
   }
 
 

@@ -1,15 +1,16 @@
 import { getSameProducts, getProduct } from './../../api/api_proxy'
 
 const ADD_PRODUCT = 'ADD_PRODUCT'
-const ADD_PRODUCTS = 'ADD_PRODUCTS' 
-const IS_FATCHING = 'IS_FATCHING' 
+const ADD_PRODUCTS = 'ADD_PRODUCTS'
+const IS_FATCHING = 'IS_FATCHING'
 const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
 const SET_SAME_PRODUCTS = 'SET_SAME_PRODUCTS'
 
 function addProduct( product ) {
   return {
     type: ADD_PRODUCT,
-    product: product
+    product: product,
+    id: product.id
   }
 }
 
@@ -34,17 +35,16 @@ function setSameProductList( products){
   }
 }
 
- 
+
 export function fetchProduct(id){
   return function(dispatch){
     return getProduct(id).then(function(product){
       dispatch(addProduct(product))
-      dispatch(setCurrentProduct(product))
     })
   }
 }
 
- 
+
 export function fetchSameProducts(id){
   return function(dispatch){
     return getSameProducts(id).then(function(products){
@@ -54,7 +54,7 @@ export function fetchSameProducts(id){
 }
 
 
- 
+
 const initialState = {
   isFetching: false,
   products: []
@@ -65,9 +65,12 @@ export default function products (state = initialState, action) {
     case ADD_PRODUCT:
       return {
         ...state,
-        isFetching: false,
-        // posts: [action.post]
+        products: {
+          ...state.products,
+          [action.id]: action.product
+        }
       }
+      break;
     case SET_SAME_PRODUCTS:
       return {
         ...state,

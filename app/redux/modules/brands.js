@@ -13,7 +13,6 @@ const ADD_BRAND_STREAM = 'ADD_BRAND_STREAM'
 const UPDATE_BRAND_FOLLOW = 'UPDATE_BRAND_FOLLOW'
 
 function addBrand( brand ) {
-  console.log(' ADD A BRAND')
   return {
     type: ADD_BRAND,
     brand: brand

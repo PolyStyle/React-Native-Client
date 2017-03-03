@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
-import Item from './Item';
+import FeedItem from './FeedItem';
 
 import { fetchStreamFeed } from './../../redux/modules/streamFeed'
 
@@ -110,7 +110,13 @@ class StreamListView extends React.Component {
         enableEmptySections={true}
         style={styles.container}
         dataSource={this.state.dataSource}
-        renderRow={(data) => <Item navigator={this.props.navigator} {...data} active={false} onPress={this.handlerSelection.bind(this)} />}
+        renderRow={(data) => <FeedItem
+          navigator={this.props.navigator}
+          {...data}
+          active={false}
+          onPress={this.handlerSelection.bind(this)}
+          />
+        }
       />
     );
   }

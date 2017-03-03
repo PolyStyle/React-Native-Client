@@ -1,6 +1,9 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Text, StyleSheet, Image, Dimensions, TouchableWithoutFeedback} from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
+import { connect } from 'react-redux'
+import { fetchProduct } from './../../redux/modules/products'
+
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -69,6 +72,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     minHeight: 350,
+  },
+  boxContainer: {
+    minHeight: 350,
+    backgroundColor: '#dfdfdf',
+    marginBottom: 120,
   }
 
 });
@@ -86,10 +94,11 @@ class ProductItem extends Component {
     this.state = {
       active: props.active,
     }
-  }
-  componentDidMount() {
-    // Set a ratio. We should allow picture with the height between 1/2 and 3/2 of the width
 
+  }
+
+  componentDidMount() {
+    this.props.dispatch(fetchProduct(this.props.id));
   }
 
   onPress = () =>{
@@ -153,16 +162,19 @@ class ProductItem extends Component {
 
 
   render(){
-    if (this.props.ImageId) {
+    if (this.props.products[this.props.id] && this.props.products[this.props.id].ImageId) {
       return (
         <View style={styles.container}>
-          <TouchableWithoutFeedback style={styles.imageContainer} onPress={this._navigateToProduct.bind(this)}>
+          <TouchableOpacity
+            activeOpacity={0.9}
+            style={styles.imageContainer}
+            onPress={this._navigateToProduct.bind(this)}>
             <ScaledImage
               setNativeProps
               id={this.props.ImageId}
               width={width}
             />
-          </TouchableWithoutFeedback>
+          </TouchableOpacity>
          <View style={styles.descriptions}>
           <View style={styles.iconContainer}>
             <Heart active={this.state.active} style={styles.heartIcon} onPress={this.onPress.bind(this)}/>
@@ -173,9 +185,18 @@ class ProductItem extends Component {
          </View>
         </View>
       )
+    } else {
+      return (<View style={styles.boxContainer} />)
     }
-    return (<Text> Loading ... {this.props} </Text>)
   }
 }
 
-export default ProductItem
+
+function mapStateToProps ({products}) {
+  return {
+    products: products.products
+  }
+}
+
+
+export default connect(mapStateToProps)(ProductItem)

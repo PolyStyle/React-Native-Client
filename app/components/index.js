@@ -27,7 +27,7 @@ import FollowButton from './Button/FollowButton'
 import StreamListView from './Stream/StreamListView'
 import TagLabel from './Stream/TagLabel'
 import FilterLabel from './Stream/FilterLabel'
-import Item from './Stream/Item'
+import FeedItem from './Stream/FeedItem'
 import ProductItem from './Stream/ProductItem'
 import UserItem from './Stream/UserItem'
 import ScaledImage from './ScaledImage/ScaledImage'
@@ -62,7 +62,7 @@ export {
 	StreamListView,
 	TagLabel,
 	FilterLabel,
-	Item,
+	FeedItem,
 	ProductItem,
 	UserItem,
 	ScaledImage

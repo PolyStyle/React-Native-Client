@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
 
 
-class Item extends Component {
+class FeedItem extends Component {
   static propTypes = {
     onPress: PropTypes.func,
     active: PropTypes.bool,
@@ -247,6 +247,6 @@ function mapStateToProps ({posts}) {
 }
 
 
-export default connect(mapStateToProps)(Item)
+export default connect(mapStateToProps)(FeedItem)
 
 
