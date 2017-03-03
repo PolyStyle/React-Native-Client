@@ -40,10 +40,8 @@ export default class RNFashion extends Component {
   }
 
   componentDidMount () {
-      console.log('Component Mounted');
       _self = this;
       var persistor = persistStore(store, {storage: AsyncStorage}, () => {
-        console.log('Rehydrated');
         this.setState({
           restoredPersistentStore: true
         })

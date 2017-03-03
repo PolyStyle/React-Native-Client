@@ -49,13 +49,13 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   avatar: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     height: 50,
     width: 50,
     borderRadius: 25,
   },
   avatarName: {
-    flexDirection: 'row', 
+    flexDirection: 'row',
     backgroundColor: "#000000",
     color: '#ffffff',
     marginTop: 15,
@@ -78,20 +78,20 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
 
-  productHolder: { 
+  productHolder: {
     height: 90,
     width: width,
     marginTop: 10,
     marginBottom: 10
   },
-  roundedProduct: { 
+  roundedProduct: {
     width: 90,
     height: 90,
     borderRadius: 45,
     borderColor: '#ffffff',
     borderWidth: 1,
   },
-  roundedBrand: { 
+  roundedBrand: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   productItem: {
     width: 90,
     height: 90,
-    marginRight: 10, 
+    marginRight: 10,
   }
 });
 
@@ -126,17 +126,16 @@ class ProductContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(!this.props.sameProductsList || 
-        this.props.sameProductsList.length == 0) {
+    if(!this.props.product.similarProduct) {
       return
     } // Don't render similar products if this is unique
 
 
     // add the current product to the list of all the other products,
     // in this way this will always be rendered as first option
-      
-    let newList = [this.props.product].concat(this.props.sameProductsList)
-    
+
+    let newList = [this.props.product].concat(this.props.product.similarProduct)
+
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     const newDataStore = ds.cloneWithRows(newList);
     if(this.state.dataSource == null || (this.state.dataSource._cachedRowCount != newDataStore._cachedRowCount)){
@@ -147,10 +146,10 @@ class ProductContainer extends Component {
   }
 
 
-  onPress = () =>{ 
+  onPress = () =>{
     if(this.props.onPress) {
       this.props.onPress()
-    } 
+    }
   }
 
   _selectProduct(rowData){
@@ -169,7 +168,7 @@ class ProductContainer extends Component {
   }
 
 
-  render(){ 
+  render(){
     if( this.props.product){
       return (
         <ScrollView style={styles.container}>
@@ -184,16 +183,16 @@ class ProductContainer extends Component {
               removeClippedSubviews={false}
               showsHorizontalScrollIndicator={false}
               dataSource={this.state.dataSource}
-              renderRow={(rowData) => 
-                  <TouchableOpacity style={styles.productItem} onPress={this._selectProduct.bind(this,rowData)}> 
-                  <View style={styles.productItem}>
-                     <ScaledImage
-                        style={styles.roundedProduct}
-                        styles={styles.roundedProduct}
-                        id={rowData.ImageId}
-                        width={90}
-                      />
-                  </View>
+              renderRow={(rowData) =>
+                  <TouchableOpacity style={styles.productItem} onPress={this._selectProduct.bind(this,rowData)}>
+                    <View style={styles.productItem}>
+                       <ScaledImage
+                          style={styles.roundedProduct}
+                          styles={styles.roundedProduct}
+                          id={rowData.ImageId}
+                          width={90}
+                        />
+                    </View>
                   </TouchableOpacity>
                 }
               />
@@ -224,9 +223,9 @@ class ProductContainer extends Component {
 }
 
 
-function mapStateToProps ({products}) {
-  return { 
-    product: products.currentProduct,
+function mapStateToProps ({products}, ownProps) {
+  return {
+    product: products.products[ownProps.id],
     sameProductsList: products.sameProductsList,
   }
 }

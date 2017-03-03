@@ -4,7 +4,7 @@ const ADD_PRODUCT = 'ADD_PRODUCT'
 const ADD_PRODUCTS = 'ADD_PRODUCTS'
 const IS_FATCHING = 'IS_FATCHING'
 const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
-const SET_SAME_PRODUCTS = 'SET_SAME_PRODUCTS'
+const ADD_SIMILAR_PRODUCT = 'ADD_SIMILAR_PRODUCT'
 
 function addProduct( product ) {
   return {
@@ -28,10 +28,11 @@ function setCurrentProduct( product ) {
   }
 }
 
-function setSameProductList( products){
+function addSimilarProduct(id, products){
   return {
-    type: SET_SAME_PRODUCTS,
-    products: products
+    type: ADD_SIMILAR_PRODUCT,
+    id,
+    products
   }
 }
 
@@ -48,7 +49,7 @@ export function fetchProduct(id){
 export function fetchSameProducts(id){
   return function(dispatch){
     return getSameProducts(id).then(function(products){
-      dispatch(setSameProductList(products))
+      dispatch(addSimilarProduct(id, products))
     })
   }
 }
@@ -67,20 +68,23 @@ export default function products (state = initialState, action) {
         ...state,
         products: {
           ...state.products,
-          [action.id]: action.product
+          [action.id]: {
+            ...state.products[action.id],
+            ...action.product,
+          }
         }
       }
       break;
-    case SET_SAME_PRODUCTS:
+    case ADD_SIMILAR_PRODUCT:
       return {
         ...state,
-        sameProductsList: action.products
-      }
-    case SET_CURRENT_PRODUCT:
-      return {
-        ...state,
-        isFetching: false,
-        currentProduct: action.product
+        products: {
+          ...state.products,
+          [action.id]: {
+            ...state.products[action.id],
+            similarProduct: action.products,
+          }
+        }
       }
     case ADD_PRODUCTS :
       return {

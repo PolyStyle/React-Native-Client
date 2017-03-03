@@ -10,22 +10,19 @@ export default class AppNavigator extends Component {
 
 
   renderScene = (route, navigator) => {
-      
-    console.log('--- BOOTSTRAPS INFO ----')
-    console.log('isAuthed', this.props.isAuthed)
-    console.log('isNew', this.props.isNew)
+
     if (this.props.isAuthed === false) {
       // I NEED TO SHOW THE LOGIN PAGE
       return <SplashContainer  style={{flex: 1, backgroundColor: '#00ccff'}} navigator={navigator} />
     } else if (route.settings === true) {
-      console.log('Show Settings')
+
       return <SettingsContainer  style={{flex: 1, backgroundColor: '#ffcc00'}} navigator={navigator} />
     } else if( this.props.isAuthed === true && this.props.isNew === true) {
       // THIS NEEDS AN ONBOARDING
       return <OnboardingContainer  style={{flex: 1, backgroundColor: '#ff0000'}} navigator={navigator} />
     }
     // IF NONE OF THE ABOVE, START THE STANDARD NAVIGATION (which in include the main view. Thanks iOS for this
-    // idiotic way 
+    // idiotic way
     return <FooterTabsContainer navigator={navigator} />
   }
   configureScene = (route) => {
@@ -36,15 +33,11 @@ export default class AppNavigator extends Component {
     if (route.settings === true) {
       return Navigator.SceneConfigs.FloatFromBottom
     }
-    
+
 
     return Navigator.SceneConfigs.FloatFromRight
   }
   render () {
-      console.log('-------------');
-  console.log(this.props.isAuthed);
-  console.log(this.props.isNew);
-  console.log('-------------');
     return (
        <View style={{flex: 1}}>
         <Navigator

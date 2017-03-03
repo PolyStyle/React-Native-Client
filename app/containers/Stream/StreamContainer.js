@@ -23,7 +23,7 @@ class StreamContainer extends Component {
       needed: newCounter,
       readyToFinish: isFinished
     });
-    
+
   }
 
   constructor (props) {
@@ -32,7 +32,7 @@ class StreamContainer extends Component {
       needed: 3, // the number of categories needed
       readyToFinish: false, // when the user has selected at least x needed categories
     }
-    
+
     // console.log('FETCH ALL POSTS')
   }
 
@@ -60,7 +60,10 @@ class StreamContainer extends Component {
                                   </TouchableHighlight> )
       },
       Title(route, navigator, index, navState) {
-        return <View style={styles.titleHolder}><Text style={ styles.textTitle }>{route.title}</Text></View>
+        return <View style={styles.titleHolder}><Text
+        numberOfLines={1}
+        ellipsizeMode={'tail'}
+        style={ styles.textTitle}>{route.title}</Text></View>
       }
     };
 
@@ -133,6 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   leftNavButton:{
+    width: 50,
     marginTop: (Platform.OS === 'android' ? 22 : 0),
     height: 35,
     alignItems: 'center'
@@ -145,13 +149,12 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   titleHolder: {
-    //backgroundColor: '#00ffcc',
-    width: width-140,
+    width: width-100,
     alignItems: 'center'
   },
   textTitle: {
       marginTop: (Platform.OS === 'android' ? 15 : 0),
-      fontSize: (Platform.OS === 'android' ? 18 : 17),
+      fontSize: (Platform.OS === 'android' ? 17 : 15),
       fontFamily: (Platform.OS === 'android' ? 'AvenirNextLTW01RegularRegular' :'AvenirNextLTW01BoldRegular'),
       color: '#000000'
   },
