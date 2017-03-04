@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
 
 import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
 const { height,width } = Dimensions.get('window');
@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   descriptions: {
     backgroundColor: '#ffffff',
     paddingLeft: 10,
-    paddingTop: 5,
     paddingBottom: 30,
     paddingRight: 10
   },
@@ -27,7 +26,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
-    marginTop: 5
+    marginTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10
   },
   heartIcon: {
     flexDirection: 'row',
@@ -89,6 +90,7 @@ class FeedItem extends Component {
     super(props)
     this.state = {
       currentIndexInPosts: -1,
+      exapndedMoreMenu: false,
     };
   }
   componentDidMount() {
@@ -180,6 +182,13 @@ class FeedItem extends Component {
     })
   }
 
+  expandMoreMenu(){
+    //this.props.scrollTo({y:-50})
+    this.setState({
+      exapndedMoreMenu: !this.state.exapndedMoreMenu
+    })
+  }
+
   render(){
     let currentPost;
     if(this.state.currentIndexInPosts > -1){
@@ -211,11 +220,13 @@ class FeedItem extends Component {
                 />
             </View>
           </TouchableOpacity>
-         <View style={styles.descriptions}>
+          
           <View style={styles.iconContainer}>
             <Heart active={currentPost.isLiking} style={styles.heartIcon} onPress={this.likePost.bind(this)}/>
-            <MoreDots style={styles.addIcon} onPress={this.onPress.bind(this)}/>
-          </View>
+            <MoreDots ref="moreButton" active={this.state.exapndedMoreMenu} style={styles.addIcon} onPress={this.expandMoreMenu.bind(this)}/>
+          </View> 
+          {this.state.exapndedMoreMenu && <ExpandInFeed />}
+         <View style={styles.descriptions}> 
           <View style={styles.separationLine} />
           <Text style={styles.descriptionText}>{currentPost.description}</Text>
           {currentPost.Tags.length > 0 && <View style={styles.tagList}>

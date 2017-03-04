@@ -31,6 +31,9 @@ import FeedItem from './Stream/FeedItem'
 import ProductItem from './Stream/ProductItem'
 import UserItem from './Stream/UserItem'
 import ScaledImage from './ScaledImage/ScaledImage'
+import ExpandInFeed from './ExpandInFeed/ExpandInFeed'
+import MenuButton from './ExpandInFeed/MenuButton'
+import AddToCollectionView from './ExpandInFeed/AddToCollectionView'
 
 export {
 	LogIn,
@@ -65,5 +68,8 @@ export {
 	FeedItem,
 	ProductItem,
 	UserItem,
-	ScaledImage
+	ExpandInFeed,
+	ScaledImage,
+	MenuButton,
+	AddToCollectionView
 }

@@ -88,8 +88,9 @@ class StreamListView extends React.Component {
 
 
   }
-  handlerSelection(id,active){
-    //this.props.handlerSelection(id,active);
+  handlerSelection(position){
+    console.log(this.listView.getScrollResponder());
+    this.listView.getScrollResponder().scrollTo(position)
   }
 
 
@@ -107,14 +108,16 @@ class StreamListView extends React.Component {
             title="Loading..."
             titleColor="#000000"
           />}
+        ref={ref => this.listView = ref}
         enableEmptySections={true}
         style={styles.container}
         dataSource={this.state.dataSource}
         renderRow={(data) => <FeedItem
           navigator={this.props.navigator}
           {...data}
+
           active={false}
-          onPress={this.handlerSelection.bind(this)}
+          scrollTo={this.handlerSelection.bind(this)}
           />
         }
       />
