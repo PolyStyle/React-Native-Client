@@ -24,6 +24,7 @@ import Onboarding from './Onboarding/Onboarding'
 import OnboardingListView from './Onboarding/OnboardingListView'
 import CustomButton from './Button/CustomButton'
 import FollowButton from './Button/FollowButton'
+import WideButton from './Button/WideButton'
 import StreamListView from './Stream/StreamListView'
 import TagLabel from './Stream/TagLabel'
 import FilterLabel from './Stream/FilterLabel'
@@ -35,6 +36,7 @@ import ExpandInFeed from './ExpandInFeed/ExpandInFeed'
 import MenuButton from './ExpandInFeed/MenuButton'
 import AddToCollectionView from './ExpandInFeed/AddToCollectionView'
 import CollectionListView from './ExpandInFeed/CollectionListView'
+import CreateNewCollection from './ExpandInFeed/CreateNewCollection'
 
 export {
 	LogIn,
@@ -63,6 +65,7 @@ export {
 	OnboardingListView ,
 	CustomButton ,
 	FollowButton ,
+	WideButton,
 	StreamListView,
 	TagLabel,
 	FilterLabel,
@@ -73,5 +76,6 @@ export {
 	ScaledImage,
 	MenuButton,
 	AddToCollectionView,
-	CollectionListView
+	CollectionListView,
+	CreateNewCollection
 }

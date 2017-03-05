@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { View, TouchableOpacity ,StyleSheet,  Text, Dimensions} from 'react-native'
 import CollectionListView  from './CollectionListView'
 import CollectionGroupItem from './CollectionGroupItem'
+import CreateNewCollection from './CreateNewCollection'
 
  
 
@@ -55,7 +56,6 @@ class AddToCollectionView extends Component {
      this.state = {
       showListView: true,
       showNewCollection: false,
-
     };
   };
 
@@ -66,7 +66,17 @@ class AddToCollectionView extends Component {
   }
 
   createNewCollectionHandler() {
+    this.setState({
+      showListView: false,
+      showNewCollection: true,    
+    })
+  }
 
+  backToPrevious(){
+    this.setState({
+      showListView: true,
+      showNewCollection: false,    
+    })
   }
 
  render(){
@@ -74,7 +84,8 @@ class AddToCollectionView extends Component {
     <View style={styles.container} >
       <Text style={styles.textTitle}> Add to Collection</Text>
       <View style={styles.separationLine} />
-      <CollectionListView onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>
+      {this.state.showListView && <CollectionListView onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>}
+      {this.state.showNewCollection && <CreateNewCollection backToPrevious={this.backToPrevious.bind(this)} onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>}
     </View>
     )
   }

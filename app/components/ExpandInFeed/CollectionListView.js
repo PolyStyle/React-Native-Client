@@ -62,8 +62,7 @@ class CollectionListView extends React.Component {
   }
 
   handleBackButton() {
-      if (this.props.navigator) {
-        console.log('need to pop out something ')
+      if (this.props.navigator) { 
           this.props.navigator.pop();
           return true;
       }
@@ -80,8 +79,7 @@ class CollectionListView extends React.Component {
     const newDataStore = this.state.dataSource.cloneWithRows(this.props.posts);
     console.log(newDataStore);
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
-    console.log(this.state.dataSource.getRowCount());
-    console.log(newDataStore.getRowCount());
+
       this.setState({
         dataSource: newDataStore,
       });
@@ -94,8 +92,6 @@ class CollectionListView extends React.Component {
     this.listView.getScrollResponder().scrollTo(position)
   }
   handlerSelectItem(index){
-    console.log(index);
-    console.log(this)
     if(index == 0){
       this.props.onCreateNewCollection();
     }
