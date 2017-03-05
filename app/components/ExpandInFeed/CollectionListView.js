@@ -89,9 +89,13 @@ class CollectionListView extends React.Component {
 
 
   }
-  handlerSelection(position){
+  handlerScroll(position){
     console.log(this.listView.getScrollResponder());
     this.listView.getScrollResponder().scrollTo(position)
+  }
+  handlerSelectItem(item){
+    console.log(item);
+    console.log(this)
   }
 
 
@@ -118,9 +122,9 @@ class CollectionListView extends React.Component {
           navigator={this.props.navigator}
           index={rowID}
           {...data}
-
+          selectItem={this.handlerSelectItem.bind(this,rowID)}
           active={false}
-          scrollTo={this.handlerSelection.bind(this)}
+          scrollTo={this.handlerScroll.bind(this)}
           />
         }
       />
