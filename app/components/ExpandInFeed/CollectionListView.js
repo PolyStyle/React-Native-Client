@@ -93,9 +93,12 @@ class CollectionListView extends React.Component {
     console.log(this.listView.getScrollResponder());
     this.listView.getScrollResponder().scrollTo(position)
   }
-  handlerSelectItem(item){
-    console.log(item);
+  handlerSelectItem(index){
+    console.log(index);
     console.log(this)
+    if(index == 0){
+      this.props.onCreateNewCollection();
+    }
   }
 
 

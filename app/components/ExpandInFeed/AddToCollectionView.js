@@ -52,6 +52,11 @@ class AddToCollectionView extends Component {
 
   constructor (props) {
     super(props)
+     this.state = {
+      showListView: true,
+      showNewCollection: false,
+
+    };
   };
 
   onPress() {
@@ -60,12 +65,16 @@ class AddToCollectionView extends Component {
     } 
   }
 
+  createNewCollectionHandler() {
+
+  }
+
  render(){
     return (
     <View style={styles.container} >
       <Text style={styles.textTitle}> Add to Collection</Text>
       <View style={styles.separationLine} />
-      <CollectionListView />
+      <CollectionListView onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>
     </View>
     )
   }
