@@ -1,5 +1,9 @@
 import React, { PropTypes, Component } from 'react'
 import { View, TouchableOpacity ,StyleSheet,  Text, Dimensions} from 'react-native'
+import CollectionListView  from './CollectionListView'
+import CollectionGroupItem from './CollectionGroupItem'
+
+ 
 
 const { height,width } = Dimensions.get('window')
 
@@ -36,13 +40,13 @@ const styles = StyleSheet.create({
     borderColor: '#333333',
     borderBottomWidth: 1,
     width: width-20,
+    marginBottom: 10
   },
 });
 
 
 class AddToCollectionView extends Component {
   static propTypes = {
-    description: PropTypes.string.isRequired,
     onPress: PropTypes.func,
   };
 
@@ -61,6 +65,7 @@ class AddToCollectionView extends Component {
     <View style={styles.container} >
       <Text style={styles.textTitle}> Add to Collection</Text>
       <View style={styles.separationLine} />
+      <CollectionListView />
     </View>
     )
   }

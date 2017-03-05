@@ -34,6 +34,7 @@ import ScaledImage from './ScaledImage/ScaledImage'
 import ExpandInFeed from './ExpandInFeed/ExpandInFeed'
 import MenuButton from './ExpandInFeed/MenuButton'
 import AddToCollectionView from './ExpandInFeed/AddToCollectionView'
+import CollectionListView from './ExpandInFeed/CollectionListView'
 
 export {
 	LogIn,
@@ -71,5 +72,6 @@ export {
 	ExpandInFeed,
 	ScaledImage,
 	MenuButton,
-	AddToCollectionView
+	AddToCollectionView,
+	CollectionListView
 }
