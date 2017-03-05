@@ -1,20 +1,92 @@
 'use strict';
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import { AccessToken as FacebookAccessToken, LoginManager } from 'react-native-fbsdk';
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
 var baseUrl = 'http://104.155.46.72/api/v1'
 // var baseUrl = 'http://127.0.0.1:3000'
 
-var AppAuthToken = null;
+var AccessToken = null;
 
 function isSuccess(code) {
     return code >= 200 && code < 300;
 }
+
+/**
+ * Executes a call to the APIs. If the token expired (the API call returns 401 with
+ * reason = TOKEN_EXPIRED) then this function tries to refresh the token first and then execute the
+ * API call again.
+ *
+ * apiCall                  - The function that wraps the API call, must return a promise
+ *
+ * Returns:
+ * On Success               - The result of apiCall
+ *
+ * On Error                 - A JSON object containing the following fields
+ *                            status  - HTTP status code
+ *                            message - Human readable error message
+ *                            details - Error details (optional)
+ */
+function runWithRefresh(apiCall) {
+  return function() {
+    const self = this;
+    const selfArguments = arguments;
+    return apiCall.apply(self, selfArguments).catch(function(error) {
+      console.log(error);
+      if (error.status === 401 && error.reason === "TOKEN_EXPIRED") {
+        return refreshToken(AccessToken).then(function(accessToken) {
+          AccessToken = accessToken;
+          return apiCall.apply(self, selfArguments);
+        });
+      } else {
+        throw error;
+      }
+    });
+  };
+}
+
+/**
+ * Refreshes an access token, this method should be called only when the token
+ * expired (i.e. a previous request return 401 with reason = TOKEN_EXPIRED).
+ *
+ * accessToken.accessToken    - The expired access token
+ * accessToken.refreshToken   - The refresh token
+ *
+ * Returns:
+ * On Success               - A JSON object containing the following fields:
+ *                            accessToken   - a JWT token for the current user
+ *                            refreshToken  - a token to refresh the JWT
+ *                            expiresIn     - time in seconds before the JWT expires
+ *
+ * On Error                 - A JSON object containing the following fields
+ *                            status  - HTTP status code
+ *                            message - Human readable error message
+ *                            details - Error details (optional)
+ */
+function refreshToken(accessToken) {
+  var endpoint = baseUrl + '/users/me/token';
+  return fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ refreshToken: accessToken.refreshToken })
+  }).then(function(res) {
+      if (!isSuccess(res.status)) {
+          return res.json().then(function(json) {
+              return Promise.reject(json);
+          });
+      }
+      return res.json();
+  }).catch(function(error) {
+      throw error;
+  });
+}
+
 /**
  * Gets all the posts
  */
-export function getPosts() {
+function getPosts() {
     var self = this;
     var endpoint = baseUrl + '/posts';
     return fetch(endpoint, {
@@ -35,7 +107,10 @@ export function getPosts() {
         console.error(error);
     });
 };
-export function getFeed() {
+
+exports.getPosts = runWithRefresh(getPosts);
+
+function getFeed() {
     var self = this;
     var endpoint = baseUrl + '/posts/feed';
     return fetch(endpoint, {
@@ -57,8 +132,9 @@ export function getFeed() {
     });
 };
 
+exports.getFeed = runWithRefresh(getFeed);
 
-export function getPost(id) {
+function getPost(id) {
     var self = this;
     var endpoint = baseUrl + '/posts/' + id;
     return fetch(endpoint, {
@@ -81,10 +157,13 @@ export function getPost(id) {
     });
 };
 
+exports.getPost = runWithRefresh(getPost);
+
 // LIKE POSTS
 
-export function hasLikedPost(id) {
-
+function hasLikedPost(id) {
+    console.log('GET LIKE  LIKE POST')
+    console.log(AccessToken.accessToken);
     var self = this;
     var endpoint = baseUrl + '/posts/' + id + '/like';
     return fetch(endpoint, {
@@ -93,7 +172,7 @@ export function hasLikedPost(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -105,9 +184,11 @@ export function hasLikedPost(id) {
     })
 };
 
+exports.hasLikedPost = runWithRefresh(hasLikedPost);
 
-export function likePost(id) {
-
+function likePost(id) {
+    console.log('CALLING LIKE POST')
+    console.log(AccessToken.accessToken);
     var self = this;
     var endpoint = baseUrl + '/posts/' + id + '/like';
     return fetch(endpoint, {
@@ -116,7 +197,7 @@ export function likePost(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -128,7 +209,9 @@ export function likePost(id) {
     })
 };
 
-export function unlikePost(id) {
+exports.likePost = runWithRefresh(likePost);
+
+function unlikePost(id) {
     var self = this;
     var endpoint = baseUrl + '/posts/' + id + '/unlike';
     return fetch(endpoint, {
@@ -137,7 +220,7 @@ export function unlikePost(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -149,7 +232,9 @@ export function unlikePost(id) {
     })
 };
 
-export function getBrand(id) {
+exports.unlikePost = runWithRefresh(unlikePost);
+
+function getBrand(id) {
     var self = this;
     var endpoint = baseUrl + '/brands/' + id;
     return fetch(endpoint, {
@@ -172,8 +257,9 @@ export function getBrand(id) {
     });
 };
 
+exports.getBrand = runWithRefresh(getBrand);
 
-export function isFollowingBrand(id) {
+function isFollowingBrand(id) {
     var self = this;
     var endpoint = baseUrl + '/brands/' + id + '/follow';
     return fetch(endpoint, {
@@ -182,7 +268,7 @@ export function isFollowingBrand(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -194,8 +280,9 @@ export function isFollowingBrand(id) {
     })
 };
 
+exports.isFollowingBrand = runWithRefresh(isFollowingBrand);
 
-export function followBrand(id) {
+function followBrand(id) {
     var self = this;
     var endpoint = baseUrl + '/brands/' + id + '/follow';
     return fetch(endpoint, {
@@ -204,7 +291,7 @@ export function followBrand(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -216,7 +303,9 @@ export function followBrand(id) {
     })
 };
 
-export function unfollowBrand(id) {
+exports.followBrand = runWithRefresh(followBrand);
+
+function unfollowBrand(id) {
     var self = this;
     var endpoint = baseUrl + '/brands/' + id + '/unfollow';
     return fetch(endpoint, {
@@ -225,7 +314,7 @@ export function unfollowBrand(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -237,8 +326,9 @@ export function unfollowBrand(id) {
     })
 };
 
+exports.unfollowBrand = runWithRefresh(unfollowBrand);
 
-export function isFollowingUser(id) {
+function isFollowingUser(id) {
     var self = this;
     var endpoint = baseUrl + '/users/' + id + '/follow';
     return fetch(endpoint, {
@@ -247,7 +337,7 @@ export function isFollowingUser(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -259,8 +349,9 @@ export function isFollowingUser(id) {
     })
 };
 
+exports.isFollowingUser = runWithRefresh(isFollowingUser);
 
-export function followUser(id) {
+function followUser(id) {
     var self = this;
     var endpoint = baseUrl + '/users/' + id + '/follow';
     return fetch(endpoint, {
@@ -269,7 +360,7 @@ export function followUser(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -281,7 +372,9 @@ export function followUser(id) {
     })
 };
 
-export function unfollowUser(id) {
+exports.followUser = runWithRefresh(followUser);
+
+function unfollowUser(id) {
     var self = this;
     var endpoint = baseUrl + '/users/' + id + '/unfollow';
     return fetch(endpoint, {
@@ -290,7 +383,7 @@ export function unfollowUser(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -302,12 +395,9 @@ export function unfollowUser(id) {
     })
 };
 
+exports.unfollowUser = runWithRefresh(unfollowUser);
 
-
-
-
-
-export function getBrandStream(id) {
+function getBrandStream(id) {
     var self = this;
     var endpoint = baseUrl + '/brands/stream/' + id;
     return fetch(endpoint, {
@@ -329,7 +419,9 @@ export function getBrandStream(id) {
     });
 };
 
-export function getTag(id) {
+exports.getBrandStream = runWithRefresh(getBrandStream);
+
+function getTag(id) {
     var self = this;
     var endpoint = baseUrl + '/tags/' + id;
     return fetch(endpoint, {
@@ -352,9 +444,9 @@ export function getTag(id) {
     });
 };
 
+exports.getTag = runWithRefresh(getTag);
 
-
-export function getTagStream(id) {
+function getTagStream(id) {
     var self = this;
     var endpoint = baseUrl + '/tags/stream/' + id;
     return fetch(endpoint, {
@@ -377,9 +469,9 @@ export function getTagStream(id) {
     });
 };
 
+exports.getTagStream = runWithRefresh(getTagStream);
 
-
-export function getUser(id) {
+function getUser(id) {
     var self = this;
     var endpoint = baseUrl + '/users/' + id;
     return fetch(endpoint, {
@@ -402,8 +494,9 @@ export function getUser(id) {
     });
 };
 
+exports.getUser = runWithRefresh(getUser);
 
-export function getUserStream(id) {
+function getUserStream(id) {
     var self = this;
     var endpoint = baseUrl + '/users/stream/' + id;
     return fetch(endpoint, {
@@ -426,8 +519,9 @@ export function getUserStream(id) {
     });
 };
 
+exports.getUserStream = runWithRefresh(getUserStream);
 
-export function getProduct(id) {
+function getProduct(id) {
     var self = this;
     var endpoint = baseUrl + '/products/' + id;
     return fetch(endpoint, {
@@ -450,8 +544,9 @@ export function getProduct(id) {
     });
 };
 
+exports.getProduct = runWithRefresh(getProduct);
 
-export function getSameProducts(id) {
+function getSameProducts(id) {
     var self = this;
     var endpoint = baseUrl + '/products/sameproducts/' + id;
     return fetch(endpoint, {
@@ -474,10 +569,11 @@ export function getSameProducts(id) {
     });
 };
 
+exports.getSameProducts = runWithRefresh(getSameProducts);
 
 // LIKE PRODUCT
 
-export function hasLikedProduct(id) {
+function hasLikedProduct(id) {
     var self = this;
     var endpoint = baseUrl + '/products/' + id + '/like';
     return fetch(endpoint, {
@@ -486,7 +582,7 @@ export function hasLikedProduct(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -498,10 +594,11 @@ export function hasLikedProduct(id) {
     })
 };
 
+exports.hasLikedProduct = runWithRefresh(hasLikedProduct);
 
-export function likeProduct(id) {
+function likeProduct(id) {
     console.log('CALLING LIKE POST')
-    console.log(AppAuthToken);
+    console.log(AccessToken.accessToken);
     var self = this;
     var endpoint = baseUrl + '/products/' + id + '/like';
     return fetch(endpoint, {
@@ -510,7 +607,7 @@ export function likeProduct(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -522,7 +619,9 @@ export function likeProduct(id) {
     })
 };
 
-export function unlikeProduct(id) {
+exports.likeProduct = runWithRefresh(likeProduct);
+
+function unlikeProduct(id) {
     var self = this;
     var endpoint = baseUrl + '/products/' + id + '/unlike';
     return fetch(endpoint, {
@@ -531,7 +630,7 @@ export function unlikeProduct(id) {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + AppAuthToken
+            'Authorization': 'Bearer ' + AccessToken.accessToken
         }
     }).then(function(res) {
         if (!isSuccess(res.status)) {
@@ -543,15 +642,15 @@ export function unlikeProduct(id) {
     })
 };
 
-
+exports.unlikeProduct = runWithRefresh(unlikeProduct);
 
 
 /* authentication part */
 export function getAccessToken() {
-    console.log('get access token', AccessToken.getCurrentAccessToken());
+    console.log('get access token', FacebookAccessToken.getCurrentAccessToken());
     // TODO RIPRISTINATE THE JS ACCESS TOKEN PART
     //LoginManager.logOut();
-    return AccessToken.getCurrentAccessToken()
+    return FacebookAccessToken.getCurrentAccessToken()
 }
 
 
@@ -559,12 +658,13 @@ export function onAuthStateChanged(callback) {
     onAuthStateChangedCallbacks.push(callback);
 }
 
-export function setAuthToken(token){
-  AppAuthToken = token;
+export function authWithAccessToken(accessToken){
+  AccessToken = accessToken;
   console.log('set auth token');
-  console.log(AppAuthToken)
+  console.log(AccessToken)
 }
-export function authWithFacebook(accessToken) {
+
+export function authWithFacebook(facebookAccessToken) {
     var endpoint = baseUrl + '/users/login/facebook';
     console.log('endpoint', endpoint);
     return fetch(endpoint, {
@@ -573,7 +673,7 @@ export function authWithFacebook(accessToken) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ accessToken: accessToken })
+            body: JSON.stringify({ accessToken: facebookAccessToken })
         })
         .then((response) => {
             console.log('line 378', response);
@@ -587,7 +687,7 @@ export function authWithFacebook(accessToken) {
             }
 
             // SAVE THE TOKEN FOR FUTURE CALLS
-            setAuthToken(user.accessToken.accessToken);
+            authWithAccessToken(user.accessToken);
             return user;
         })
         .catch((error) => {

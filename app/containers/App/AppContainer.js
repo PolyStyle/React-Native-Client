@@ -7,7 +7,7 @@ import { onAuthStateChanged } from './../../api/api_proxy'
 import { onAuthChange, handleAuthRemotely } from './../../redux/modules/authentication'
 import { hideFlashNotification } from './../../redux/modules/flashNotification'
 import { userOnboarded } from './../../redux/modules/users'
-import {  setAuthToken  } from './../../api/api_proxy'
+import {  authWithAccessToken } from './../../api/api_proxy'
 // import { notifications } from  './../../api/notifications'
 console.disableYellowBox = true
 
@@ -53,7 +53,7 @@ class AppContainer extends Component {
     console.log(this.props.currentUser)
     if(this.props.currentUser && this.props.currentUser.accessToken && this.props.currentUser.accessToken.accessToken){
       // CASE B. All's good ... move on
-      setAuthToken(this.props.currentUser.accessToken.accessToken)
+      authWithAccessToken(this.props.currentUser.accessToken)
     } else {
 
       //  I don't need this, yet.
