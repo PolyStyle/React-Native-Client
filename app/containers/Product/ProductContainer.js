@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react'
 import { ScrollView, View, Text, StyleSheet, Image, ListView, Dimensions, TouchableOpacity, InteractionManager} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
 import { fetchProduct, fetchSameProducts } from './../../redux/modules/products';
+import {  trackScreenView } from './../../api/tracking'
+
 import { connect } from 'react-redux';
 
 
@@ -121,6 +123,8 @@ class ProductContainer extends Component {
   }
 
   componentDidMount() {
+
+    trackScreenView('Product Screen', {label: 'id', value: this.props.id})
     this.props.dispatch(fetchProduct(this.props.id));
     this.props.dispatch(fetchSameProducts(this.props.id));
   }

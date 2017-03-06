@@ -3,6 +3,7 @@ import { ScrollView, View, Text, StyleSheet, Image, Dimensions, TouchableOpacity
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, UserItem, FollowButton, ScaledImage} from './../../components'
 import { fetchUser,fetchUserStream, unfollowUser, followUser, isFollowingUser} from './../../redux/modules/users';
 import { connect } from 'react-redux';
+import { trackScreenView } from './../../api/tracking'
 
 
 const { height, width } = Dimensions.get('window');
@@ -147,6 +148,7 @@ class UserProfileContainer extends Component {
   }
 
   componentDidMount() {
+    trackScreenView('User Screen', {label: 'id', value: this.props.id})
     this.props.dispatch(fetchUser(this.props.id));
     this.props.dispatch(isFollowingUser(this.props.id));
     this.props.dispatch(fetchUserStream(this.props.id));

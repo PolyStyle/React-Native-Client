@@ -3,7 +3,6 @@ import SplashContainer from './Splash/SplashContainer'
 import AppContainer from './App/AppContainer'
 import FooterTabsContainer from './FooterTabs/FooterTabsContainer'
 import LeaderboardContainer from './Leaderboard/LeaderboardContainer'
-import HomeContainer from './Home/HomeContainer'
 import UserProfileContainer from './UserProfile/UserProfileContainer'
 import SettingsContainer from './Settings/SettingsContainer'
 import SwipeContainer from './Swipe/SwipeContainer'
@@ -21,7 +20,6 @@ export {
 	AppContainer,
 	FooterTabsContainer,
 	LeaderboardContainer,
-	HomeContainer,
 	UserProfileContainer,
 	SettingsContainer,
 	SwipeContainer,
