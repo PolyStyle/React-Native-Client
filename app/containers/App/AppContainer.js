@@ -8,6 +8,7 @@ import { onAuthChange, handleAuthRemotely } from './../../redux/modules/authenti
 import { hideFlashNotification } from './../../redux/modules/flashNotification'
 import { userOnboarded } from './../../redux/modules/users'
 import {  authWithAccessToken } from './../../api/api_proxy'
+import {  trackScreenView } from './../../api/tracking'
 // import { notifications } from  './../../api/notifications'
 console.disableYellowBox = true
 
@@ -23,6 +24,7 @@ class AppContainer extends Component {
   }
   componentDidMount () {
     // Attach a callback when you have a change in the user
+    trackScreenView('Opening Screen')
     onAuthStateChanged((user) => this.props.dispatch(onAuthChange(user)))
     // on bootstrap try to handle an automatic authentication
     // for the time being is handling the case of being logged in with Facebook
@@ -72,9 +74,9 @@ class AppContainer extends Component {
         <StatusBar
           hidden={true}
         />
-        <AppNavigator 
-          isNew={this.props.currentUser.isNew} 
-          isAuthed={this.props.isAuthed} 
+        <AppNavigator
+          isNew={this.props.currentUser.isNew}
+          isAuthed={this.props.isAuthed}
         />
         {this.props.showFlashNotification === true
           ? <FlashNotification
@@ -89,7 +91,7 @@ class AppContainer extends Component {
 }
 
 function mapStateToProps ({authentication, flashNotification, users}) {
- 
+
   return {
     currentUser : users.currentUser,
     isAuthenticating: authentication.isAuthenticating,

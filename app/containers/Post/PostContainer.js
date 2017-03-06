@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ScrollView, View, Text, StyleSheet, Image, ListView, Dimensions, TouchableOpacity, InteractionManager} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components';
 import {  hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts';
-
+import {  trackScreenView } from './../../api/tracking'
 const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -128,6 +128,7 @@ class PostContainer extends Component {
   }
 
   componentDidMount() {
+    trackScreenView('Post Screen', {label: 'id', value: this.props.id})
     let currentPost = null;
     let index = -1;
     for(var i = 0; i < this.props.posts.length; i++){

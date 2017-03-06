@@ -3,10 +3,14 @@ import { View, Text, StyleSheet , Dimensions, Image} from 'react-native'
 import { LogIn }  from './../../components'
 import { connect } from 'react-redux'
 import { handleAuthRemotely } from './../../redux/modules/authentication'
+import {  trackScreenView } from './../../api/tracking'
 
 const { height,width } = Dimensions.get('window')
 
 class SplashContainer extends Component {
+  componentDidMount () {
+    trackScreenView('Splash Container');
+  }
   handleLoginFinished = (error, result) => {
     console.log('LOGIN FINISHED')
     if (error) {
@@ -21,7 +25,7 @@ class SplashContainer extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <View style={styles.backgroundColorContainer}>  
+        <View style={styles.backgroundColorContainer}>
           <View>
             <Image style={styles.image} source={require('../../images/logoType.png')} />
           </View>
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
- 
+
   image: {
     marginLeft: 0,
     marginRight: 0,
@@ -56,6 +60,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginTop: height/10,
     height: height * .4 > 300 ? 300 : height * .6
-  }, 
+  },
 })
 export default connect()(SplashContainer)

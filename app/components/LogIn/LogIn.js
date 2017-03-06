@@ -4,6 +4,7 @@ import { LoginButton } from 'react-native-fbsdk'
 import { colors, fontSizes } from './../../styles'
 import { onAuthChange, handleAuthRemotely, facebookToken, alreadySignedIn } from './../../redux/modules/authentication'
 import { connect } from 'react-redux'
+import {  trackScreenView } from './../../api/tracking'
 
 const { height,width } = Dimensions.get('window')
 
@@ -17,7 +18,8 @@ class LogIn extends Component {
   }
 
   componentDidMount() {
-    var _self = this; 
+    trackScreenView('Login Page');
+    var _self = this;
     // try to se if there is a login token from facebook SDK
     var currentUser = null;
     if(this.props.authentication){
@@ -29,7 +31,7 @@ class LogIn extends Component {
         preSavedAuthToken = this.props.users[currentUser].accessToken.accessToken;
       }
     }
-    if(preSavedAuthToken){ 
+    if(preSavedAuthToken){
       _self.props.dispatch(alreadySignedIn(this.props.authentication.id))
     } else {
       // I don't have an app token, let's go through fb.
@@ -61,7 +63,7 @@ class LogIn extends Component {
   render () {
     return (
           <View>
-          {this.state.isLoading == false && 
+          {this.state.isLoading == false &&
             <View style={styles.loginContainer}>
               <LoginButton
                 readPermissions={['email','public_profile']}
@@ -77,7 +79,7 @@ class LogIn extends Component {
             </View>
           }
           </View>
-         
+
     )
   }
 }
