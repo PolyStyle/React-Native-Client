@@ -644,6 +644,43 @@ function unlikeProduct(id) {
 
 exports.unlikeProduct = runWithRefresh(unlikeProduct);
 
+/*   Collection part
+/   GET /users/:userId/collections
+/   GET /collections/:collectionId
+/  POST /collections/
+/   PUT /collections/:collectionId.  NOT IMPLEMENTED
+/  POST /collections/:collectionId/addPost/
+/  POST /collections/:collectionId/removePost/
+/  POST /collections/:collectionId/addProduct/
+/  POST /collections/:collectionId/removeProduct/
+*/
+
+exports.getCollections = runWithRefresh(getCollections);
+
+function getCollections(userId) {
+    var self = this;
+    var endpoint = baseUrl + '/users/' + userId + /collections/;
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + 'TOKEN'
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    }).catch(function(error) {
+        console.log('8 There has been a problem with your fetch operation: ' + error.message);
+        // ADD THIS THROW error
+        throw error;
+    });
+};
+
+
 
 /* authentication part */
 export function getAccessToken() {
