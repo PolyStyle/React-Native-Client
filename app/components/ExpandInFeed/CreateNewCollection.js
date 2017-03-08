@@ -4,13 +4,13 @@ import { View, ListView, StyleSheet, Text,Dimensions, TextInput } from 'react-na
 import {ScaledImage, WideButton} from './../../components'
 import FeedItem from './../Stream/FeedItem';
 import CollectionGroupItem from './CollectionGroupItem'
-
+import { createNewUserCollectionWithPost } from './../../redux/modules/collections'
 
 const { height,width } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   container: {
- 
+
   },
   list: {
     flexDirection: 'row',
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   },
   previewImage: {
     width: width-40,
+    height: 250,
     borderRadius: 7,
     margin: 10,
   },
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
     margin: 2,
     height: 30,
   },
-  buttonHolder: { 
+  buttonHolder: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: 5,
@@ -47,7 +48,7 @@ class CreateNewCollection extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: 'Some Text',
+      text: 'New Collection',
     };
   }
 
@@ -57,7 +58,7 @@ class CreateNewCollection extends React.Component {
   }
 
   componentWillUnmount() {
-      
+
   }
 
   handlerSelectItem(index){
@@ -67,9 +68,19 @@ class CreateNewCollection extends React.Component {
     }
   }
 
+  createNewCollection(){
+    console.log('CREATE A NEW COLLECTION NAMED: ', this.state.text);
+    console.log('TYPE: ', this.props.itemType);
+    console.log('ITEM ID', this.props.item.id);
+    console.log('USER ID', this.props.userId);
+    if(this.props.itemType == 'POST'){
+      // I'm trying to add a POST.
+      this.props.dispatch(createNewUserCollectionWithPost(this.props.userId, this.props.item.id, this.state.text));
+    }
+  }
 
   render() {
- 
+
     return (
       <View>
         <View style={styles.inputHolder}>
@@ -81,17 +92,31 @@ class CreateNewCollection extends React.Component {
         </View>
         <ScaledImage
           styles={styles.previewImage}
-          id={Math.floor(Math.random()*6000+1000)}
+          id={this.props.item.ImageId}
           width={200}
         />
-        <View style={styles.buttonHolder}> 
-            <WideButton onPress={this.props.backToPrevious.bind(this)} opacity={.5} backgroundColor={'#202020'} cta="Cancel" />
-            <WideButton    cta="Create" />
+        <View style={styles.buttonHolder}>
+            <WideButton
+              onPress={this.props.backToPrevious.bind(this)}
+              opacity={.5}
+              backgroundColor={'#202020'}
+              cta="Cancel"
+            />
+            <WideButton
+              cta="Create"
+              onPress={this.createNewCollection.bind(this)}
+            />
         </View>
       </View>
     );
   }
 }
 
+function mapStateToProps () {
+  return {
 
-export default CreateNewCollection
+  }
+}
+
+
+export default connect(mapStateToProps)(CreateNewCollection)

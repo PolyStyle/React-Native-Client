@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
-
 import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
 const { height,width } = Dimensions.get('window');
 
@@ -220,13 +219,13 @@ class FeedItem extends Component {
                 />
             </View>
           </TouchableOpacity>
-          
+
           <View style={styles.iconContainer}>
             <Heart active={currentPost.isLiking} style={styles.heartIcon} onPress={this.likePost.bind(this)}/>
             <MoreDots ref="moreButton" active={this.state.exapndedMoreMenu} style={styles.addIcon} onPress={this.expandMoreMenu.bind(this)}/>
-          </View> 
-          {this.state.exapndedMoreMenu && <ExpandInFeed />}
-         <View style={styles.descriptions}> 
+          </View>
+          {this.state.exapndedMoreMenu && <ExpandInFeed taskAchievedCallback={this.expandMoreMenu.bind(this)} itemType={'POST'} item={currentPost}/>}
+         <View style={styles.descriptions}>
           <View style={styles.separationLine} />
           <Text style={styles.descriptionText}>{currentPost.description}</Text>
           {currentPost.Tags.length > 0 && <View style={styles.tagList}>

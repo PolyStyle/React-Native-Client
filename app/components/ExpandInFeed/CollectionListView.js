@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux'
 import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
 import FeedItem from './../Stream/FeedItem';
 import CollectionGroupItem from './CollectionGroupItem'
-import { fetchStreamFeed } from './../../redux/modules/streamFeed'
+import CollectionCreateNewItem from './CollectionCreateNewItem'
+import { fetchUserCollections } from './../../redux/modules/users'
+import { addPostToCollection } from './../../redux/modules/collections'
 
 const styles = StyleSheet.create({
   container: {
- 
+
   },
   list: {
         flexDirection: 'row',
@@ -19,7 +21,9 @@ const styles = StyleSheet.create({
 
 class CollectionListView extends React.Component {
 
-
+  static propTypes = {
+    userId: PropTypes.number.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -30,39 +34,37 @@ class CollectionListView extends React.Component {
       dataSource: ds.cloneWithRows([]),
       refreshing: false,
     };
-    this.props.dispatch(fetchStreamFeed()).then(function(){
-      self.updateListView();
+    console.log('--------------');
+    this.props.dispatch(fetchUserCollections(this.props.userId)).then(function(){
+
+      console.log('callback to fetch User COllections');
+       self.updateListView();
     })
   }
 
   _onRefresh() {
     this.setState({refreshing: true}, function(){
-        this.props.dispatch(fetchStreamFeed());
+        this.props.dispatch(fetchUserCollections(this.props.userId))
 
     });
 
   }
 
-  componentWillUpdate(){
-    if(this.state.refreshing){ 
-      this.setState({refreshing: false}, function(){ 
-        this.updateListView()
-      });
-    }
-  }
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
+    console.log('INFO ABOUT AT THIS STAGE');
+    console.log(this.props)
     this.updateListView();
 
   }
 
   componentWillUnmount() {
       BackAndroid.removeEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-          this.updateListView();
+      //this.updateListView();
   }
 
   handleBackButton() {
-      if (this.props.navigator) { 
+      if (this.props.navigator) {
           this.props.navigator.pop();
           return true;
       }
@@ -73,10 +75,17 @@ class CollectionListView extends React.Component {
 
 
   updateListView(){
-    console.log('UPDATE LIST VIEW ')
-    if(!this.props.posts) return;
+    console.log('CURRENT COLLECTION LISTS: ', this.props.collections)
+
+    if(!this.props.collections) return;
+
+    // ADD AN EMPTY COLLECTION AS PLACEHOLDER FOR THE 'CREATE A NEW ONE'
+    var newCollectionPlaceholder = {
+      displayName : "Create New Collection"
+    }
+    const collections = [newCollectionPlaceholder].concat(this.props.collections)
     // NOW THE DATA IS ORDER
-    const newDataStore = this.state.dataSource.cloneWithRows(this.props.posts);
+    const newDataStore = this.state.dataSource.cloneWithRows(collections);
     console.log(newDataStore);
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
 
@@ -91,12 +100,19 @@ class CollectionListView extends React.Component {
     console.log(this.listView.getScrollResponder());
     this.listView.getScrollResponder().scrollTo(position)
   }
-  handlerSelectItem(index){
-    if(index == 0){
-      this.props.onCreateNewCollection();
+  handlerAddToExistingCollection(id){
+
+    if(this.props.itemType == 'POST'){
+      // I'm trying to add a POST.
+      this.props.dispatch(addPostToCollection(id, this.props.item));
     }
+
+    this.props.taskAchievedCallback();
   }
 
+  handlerCreateNewCollection(){
+    this.props.onCreateNewCollection();
+  }
 
   render() {
     if(!this.state.dataSource){
@@ -117,13 +133,19 @@ class CollectionListView extends React.Component {
         enableEmptySections={true}
         style={styles.container}
         dataSource={this.state.dataSource}
-        renderRow={(data, sectionID, rowID) => <CollectionGroupItem
-          navigator={this.props.navigator}
-          index={rowID}
-          {...data}
-          selectItem={this.handlerSelectItem.bind(this,rowID)}
-          active={false}
-          scrollTo={this.handlerScroll.bind(this)}
+        renderRow={(data, sectionID, rowID) =>
+          rowID > 0 ?
+          <CollectionGroupItem
+            navigator={this.props.navigator}
+            index={rowID}
+            {...data}
+            selectItem={this.handlerAddToExistingCollection.bind(this,data.id)}
+            active={false}
+            scrollTo={this.handlerScroll.bind(this)}
+          /> :
+          <CollectionCreateNewItem
+            {...data}
+            selectItem={this.handlerCreateNewCollection.bind(this)}
           />
         }
       />
@@ -131,9 +153,9 @@ class CollectionListView extends React.Component {
   }
 }
 
-function mapStateToProps ({posts}) {
+function mapStateToProps ({users},ownProps) {
   return {
-    posts: posts.feed
+    collections: users[ownProps.userId].collections,
   }
 }
 

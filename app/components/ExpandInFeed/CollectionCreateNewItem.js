@@ -56,9 +56,11 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     color: '#cccccc',
-    fontFamily: 'AvenirNextLTW01RegularRegular',
-    fontSize: 13,
-    lineHeight: 13,
+    fontFamily: 'AvenirNext-Bold',
+    fontSize: 15,
+    lineHeight: 18,
+    marginTop: 40,
+    textAlign: 'center'
   },
   previewContainer: {
     flex: 1,
@@ -94,9 +96,7 @@ const styles = StyleSheet.create({
   }
 });
 
-
-
-class CollectionGroupItem extends Component {
+class CollectionCreateNewItem extends Component {
   static propTypes = {
     onPress: PropTypes.func,
     active: PropTypes.bool,
@@ -107,83 +107,21 @@ class CollectionGroupItem extends Component {
     this.state = {
       currentIndexInPosts: -1,
       exapndedMoreMenu: false,
-      previewImages: []
     };
   }
   componentDidMount() {
-    console.log('COLLECTION GROUP PROPS')
-    console.log(this.props)
-    // posts are in this.props.Posts
-    // products are in this.props.Products
-
-    const previewImages = this.props.Posts.slice(0,5).concat(this.props.Products.slice(0,5));
-    this.setState({
-      previewImages: previewImages,
-    })
   }
   componentWillReceiveProps(nextProps){
-
-
   }
 
-/*
-<ScaledImage
-                    styles={styles.smallImageContainer}
-                    id={Math.floor(Math.random()*6000+1000)}
-                    width={20}
-                  />
-*/
   render(){
      return (
-
           <View
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
             style={(this.props.index % 2) ? styles.containerRight : styles.containerLeft}>
             <TouchableOpacity activeOpacity={0.1} onPress={this.props.selectItem}>
               <Text style={styles.textTitle}>{this.props.displayName}</Text>
-              <Text style={styles.descriptionText}>125 Products, 120 Posts</Text>
-              <View style={styles.previewContainer}>
-                  <View style={styles.bigImageContainer}>
-                    {this.state.previewImages[0] && <ScaledImage
-                      styles={styles.bigImage}
-                      id={this.state.previewImages[0].ImageId}
-                      width={50}
-                    />}
-                  </View>
-
-
-                 <View style={styles.previewContainer}>
-                  <View style={styles.smallImageContainer}>
-                   {this.state.previewImages[1] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[1].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[2] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[2].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[3]  &&<ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[3].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[4] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[4].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                </View>
-              </View>
             </TouchableOpacity>
           </View>
       )
@@ -195,6 +133,6 @@ class CollectionGroupItem extends Component {
 
 
 
-export default CollectionGroupItem
+export default CollectionCreateNewItem
 
 

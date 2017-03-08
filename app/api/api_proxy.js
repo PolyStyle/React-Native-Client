@@ -3,8 +3,8 @@ import { AccessToken as FacebookAccessToken, LoginManager } from 'react-native-f
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-var baseUrl = 'http://104.155.46.72/api/v1'
-// var baseUrl = 'http://127.0.0.1:3000'
+//var baseUrl = 'http://104.155.46.72/api/v1'
+ var baseUrl = 'http://127.0.0.1:3000'
 
 var AccessToken = null;
 
@@ -655,9 +655,9 @@ exports.unlikeProduct = runWithRefresh(unlikeProduct);
 /  POST /collections/:collectionId/removeProduct/
 */
 
-exports.getCollections = runWithRefresh(getCollections);
+exports.getUserCollections = runWithRefresh(getUserCollections);
 
-function getCollections(userId) {
+function getUserCollections(userId) {
     var self = this;
     var endpoint = baseUrl + '/users/' + userId + /collections/;
     return fetch(endpoint, {
@@ -674,10 +674,85 @@ function getCollections(userId) {
         }
         return res.json();
     }).catch(function(error) {
-        console.log('8 There has been a problem with your fetch operation: ' + error.message);
+        console.log('Get user collections: ' + error.message);
         // ADD THIS THROW error
         throw error;
     });
+};
+
+exports.getCollection  = runWithRefresh(getCollection);
+
+function getCollection(collectionId) {
+    var self = this;
+    var endpoint = baseUrl + '/collections/' + collectionId;
+    return fetch(endpoint, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + 'TOKEN'
+        }
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    }).catch(function(error) {
+        console.log('Get collection: ' + error.message);
+        // ADD THIS THROW error
+        throw error;
+    });
+};
+
+exports.addCollection = runWithRefresh(addCollection);
+
+function addCollection(collection) {
+    var self = this;
+    var endpoint = baseUrl + '/collections';
+    console.log(endpoint)
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AccessToken.accessToken
+        },
+        body: JSON.stringify(collection)
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+};
+
+exports.addPostToCollection = runWithRefresh(addPostToCollection);
+
+function addPostToCollection(collectionId, post) {
+    var self = this;
+    var endpoint = baseUrl + '/collections/' + collectionId + '/addPost';
+    console.log(endpoint)
+    return fetch(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AccessToken.accessToken
+        },
+        body: JSON.stringify(post)
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
 };
 
 

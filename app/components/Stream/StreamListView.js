@@ -16,8 +16,6 @@ const styles = StyleSheet.create({
 
 class StreamListView extends React.Component {
 
-
-
   constructor(props) {
     super(props);
 
@@ -35,7 +33,6 @@ class StreamListView extends React.Component {
   _onRefresh() {
     this.setState({refreshing: true}, function(){
         this.props.dispatch(fetchStreamFeed());
-
     });
 
   }

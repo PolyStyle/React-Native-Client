@@ -49,7 +49,7 @@ class ExpandInFeed extends Component {
   addToCollection(){
     this.toggleBigScreen();
     this.setState({
-        menuView : false, 
+        menuView : false,
         addToCollectionView: true,
     });
   }
@@ -64,7 +64,7 @@ class ExpandInFeed extends Component {
           </View>
         }
         {this.state.addToCollectionView && <View>
-            <AddToCollectionView />
+            <AddToCollectionView taskAchievedCallback={this.props.taskAchievedCallback} itemType={this.props.itemType} item={this.props.item}/>
           </View>
         }
        </Animated.View>

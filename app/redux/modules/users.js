@@ -4,7 +4,9 @@ import {
   getUserStream,
   followUser as followUserAPI,
   unfollowUser as unfollowUserAPI,
-  isFollowingUser as isFollowingUserAPI
+  isFollowingUser as isFollowingUserAPI,
+  getUserCollections,
+  addCollection,
 } from './../../api/api_proxy'
 
 
@@ -21,6 +23,7 @@ const SET_CURRENT_USER_STREAM = 'SET_CURRENT_USER_STREAM'
 const ADD_USER_STREAM = 'ADD_USER_STREAM'
 
 const UPDATE_USER_FOLLOW = 'UPDATE_USER_FOLLOW'
+const ADD_USER_COLLECTIONS = 'ADD_USER_COLLECTIONS'
 import {REHYDRATE} from 'redux-persist/constants'
 
 
@@ -145,6 +148,23 @@ export function userOnboarded(){
   }
 }
 
+export function fetchUserCollections(userId){
+  console.log('RECEIVED CALL ON REDUX')
+  return function(dispatch){
+    return getUserCollections(userId).then(function(collections){
+      dispatch(addUserCollections(userId, collections))
+    })
+  }
+}
+function addUserCollections(userId, collections){
+  return {
+    type: ADD_USER_COLLECTIONS,
+    id: userId,
+    collections: collections
+  }
+}
+
+
 // this state is for isNew.
 const initialState = {
   currentUser : {
@@ -165,6 +185,14 @@ export default function users (state = initialState, action) {
       return {
         ...state,
         userStreams: [action.userStream]
+    }
+    case ADD_USER_COLLECTIONS:
+      return {
+        ...state,
+        [action.id] : {
+          ...state[action.id],
+          collections: action.collections
+        }
       }
     case UPDATE_USER_FOLLOW:
       console.log('update the state');
