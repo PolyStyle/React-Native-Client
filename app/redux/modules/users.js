@@ -157,6 +157,7 @@ export function fetchUserCollections(userId){
   }
 }
 function addUserCollections(userId, collections){
+  console.log('ADD USER COLLECTIONS ACTION', userId, collections)
   return {
     type: ADD_USER_COLLECTIONS,
     id: userId,
@@ -187,11 +188,20 @@ export default function users (state = initialState, action) {
         userStreams: [action.userStream]
     }
     case ADD_USER_COLLECTIONS:
+      let version = 0;
+      console.log(state[action.id])
+      if(state[action.id].collections){
+        version = state[action.id].collections.version + 1
+      }
+      console.log(version)
       return {
         ...state,
         [action.id] : {
           ...state[action.id],
-          collections: action.collections
+          collections: {
+            version: version,
+            collections: action.collections
+          }
         }
       }
     case UPDATE_USER_FOLLOW:

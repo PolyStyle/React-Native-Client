@@ -20,25 +20,40 @@ const styles = StyleSheet.create({
 });
 
 class CollectionListView extends React.Component {
+   static defaultProps = {
+    version: 0,
+  };
 
   static propTypes = {
     userId: PropTypes.number.isRequired,
+    version: PropTypes.number
   };
+
 
   constructor(props) {
     super(props);
 
     var self = this
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id || r1.updatedAt !== r2.updatedAt});
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) =>
+      {
+        if(!r1.Posts) {
+          return false; // this is the mock object at the beginning.
+        }
+        return (r1.id !== r2.id ||
+               r1.updatedAt !== r2.updatedAt ||
+               r1.Posts.length !== r2.Posts.length  ||
+                r1.Products.length !== r2.Products.length)
+
+      }
+    });
      this.state = {
       dataSource: ds.cloneWithRows([]),
       refreshing: false,
     };
-    console.log('--------------');
     this.props.dispatch(fetchUserCollections(this.props.userId)).then(function(){
 
-      console.log('callback to fetch User COllections');
-       self.updateListView();
+     self.updateListView();
+
     })
   }
 
@@ -52,8 +67,7 @@ class CollectionListView extends React.Component {
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.handleBackButton.bind(this));
-    console.log('INFO ABOUT AT THIS STAGE');
-    console.log(this.props)
+
     this.updateListView();
 
   }
@@ -73,20 +87,28 @@ class CollectionListView extends React.Component {
 
 
 
-
+  componentDidUpdate(prevProps) {
+    if(!this.props.version){
+      return
+    }
+    if(this.props.version > prevProps.version){
+      this.updateListView();
+    }
+  }
   updateListView(){
-    console.log('CURRENT COLLECTION LISTS: ', this.props.collections)
 
-    if(!this.props.collections) return;
+
+    if(!this.props || !this.props.collections) return;
 
     // ADD AN EMPTY COLLECTION AS PLACEHOLDER FOR THE 'CREATE A NEW ONE'
     var newCollectionPlaceholder = {
       displayName : "Create New Collection"
     }
+
     const collections = [newCollectionPlaceholder].concat(this.props.collections)
     // NOW THE DATA IS ORDER
     const newDataStore = this.state.dataSource.cloneWithRows(collections);
-    console.log(newDataStore);
+
     // TODO: the stop condition to avoid loop updates is really naive, to be fixed
 
       this.setState({
@@ -97,17 +119,21 @@ class CollectionListView extends React.Component {
 
   }
   handlerScroll(position){
-    console.log(this.listView.getScrollResponder());
     this.listView.getScrollResponder().scrollTo(position)
   }
   handlerAddToExistingCollection(id){
-
+    const self = this;
     if(this.props.itemType == 'POST'){
       // I'm trying to add a POST.
-      this.props.dispatch(addPostToCollection(id, this.props.item));
+      this.props.dispatch(addPostToCollection(id, this.props.item)).then(function(){
+        self.props.dispatch(fetchUserCollections(self.props.userId))
+
+      });
+    } else {
+      // I'm trying to add something else
     }
 
-    this.props.taskAchievedCallback();
+    // this.props.taskAchievedCallback();
   }
 
   handlerCreateNewCollection(){
@@ -154,8 +180,12 @@ class CollectionListView extends React.Component {
 }
 
 function mapStateToProps ({users},ownProps) {
+  if(!users[ownProps.userId].collections){
+    return {}
+  }
   return {
-    collections: users[ownProps.userId].collections,
+    collections: users[ownProps.userId].collections.collections,
+    version: users[ownProps.userId].collections.version
   }
 }
 

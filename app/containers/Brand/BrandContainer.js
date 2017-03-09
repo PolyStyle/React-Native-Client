@@ -3,7 +3,7 @@ import { View, ListView, StyleSheet, Text, Dimensions, Image, TouchableOpacity, 
 import { ProductItem, FilterLabel, ScaledImage, FollowButton }  from './../../components'
 import { connect } from 'react-redux';
 import { fetchBrand, followBrand, fetchBrandStream, unfollowBrand,isFollowingBrand} from './../../redux/modules/brands';
-import {  trackScreenView } from './../../api/tracking'
+import { trackScreenView } from './../../api/tracking'
 
 
 

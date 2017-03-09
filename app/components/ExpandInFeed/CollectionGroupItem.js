@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
 import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
 
-import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
+import { fetchPost, hasLikedPost, unlikePost , likePost } from './../../redux/modules/posts'
 const { height,width } = Dimensions.get('window');
 
 const SIZE_GROUP_WIDTH = Math.floor(width/2) - 25;
@@ -64,7 +64,17 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-
+  },
+  previewContainerMain: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  previewContainerMainFaded: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    opacity: .1
   },
   bigImageContainer: {
     backgroundColor: '#333333',
@@ -91,7 +101,15 @@ const styles = StyleSheet.create({
     width: SMALL_IMAGE_SIZE,
     height: SMALL_IMAGE_SIZE,
     borderRadius: 3,
-  }
+  },
+  textTitleAdding: {
+    color: '#cccccc',
+    fontFamily: 'AvenirNext-Bold',
+    fontSize: 15,
+    lineHeight: 18,
+    marginTop: 50,
+    textAlign: 'center'
+  },
 });
 
 
@@ -106,13 +124,11 @@ class CollectionGroupItem extends Component {
     super(props)
     this.state = {
       currentIndexInPosts: -1,
-      exapndedMoreMenu: false,
-      previewImages: []
+      isAdding: false,
+      previewImages: [],
     };
   }
   componentDidMount() {
-    console.log('COLLECTION GROUP PROPS')
-    console.log(this.props)
     // posts are in this.props.Posts
     // products are in this.props.Products
 
@@ -121,9 +137,22 @@ class CollectionGroupItem extends Component {
       previewImages: previewImages,
     })
   }
+  componentWillUpdate(){
+  }
+
   componentWillReceiveProps(nextProps){
+    const previewImages = nextProps.Posts.slice(0,5).concat(nextProps.Products.slice(0,5));
+    this.setState({
+      isAdding: false,
+      previewImages: previewImages,
+    })
 
-
+  }
+  handleSelect(){
+    this.setState({
+      isAdding: true
+    })
+    this.props.selectItem();
   }
 
 /*
@@ -134,57 +163,60 @@ class CollectionGroupItem extends Component {
                   />
 */
   render(){
+     const totalItems = this.props.Posts.length + this.props.Products.length;
      return (
 
           <View
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
             style={(this.props.index % 2) ? styles.containerRight : styles.containerLeft}>
-            <TouchableOpacity activeOpacity={0.1} onPress={this.props.selectItem}>
-              <Text style={styles.textTitle}>{this.props.displayName}</Text>
-              <Text style={styles.descriptionText}>125 Products, 120 Posts</Text>
-              <View style={styles.previewContainer}>
-                  <View style={styles.bigImageContainer}>
-                    {this.state.previewImages[0] && <ScaledImage
-                      styles={styles.bigImage}
-                      id={this.state.previewImages[0].ImageId}
-                      width={50}
-                    />}
-                  </View>
 
-
-                 <View style={styles.previewContainer}>
-                  <View style={styles.smallImageContainer}>
-                   {this.state.previewImages[1] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[1].ImageId}
-                      width={50}
-                    />}
+              <TouchableOpacity activeOpacity={0.1} onPress={this.handleSelect.bind(this)}>
+                <Text style={styles.textTitle}>{this.props.displayName}</Text>
+                <Text style={styles.descriptionText}>{totalItems} {totalItems == 1 ? 'Item' : 'Items'} </Text>
+                <View style={this.state.isAdding ? styles.previewContainerMainFaded : styles.previewContainerMain}>
+                  <View style={  styles.bigImageContainer}>
+                      {this.state.previewImages[0] && <ScaledImage
+                        styles={styles.bigImage}
+                        id={this.state.previewImages[0].ImageId}
+                        width={50}
+                      />}
                   </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[2] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[2].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[3]  &&<ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[3].ImageId}
-                      width={50}
-                    />}
-                  </View>
-                  <View style={styles.smallImageContainer}>
-                    {this.state.previewImages[4] && <ScaledImage
-                      styles={styles.smallImage}
-                      id={this.state.previewImages[4].ImageId}
-                      width={50}
-                    />}
+                  <View style={styles.previewContainer}>
+                    <View style={styles.smallImageContainer}>
+                     {this.state.previewImages[1] && <ScaledImage
+                        styles={styles.smallImage}
+                        id={this.state.previewImages[1].ImageId}
+                        width={50}
+                      />}
+                    </View>
+                    <View style={styles.smallImageContainer}>
+                      {this.state.previewImages[2] && <ScaledImage
+                        styles={styles.smallImage}
+                        id={this.state.previewImages[2].ImageId}
+                        width={50}
+                      />}
+                    </View>
+                    <View style={styles.smallImageContainer}>
+                      {this.state.previewImages[3]  &&<ScaledImage
+                        styles={styles.smallImage}
+                        id={this.state.previewImages[3].ImageId}
+                        width={50}
+                      />}
+                    </View>
+                    <View style={styles.smallImageContainer}>
+                      {this.state.previewImages[4] && <ScaledImage
+                        styles={styles.smallImage}
+                        id={this.state.previewImages[4].ImageId}
+                        width={50}
+                      />}
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            {this.state.isAdding &&
+              <Text style={styles.textTitleAdding}>Adding</Text>
+            }
           </View>
       )
 

@@ -4,7 +4,7 @@ var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
 //var baseUrl = 'http://104.155.46.72/api/v1'
- var baseUrl = 'http://127.0.0.1:3000'
+var baseUrl = 'http://10.48.24.36:3000'
 
 var AccessToken = null;
 
@@ -169,7 +169,6 @@ function hasLikedPost(id) {
     return fetch(endpoint, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -194,7 +193,6 @@ function likePost(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -217,7 +215,6 @@ function unlikePost(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -265,7 +262,6 @@ function isFollowingBrand(id) {
     return fetch(endpoint, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -288,7 +284,6 @@ function followBrand(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -311,7 +306,6 @@ function unfollowBrand(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -334,7 +328,6 @@ function isFollowingUser(id) {
     return fetch(endpoint, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -357,7 +350,6 @@ function followUser(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -380,7 +372,6 @@ function unfollowUser(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -579,7 +570,6 @@ function hasLikedProduct(id) {
     return fetch(endpoint, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -604,7 +594,6 @@ function likeProduct(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -627,7 +616,6 @@ function unlikeProduct(id) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -714,7 +702,6 @@ function addCollection(collection) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
@@ -739,7 +726,6 @@ function addPostToCollection(collectionId, post) {
     return fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AccessToken.accessToken
