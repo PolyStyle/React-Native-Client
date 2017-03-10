@@ -16,11 +16,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
-  previewImage: {
+  previewImageContainer: {
     width: width-40,
     height: 250,
     borderRadius: 7,
     margin: 10,
+  },
+  previewImage: {
+    width: width-40,
+    height: 250,
+    borderRadius: 7,
+
   },
   inputHolder: {
     backgroundColor: '#252525',
@@ -90,11 +96,13 @@ class CreateNewCollection extends React.Component {
             value={this.state.text}
           />
         </View>
-        <ScaledImage
-          styles={styles.previewImage}
-          id={this.props.item.ImageId}
-          width={200}
-        />
+        <View style={styles.previewImageContainer}>
+          <ScaledImage
+            styles={styles.previewImage}
+            id={this.props.item.ImageId}
+            width={200}
+          />
+        </View>
         <View style={styles.buttonHolder}>
             <WideButton
               onPress={this.props.backToPrevious.bind(this)}
