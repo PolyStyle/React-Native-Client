@@ -74,7 +74,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    opacity: .1
+    backgroundColor: '#333',
+    position: 'absolute',
+    zIndex: 2,
+    width: SIZE_GROUP_WIDTH,
+    height: SIZE_GROUP_HEIGHT,
+    borderRadius: 5,
+    top: 0,
+    left: 0,
+        opacity: .8,
   },
   bigImageContainer: {
     backgroundColor: '#333333',
@@ -107,8 +115,11 @@ const styles = StyleSheet.create({
     fontFamily: 'AvenirNext-Bold',
     fontSize: 15,
     lineHeight: 18,
-    marginTop: 50,
-    textAlign: 'center'
+    width: SIZE_GROUP_WIDTH,
+    marginTop: SIZE_GROUP_HEIGHT/2 - 8,
+    backgroundColor: 'transparent',
+    textAlign: 'center',
+    position: 'absolute'
   },
 });
 
@@ -170,11 +181,16 @@ class CollectionGroupItem extends Component {
             shouldRasterizeIOS={true}
             renderToHardwareTextureAndroid={true}
             style={(this.props.index % 2) ? styles.containerRight : styles.containerLeft}>
-
+              {this.state.isAdding &&
+                  <View style={ styles.previewContainerMainFaded}>
+                    <Text style={styles.textTitleAdding}>Adding</Text>
+                  </View>
+                }
               <TouchableOpacity activeOpacity={0.1} onPress={this.handleSelect.bind(this)}>
+
                 <Text style={styles.textTitle}>{this.props.displayName}</Text>
                 <Text style={styles.descriptionText}>{totalItems} {totalItems == 1 ? 'Item' : 'Items'} </Text>
-                <View style={this.state.isAdding ? styles.previewContainerMainFaded : styles.previewContainerMain}>
+                  <View style={styles.previewContainerMain}>
                   <View style={  styles.bigImageContainer}>
                       {this.state.previewImages[0] && <ScaledImage
                         styles={styles.bigImage}
@@ -211,12 +227,11 @@ class CollectionGroupItem extends Component {
                         width={50}
                       />}
                     </View>
+                    </View>
                   </View>
-                </View>
+
               </TouchableOpacity>
-            {this.state.isAdding &&
-              <Text style={styles.textTitleAdding}>Adding</Text>
-            }
+
           </View>
       )
 

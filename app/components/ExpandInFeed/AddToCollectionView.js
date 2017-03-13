@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   textTitle: {
-      color: '#aaaaaa',
-      fontFamily: 'AvenirNextLTW01RegularRegular',
-      fontSize: 15
+    color: '#aaaaaa',
+    fontFamily: 'AvenirNextLTW01RegularRegular',
+    fontSize: 15
   },
   separationLine: {
     marginTop: 20,

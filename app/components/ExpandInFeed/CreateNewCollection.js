@@ -47,6 +47,24 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     margin: 5,
     marginTop: 10,
+  },
+  creatingNewCollection: {
+    backgroundColor: '#333',
+    position: 'absolute',
+    opacity: .8,
+    right: 0,
+    zIndex: 2,
+    width: width-40,
+    height: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  creatingNewCollectionText: {
+
+    fontFamily: 'AvenirNext-Bold',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#fff',
   }
 });
 
@@ -55,6 +73,7 @@ class CreateNewCollection extends React.Component {
     super(props);
     this.state = {
       text: 'New Collection',
+      isCreating: false,
     };
   }
 
@@ -69,23 +88,23 @@ class CreateNewCollection extends React.Component {
 
 
   createNewCollection(){
-    console.log('CREATE A NEW COLLECTION NAMED: ', this.state.text);
-    console.log('TYPE: ', this.props.itemType);
-    console.log('ITEM ID', this.props.item.id);
-    console.log('USER ID', this.props.userId);
     var self = this;
-    if(this.props.itemType == 'POST'){
+    this.setState({
+      isCreating: true,
+    }, function(){
+      if(this.props.itemType == 'POST'){
       // I'm trying to add a POST.
-      this.props.dispatch(
-        createNewUserCollectionWithPost(this.props.userId, this.props.item.id, this.state.text))
-          .then(function(){
-            console.log('CREATE NEW USER COLLECTION WITH POST')
-           self.props.dispatch(fetchUserCollections(self.props.userId)) .then(function(){
-                        console.log('FETCH USER COLLECTION')
-              self.props.backToPrevious();
-           });
-      });
-    }
+        this.props.dispatch(
+          createNewUserCollectionWithPost(this.props.userId, this.props.item.id, this.state.text))
+            .then(function(){
+              console.log('CREATE NEW USER COLLECTION WITH POST')
+             self.props.dispatch(fetchUserCollections(self.props.userId)) .then(function(){
+                          console.log('FETCH USER COLLECTION')
+                self.props.backToPrevious();
+             });
+        });
+      }
+    })
   }
 
   render() {
@@ -100,6 +119,9 @@ class CreateNewCollection extends React.Component {
           />
         </View>
         <View style={styles.previewImageContainer}>
+          {this.state.isCreating && <View style={styles.creatingNewCollection}>
+            <Text style={styles.creatingNewCollectionText}>Creating new Collection</Text>
+          </View>}
           <ScaledImage
             styles={styles.previewImage}
             id={this.props.item.ImageId}
