@@ -5,7 +5,7 @@ import {ScaledImage, WideButton} from './../../components'
 import FeedItem from './../Stream/FeedItem';
 import CollectionGroupItem from './CollectionGroupItem'
 import { createNewUserCollectionWithPost } from './../../redux/modules/collections'
-
+import { fetchUserCollections } from './../../redux/modules/users'
 const { height,width } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
@@ -67,21 +67,24 @@ class CreateNewCollection extends React.Component {
 
   }
 
-  handlerSelectItem(index){
-
-    if(index == 0){
-      this.props.onCreateNewCollection();
-    }
-  }
 
   createNewCollection(){
     console.log('CREATE A NEW COLLECTION NAMED: ', this.state.text);
     console.log('TYPE: ', this.props.itemType);
     console.log('ITEM ID', this.props.item.id);
     console.log('USER ID', this.props.userId);
+    var self = this;
     if(this.props.itemType == 'POST'){
       // I'm trying to add a POST.
-      this.props.dispatch(createNewUserCollectionWithPost(this.props.userId, this.props.item.id, this.state.text));
+      this.props.dispatch(
+        createNewUserCollectionWithPost(this.props.userId, this.props.item.id, this.state.text))
+          .then(function(){
+            console.log('CREATE NEW USER COLLECTION WITH POST')
+           self.props.dispatch(fetchUserCollections(self.props.userId)) .then(function(){
+                        console.log('FETCH USER COLLECTION')
+              self.props.backToPrevious();
+           });
+      });
     }
   }
 

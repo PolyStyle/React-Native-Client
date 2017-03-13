@@ -24,18 +24,14 @@ export function createNewUserCollectionWithPost(UserId, PostId, displayName){
       const postObject = {
         id: PostId,
       }
-      return addPostToCollectionAPI(collectionId,postObject).then(function(postCollection){
-        return postCollection;
-      })
+      return addPostToCollectionAPI(collectionId,postObject);
     })
   }
 }
 
 export function addPostToCollection(CollectionId, Post){
    return function(dispatch){
-     return addPostToCollectionAPI(CollectionId, Post).then(function(postCollection){
-        return postCollection;
-      })
+     return addPostToCollectionAPI(CollectionId, Post);
    }
 }
 

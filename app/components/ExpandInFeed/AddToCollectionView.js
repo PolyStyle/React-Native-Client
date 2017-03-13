@@ -97,7 +97,7 @@ class AddToCollectionView extends Component {
             backToPrevious={this.backToPrevious.bind(this)}
             itemType={this.props.itemType}
             item={this.props.item}
-            onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>}
+            />}
         </View>
       )
     } else {

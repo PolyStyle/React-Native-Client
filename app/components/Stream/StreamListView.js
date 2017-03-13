@@ -98,6 +98,7 @@ class StreamListView extends React.Component {
     }
     return (
       <ListView
+      keyboardShouldPersistTaps={true}
         refreshControl={
           <RefreshControl
             enableEmptySections={true}
