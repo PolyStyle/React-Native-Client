@@ -10,7 +10,7 @@ Hamburger.propTypes = {
 }
 
 Hamburger.defaultProps = {
-  size: 30,
+  size: 25,
 }
 
 export default function Hamburger (props) {
@@ -19,7 +19,7 @@ export default function Hamburger (props) {
       <Icon
         name='ios-menu'
         size={props.size}
-        color={'#c1e1f3'} />
+        color={'#333'} />
     </TouchableOpacity>
   )
 }

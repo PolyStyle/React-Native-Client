@@ -3,8 +3,8 @@ import { AccessToken as FacebookAccessToken, LoginManager } from 'react-native-f
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-//var baseUrl = 'http://104.155.46.72/api/v1'
-var baseUrl = 'http://10.48.24.36:3000'
+var baseUrl = 'http://104.155.46.72/api/v1'
+// var baseUrl = 'http://127.0.0.1:3000'
 
 var AccessToken = null;
 
