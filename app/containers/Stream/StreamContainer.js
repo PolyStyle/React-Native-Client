@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { TouchableHighlight, StyleSheet, Text, View ,Dimensions, Platform, Navigator, Animated } from 'react-native'
 import { connect } from 'react-redux'
-import { Navbar, StreamListView , CustomButton, Gear, Hamburger}  from './../../components'
+import { Navbar, StreamListView , CustomButton, Gear, Hamburger, Exit, FooterIcon}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
 import { PostContainer, UserProfileContainer, ProductContainer, BrandContainer, CollectionContainer} from  './../../containers'
 import DrawerLayout from 'react-native-drawer-layout';
@@ -56,8 +56,9 @@ class StreamContainer extends Component {
     })
      this.state.openingMenuAnimation.setValue(0);  //Step 3
       Animated.spring(     //Step 4
+
           this.state.openingMenuAnimation,
-          {toValue: height}
+          {toValue: height,}
       ).start();  //Step 5
   }
 
@@ -77,16 +78,6 @@ class StreamContainer extends Component {
         else { return null }
       },
       RightButton(route, navigator, index, navState) {
-          /*
-<TouchableHighlight
-
-                                    onPress={ () => route.onPress() }>
-                                    <Text style={ styles.rightNavButtonText }>
-                                        { route.rightText || 'Right Button' }
-                                    </Text>
-                                  </TouchableHighlight>
-          */
-
           return (<Hamburger style={styles.rightNavButton } active={true}  onPress={self.openHamburger.bind(self)} />)
       },
       Title(route, navigator, index, navState) {
@@ -101,9 +92,8 @@ class StreamContainer extends Component {
     return (
       <View style={styles.container}>
        <Animated.View style={[styles.hamburgerMenu,{height: this.state.openingMenuAnimation}]}>
-        {this.state.hamburgerMenuOpen && <View>
-           <Hamburger style={styles.closeHamburger } active={true}  onPress={this.closeHamburger.bind(this)} />
-
+        {this.state.hamburgerMenuOpen && <View  style={styles.closeHamburger }>
+           <Exit  active={true}  onPress={this.closeHamburger.bind(this)} />
         </View>}
        </Animated.View>
         <Navigator
@@ -158,6 +148,17 @@ class StreamContainer extends Component {
                 }
               }}
            />
+            <View style={styles.bottomMenu}>
+              <View style={styles.buttonContainer}>
+                <FooterIcon iconName={'ios-search-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive iconName={'ios-glasses-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon iconName={'ios-add-circle'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+
+
+                <FooterIcon iconName={'ios-compass-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon iconName={'ios-contact-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+              </View>
+            </View>
 
         </View>
     )
@@ -170,15 +171,14 @@ const styles = StyleSheet.create({
   },
   closeHamburger: {
     position: 'absolute',
-    right: 15,
-    top: 20,
+    right: 8,
+    top: 10,
   },
   hamburgerMenu: {
-    backgroundColor: '#0fc',
+    backgroundColor: '#fff',
     height: 200,
     width: width,
     position: 'absolute',
-    opacity: .8,
     zIndex: 100,
   },
   leftNavButton:{
@@ -237,6 +237,20 @@ const styles = StyleSheet.create({
     height: height-160,
     padding: 0
   },
+  bottomMenu: {
+    paddingTop: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 42,
+    borderTopWidth: 1,
+    borderColor: '#111111'
+  },
+  buttonContainer:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
+
 })
 
 

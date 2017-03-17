@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { TouchableOpacity } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/Ionicons'
 import { colors } from './../../styles'
 
 Exit.propTypes = {
@@ -10,7 +10,7 @@ Exit.propTypes = {
 }
 
 Exit.defaultProps = {
-  size: 30,
+  size: 40,
 }
 
 export default function Exit (props) {
@@ -22,10 +22,10 @@ export default function Exit (props) {
       position: 'absolute',
       backgroundColor: 'transparent'
     }}>
-      <Icon
-        name='close'
+       <Icon
+        name='ios-close-outline'
         size={props.size}
-        color={colors.white} />
+        color={'#222'} />
     </TouchableOpacity>
   )
 }

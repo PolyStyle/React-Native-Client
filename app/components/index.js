@@ -6,6 +6,7 @@ import Leaderboard from './Leaderboard/Leaderboard'
 import Navbar from './Navbar/Navbar'
 import Gear from './Icons/Gear'
 import Hamburger from './Icons/Hamburger'
+import FooterIcon from './Icons/FooterIcon'
 import Exit from './Icons/Exit'
 import Settings from './Settings/Settings'
 import Close from './Icons/Close'
@@ -77,5 +78,6 @@ export {
 	MenuButton,
 	AddToCollectionView,
 	CollectionListView,
-	CreateNewCollection
+	CreateNewCollection,
+  FooterIcon
 }
