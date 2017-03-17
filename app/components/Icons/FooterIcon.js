@@ -28,10 +28,10 @@ export default function FooterIcon (props) {
   return (
     <TouchableOpacity onPress={props.onPress} style={props.style}>
       <Icon
-        name={props.iconName || 'ios-wifi'}
+        name={!props.isActive && props.iconName+'-outline' || props.iconName}
         size={props.size}
         color={'#333'} />
-      {this.props.isActive && <View style={styles.selectedHighlight} /> }
+      {props.isActive && <View style={styles.selectedHighlight} /> }
     </TouchableOpacity>
   )
 }

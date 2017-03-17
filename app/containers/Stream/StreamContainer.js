@@ -150,13 +150,13 @@ class StreamContainer extends Component {
            />
             <View style={styles.bottomMenu}>
               <View style={styles.buttonContainer}>
-                <FooterIcon iconName={'ios-search-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon isActive iconName={'ios-glasses-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon iconName={'ios-add-circle'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={false} iconName={'ios-search'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon  isActive={false} iconName={'ios-glasses'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={true}  iconName={'ios-add-circle'}  active={true}  onPress={this.closeHamburger.bind(this)} />
 
 
-                <FooterIcon iconName={'ios-compass-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon iconName={'ios-contact-outline'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={false} iconName={'ios-compass'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={false} iconName={'ios-contact'}  active={true}  onPress={this.closeHamburger.bind(this)} />
               </View>
             </View>
 
