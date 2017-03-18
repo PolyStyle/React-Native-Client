@@ -1,6 +1,17 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Navigator, Platform, StatusBar} from 'react-native'
+import { View, Navigator, Platform, StatusBar, StyleSheet, Dimensions} from 'react-native'
 import { SplashContainer, OnboardingContainer, FooterTabsContainer, SettingsContainer } from './../../containers'
+import { FooterIcon}  from './../../components'
+
+const { height,width } = Dimensions.get('window')
+const FEED = 'Feed';
+const SEARCH = 'Search';
+const EXPLORE = 'Explore';
+const USERPROFILE = 'User Profile';
+const ADDPHOTO = 'Add Photo';
+
+
+
 
 export default class AppNavigator extends Component {
   static propTypes = {
@@ -8,6 +19,7 @@ export default class AppNavigator extends Component {
     isNew: PropTypes.bool.isRequired
   }
 
+  
 
   renderScene = (route, navigator) => {
 
@@ -29,14 +41,13 @@ export default class AppNavigator extends Component {
     if (Platform.OS === 'android') {
       return Navigator.SceneConfigs.FloatFromBottomAndroid
     }
-
-    if (route.settings === true) {
+    if(route.settings === true) {
       return Navigator.SceneConfigs.FloatFromBottom
     }
-
-
     return Navigator.SceneConfigs.FloatFromRight
   }
+
+  
   render () {
     return (
        <View style={{flex: 1}}>
@@ -44,7 +55,9 @@ export default class AppNavigator extends Component {
           initialRoute={{ }}
           renderScene={this.renderScene}
           configureScene={this.configureScene} />
+         
       </View>
     )
   }
 }
+

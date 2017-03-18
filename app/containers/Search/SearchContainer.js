@@ -12,7 +12,7 @@ const EXPLORE = 'Explore';
 const USERPROFILE = 'User Profile';
 const ADDPHOTO = 'Add Photo';
 
-class StreamContainer extends Component {
+class SearchContainer extends Component {
   componentDidMount() {
     this.setState({navigatorRef: this.navigatorRef});
   }
@@ -282,11 +282,9 @@ const styles = StyleSheet.create({
 })
 
 
-function mapStateToProps ({posts}) {
-  return {
-    posts: posts,
-  }
+function mapStateToProps ( ) {
+   
 }
 
 
-export default connect()(StreamContainer)
+export default connect()(SearchContainer)

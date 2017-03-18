@@ -13,7 +13,7 @@ import PostContainer from './Post/PostContainer'
 import ProductContainer from './Product/ProductContainer'
 import BrandContainer from './Brand/BrandContainer'
 import CollectionContainer from './Collection/CollectionContainer'
-
+import SearchContainer from './Search/SearchContainer'
 export {
 	AppNavigator,
 	SplashContainer,
@@ -29,5 +29,6 @@ export {
 	PostContainer,
 	ProductContainer,
 	BrandContainer,
-	CollectionContainer
+	CollectionContainer,
+	SearchContainer
 }
