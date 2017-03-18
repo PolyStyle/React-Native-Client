@@ -3,7 +3,7 @@ import { TouchableHighlight, StyleSheet, Text, View ,Dimensions, Platform, Navig
 import { connect } from 'react-redux'
 import { Navbar, StreamListView , CustomButton, Gear, Hamburger, Exit, FooterIcon}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
-import { PostContainer, UserProfileContainer, ProductContainer, BrandContainer, CollectionContainer} from  './../../containers'
+import { SearchContainer } from  './../../containers'
 
 const { height,width } = Dimensions.get('window')
 const FEED = 'Feed';
@@ -12,18 +12,10 @@ const EXPLORE = 'Explore';
 const USERPROFILE = 'User Profile';
 const ADDPHOTO = 'Add Photo';
 
-class StreamContainer extends Component {
-  componentDidMount() {
-    this.setState({navigatorRef: this.navigatorRef});
+class SearchStack extends Component {
+  componentDidMount() { 
   }
-
-  handleOnboardFinished = () => {
-    if(this.state.needed <= 0){
-      this.props.dispatch(userOnboarded())
-    }
-  }
-
-
+ 
   handlerSelection (id,active){
     const newCounter = active ? this.state.needed-1 : this.state.needed+1;
     const isFinished = (newCounter <= 0); // if we have selected enough categories
@@ -136,47 +128,13 @@ class StreamContainer extends Component {
               ref={(r) => { this.navigatorRef = r; }}
               style={ styles.header }
               routeMapper={NavigationBarRouteMapper} />}
-              initialRoute={{ title: 'Feed', name: 'Feed', index: 0 }}
+              initialRoute={{ title: 'Search', name: SEARCH, index: 0 }}
               renderScene={(route, navigator) => {
-                if(route.name == 'Feed'){
+                console.log('REQUEST ROUTE IN SEARCH STACK', route.name)
+                if(route.name === SEARCH){
                   return (
                     <View style={styles.categoriesList}>
-                      <StreamListView navigator={navigator}  handlerSelection={this.handlerSelection.bind(this)}/>
-                    </View>
-                    )
-                }
-                if(route.name == 'Post'){
-                  return (
-                    <View style={styles.categoriesList}>
-                      <PostContainer navigator={navigator} {...route.passProps} {...route.passState} />
-                    </View>
-                  )
-                }
-                if(route.name == 'User'){
-                  return (
-                    <View style={styles.categoriesList}>
-                      <UserProfileContainer navigator={navigator} {...route.passProps} {...route.passState} />
-                    </View>
-                  )
-                }
-                if(route.name == 'Product'){
-                  return (
-                    <View style={styles.categoriesList}>
-                      <ProductContainer  navigator={navigator} {...route.passProps} {...route.passState} />
-                    </View>
-                  )
-                }
-                if(route.name == 'Brand'){
-                  return (
-                    <View style={styles.categoriesList}>
-                      <BrandContainer navigator={navigator} {...route.passProps} {...route.passState} />
-                    </View>
-                  )
-                }
-                if(route.name == 'Collection'){
-                  return (
-                    <View style={styles.categoriesList}>
-                      <CollectionContainer navigator={navigator} {...route.passProps} {...route.passState} />
+                      <SearchContainer  />
                     </View>
                   )
                 }
@@ -187,8 +145,8 @@ class StreamContainer extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
+ 
+ const styles = StyleSheet.create({
   container: {
     height: height,
     width: width,
@@ -278,6 +236,7 @@ const styles = StyleSheet.create({
 })
 
 
+
 function mapStateToProps ({posts}) {
   return {
     posts: posts,
@@ -285,4 +244,5 @@ function mapStateToProps ({posts}) {
 }
 
 
-export default connect()(StreamContainer)
+export default connect()(SearchStack)
+

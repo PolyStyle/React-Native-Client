@@ -4,7 +4,7 @@ import { colors } from './../../styles'
 import Icon from 'react-native-vector-icons/Ionicons'
 import IconFontAwsome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { UserProfileContainer , LeaderboardContainer, SwipeContainer, TakeSelfyContainer, StreamContainer,SearchContainer} from './../../containers'
+import { UserProfileContainer , LeaderboardContainer, SwipeContainer, TakeSelfyContainer, StreamContainer,SearchStack} from './../../containers'
 import { FooterIcon}  from './../../components'
 
 
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   bottomMenu: {
   	position: 'absolute',
   	width: width,
-  	zIndex: 3,
+  	zIndex: 100,
   	backgroundColor: '#fff',
   	top: height-42,
     paddingTop: 5,
@@ -110,9 +110,11 @@ const styles = StyleSheet.create({
   containerView: {
  		width: width,
  		height: height,
+ 		opacity: 1, 
   },
   // This pushes the view out of the viewport, but why the negative bottom?
   hiddenContainer: {
+  	opacity: 0,
   	width: 0,
   	height: 0, 
   }
@@ -150,10 +152,10 @@ export default class FooterTabs extends Component {
   	return (
   		<View style={styles.container}> 
   				<View style={this.state.currentSection == FEED ? styles.containerView : styles.hiddenContainer}>
-          	 <StreamContainer style={this.state.currentSection == FEED ? styles.containerView : styles.hiddenContainer} navigator={this.props.navigator}/>
+          	 <StreamContainer navigator={this.props.navigator}/>
           </View>
  					<View style={this.state.currentSection == SEARCH ? styles.containerView : styles.hiddenContainer}>
-	           <SearchContainer  navigator={this.props.navigator}/>
+	           <SearchStack navigator={this.props.navigator}/>
 	  			</View>
           <View style={styles.bottomMenu}>
 	          <View style={styles.buttonContainer}>
