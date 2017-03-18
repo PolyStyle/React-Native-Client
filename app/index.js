@@ -14,6 +14,7 @@ import {persistStore, autoRehydrate} from 'redux-persist'
 import {AsyncStorage} from 'react-native'
 
 
+console.log('CONSTRUCT PROPS')
 const appReducer = reducers
 
 function rootReducer (state, action) {
@@ -34,6 +35,7 @@ const store = createStore(rootReducer, /* preloadedState, */ composeEnhancers(
 export default class RNFashion extends Component {
    constructor(props) {
     super(props)
+    console.log('CONSTRUCT PROPS')
     this.state = {
       restoredPersistentStore: false
     }
@@ -58,7 +60,6 @@ export default class RNFashion extends Component {
     } else {
       return(<PreSplash/>)
     }
-
   }
 }
 
