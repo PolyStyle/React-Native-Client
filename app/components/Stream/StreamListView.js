@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
+import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl, FlatList } from 'react-native';
 import FeedItem from './FeedItem';
 import { trackScreenView } from './../../api/tracking'
 import { fetchStreamFeed } from './../../redux/modules/streamFeed'
@@ -18,7 +18,7 @@ class StreamListView extends React.Component {
 
   constructor(props) {
     super(props);
-
+    console.log('LIST VIEW', FlatList)
     var self = this
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.id !== r2.id || r1.updatedAt !== r2.updatedAt});
      this.state = {

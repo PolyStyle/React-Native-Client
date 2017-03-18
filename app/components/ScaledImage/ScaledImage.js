@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { Text, Image, View, Dimensions, PixelRatio } from 'react-native'
+import { Text, Image, View, Dimensions,StyleSheet, PixelRatio, ActivityIndicator } from 'react-native'
 import FadeInImage  from './FadeInImage'
 const { height,width } = Dimensions.get('window');
 
@@ -13,13 +13,15 @@ class ScaledImage extends Component {
     };
   }
   static defaultProps = {
-    styles: {}
+    styles: {},
+    loader: true,
   }
 
 
   static propTypes = {
     id: PropTypes.number,
     width: PropTypes.number,
+    loader: PropTypes.bool,
   }
 
   componentDidMount() {
@@ -73,18 +75,53 @@ class ScaledImage extends Component {
   render() {
     if(this.state.url){
       return (
-          <FadeInImage
-            shouldRasterizeIOS={true}
-            renderToHardwareTextureAndroid={true}
-            resizeMode={this.props.resizeMode}
-            style={[{'width': this.state.width, 'height': this.state.height}, this.props.styles]}
-            source={{uri:this.state.url}}
-          />
+          <View style={[{'width': this.state.width, 'height': this.state.height}, this.props.styles]}>
+            <ActivityIndicator
+              style={[{
+                'marginLeft': this.state.width/2-10, 
+                'marginTop': this.state.height/2-10
+              },styles.centering]}
+              size="small"
+              color="#111111"
+            />
+            <FadeInImage
+              shouldRasterizeIOS={true}
+              renderToHardwareTextureAndroid={true}
+              resizeMode={this.props.resizeMode}
+              style={[{'width': this.state.width, 'height': this.state.height}, this.props.styles]}
+              source={{uri:this.state.url}}
+            />
+          </View>
       );
     } else {
-      return(<View/>)
+      if(this.props.loader) {
+        return( 
+         <ActivityIndicator style={[{
+                'marginLeft': -10, 
+                'marginTop': -10
+              },styles.centering]}
+              size="small"
+              color="#111111"
+            />
+        )
+      } else {
+        return (<View />)
+      }
     }
   }
 }
+
+const styles = StyleSheet.create({
+  centering: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+  },
+  
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 8,
+  },
+});
 
 export default ScaledImage

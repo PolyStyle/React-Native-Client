@@ -9,7 +9,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     minHeight: 500,
-    backgroundColor: '#ededed',
+    backgroundColor: '#fff',
+  },
+  imageContainer: {
+    flex: 1,
+    minHeight: 500,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ededed'
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -199,29 +207,32 @@ class FeedItem extends Component {
     if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
         <View shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
-          <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this )}>
-            <ScaledImage
-              id={currentPost.ImageId}
-              width={width}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.9}
-            style={styles.avatarContainer}
-            onPress={this._navigateToUser.bind(this, currentPost.User)}
-          >
-            <View style={styles.avatarContainerView}>
-                <Text style={styles.avatarName}>
-                  {currentPost.User.firstName}
-                  {currentPost.User.lastName}
-                </Text>
-                <ScaledImage
-                  styles={styles.avatar}
-                  id={currentPost.User.ImageId}
-                  width={50}
-                />
-            </View>
-          </TouchableOpacity>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this )}>
+              <ScaledImage
+                id={currentPost.ImageId}
+                width={width}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              style={styles.avatarContainer}
+              onPress={this._navigateToUser.bind(this, currentPost.User)}
+            >
+              <View style={styles.avatarContainerView}>
+                  <Text style={styles.avatarName}>
+                    {currentPost.User.firstName}
+                    {currentPost.User.lastName}
+                  </Text>
+                  <ScaledImage
+                    loader={false}
+                    styles={styles.avatar}
+                    id={currentPost.User.ImageId}
+                    width={50}
+                  />
+              </View>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.iconContainer}>
             <Heart active={currentPost.isLiking} style={styles.heartIcon} onPress={this.likePost.bind(this)}/>
