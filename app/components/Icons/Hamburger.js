@@ -5,7 +5,6 @@ import { colors } from './../../styles'
 
 Hamburger.propTypes = {
   size: PropTypes.number.isRequired,
-  style: PropTypes.object,
   onPress: PropTypes.func.isRequired,
 }
 

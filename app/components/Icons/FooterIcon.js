@@ -19,19 +19,26 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: '#222',
     width: 10,
-    marginLeft: 8,
+    marginLeft: 10, 
     height: 2,
   },
+  container: {
+    width: 30,
+    alignItems:'center', 
+  }
 })
 
 export default function FooterIcon (props) {
   return (
-    <TouchableOpacity onPress={props.onPress} style={props.style}>
-      <Icon
-        name={!props.isActive && props.iconName+'-outline' || props.iconName}
-        size={props.size}
-        color={'#333'} />
+    <View style={styles.container}>
+      <TouchableOpacity onPress={props.onPress}>
+        <Icon
+          name={!props.isActive && props.iconName+'-outline' || props.iconName}
+          size={props.size}
+          color={'#333'} />
+        
+      </TouchableOpacity>
       {props.isActive && <View style={styles.selectedHighlight} /> }
-    </TouchableOpacity>
+    </View>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { View, ListView, StyleSheet, Text, BackAndroid, RefreshControl } from 'react-native';
 import FeedItem from './FeedItem';
-import {  trackScreenView } from './../../api/tracking'
+import { trackScreenView } from './../../api/tracking'
 import { fetchStreamFeed } from './../../redux/modules/streamFeed'
 
 const styles = StyleSheet.create({

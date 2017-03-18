@@ -4,11 +4,21 @@ import { connect } from 'react-redux'
 import { Navbar, StreamListView , CustomButton, Gear, Hamburger, Exit, FooterIcon}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
 import { PostContainer, UserProfileContainer, ProductContainer, BrandContainer, CollectionContainer} from  './../../containers'
-import DrawerLayout from 'react-native-drawer-layout';
 
 const { height,width } = Dimensions.get('window')
-
+const FEED = 'Feed';
+const SEARCH = 'Search';
+const EXPLORE = 'Explore';
+const USERPROFILE = 'User Profile';
+const ADDPHOTO = 'Add Photo';
 class StreamContainer extends Component {
+
+ 
+
+  componentDidMount() {
+    this.setState({navigatorRef: this.navigatorRef});
+  }
+
   handleOnboardFinished = () => {
     if(this.state.needed <= 0){
       this.props.dispatch(userOnboarded())
@@ -17,7 +27,6 @@ class StreamContainer extends Component {
 
 
   handlerSelection (id,active){
-    console.log(id,active, '000')
     const newCounter = active ? this.state.needed-1 : this.state.needed+1;
     const isFinished = (newCounter <= 0); // if we have selected enough categories
     this.setState({
@@ -34,6 +43,7 @@ class StreamContainer extends Component {
       needed: 3, // the number of categories needed
       readyToFinish: false, // when the user has selected at least x needed categories
       openingMenuAnimation: new Animated.Value(),
+      currentSection: FEED,
     }
 
     // console.log('FETCH ALL POSTS')
@@ -43,23 +53,48 @@ class StreamContainer extends Component {
     this.setState({
       hamburgerMenuOpen: false,
     })
-
-      Animated.spring(     //Step 4
-          this.state.openingMenuAnimation,
-          {toValue: 0}
-      ).start();  //Step 5
+    Animated.spring(     //Step 4
+      this.state.openingMenuAnimation,
+        {toValue: 0}
+    ).start();  //Step 5
   }
 
   openHamburger(){
     this.setState({
       hamburgerMenuOpen: true,
     })
-     this.state.openingMenuAnimation.setValue(0);  //Step 3
-      Animated.spring(     //Step 4
+    this.state.openingMenuAnimation.setValue(0);  //Step 3
+    Animated.spring(     //Step 4
+      this.state.openingMenuAnimation,
+        {toValue: height,}
+    ).start();  //Step 5
+  }
 
-          this.state.openingMenuAnimation,
-          {toValue: height,}
-      ).start();  //Step 5
+  goToSearch(){
+    this.state.navigatorRef.props.navigator.push({
+      name: SEARCH,
+      title: SEARCH,
+    });
+    this.setState({
+      currentSection: SEARCH,
+    })
+  }
+  goToFeed(){
+    this.state.navigatorRef.props.navigator.push({
+      name: FEED,
+      title: FEED,
+    });
+    this.setState({
+      currentSection: FEED,
+    })
+  }
+
+  _navigateToBrand(brandData){
+  this.props.navigator.push({
+      name: 'Brand',
+      title: brandData.displayName,
+      passProps: brandData,
+    })
   }
 
   render () {
@@ -78,7 +113,7 @@ class StreamContainer extends Component {
         else { return null }
       },
       RightButton(route, navigator, index, navState) {
-          return (<Hamburger style={styles.rightNavButton } active={true}  onPress={self.openHamburger.bind(self)} />)
+          return (<Hamburger style={styles.rightNavButton} active={true}  onPress={self.openHamburger.bind(self)} />)
       },
       Title(route, navigator, index, navState) {
         return <View style={styles.titleHolder}><Text
@@ -100,11 +135,16 @@ class StreamContainer extends Component {
 
           navigationBar={
              <Navigator.NavigationBar
-               style={ styles.header }
-               routeMapper={NavigationBarRouteMapper} />}
-              initialRoute={{ title: 'Feed', name: 'Stream', index: 0 }}
+              ref={(r) => { this.navigatorRef = r; }}
+              style={ styles.header }
+              routeMapper={NavigationBarRouteMapper} />}
+              initialRoute={{ title: 'Feed', name: 'Feed', index: 0 }}
               renderScene={(route, navigator) => {
-                if(route.name == 'Stream'){
+                if(route.name == SEARCH){
+                  return(<View><Text> SEARCH </Text></View>)
+                }
+
+                if(route.name == 'Feed'){
                   return (
                     <View style={styles.categoriesList}>
                       <StreamListView navigator={navigator}  handlerSelection={this.handlerSelection.bind(this)}/>
@@ -150,13 +190,11 @@ class StreamContainer extends Component {
            />
             <View style={styles.bottomMenu}>
               <View style={styles.buttonContainer}>
-                <FooterIcon isActive={false} iconName={'ios-search'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon  isActive={false} iconName={'ios-glasses'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon isActive={true}  iconName={'ios-add-circle'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-
-
-                <FooterIcon isActive={false} iconName={'ios-compass'}  active={true}  onPress={this.closeHamburger.bind(this)} />
-                <FooterIcon isActive={false} iconName={'ios-contact'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={this.state.currentSection == SEARCH} iconName={'ios-search'}  active={true}  onPress={this.goToSearch.bind(this)} />
+                <FooterIcon  isActive={this.state.currentSection == FEED} iconName={'ios-glasses'}  active={true}  onPress={this.goToFeed.bind(this)} />
+                <FooterIcon isActive={this.state.currentSection ==  ADDPHOTO}  iconName={'ios-add-circle'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={this.state.currentSection == EXPLORE} iconName={'ios-compass'}  active={true}  onPress={this.closeHamburger.bind(this)} />
+                <FooterIcon isActive={this.state.currentSection == USERPROFILE} iconName={'ios-contact'}  active={true}  onPress={this.closeHamburger.bind(this)} />
               </View>
             </View>
 

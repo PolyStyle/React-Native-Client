@@ -7,8 +7,9 @@ const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    minHeight: 400,
-    backgroundColor: '#ffffff',
+    flex: 1,
+    minHeight: 500,
+    backgroundColor: '#ededed',
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -54,7 +55,9 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginRight: 5,
     height: 20,
-    borderRadius: 2
+    borderRadius: 2,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
   avatarContainerView:{
     flex: 1,
@@ -195,7 +198,7 @@ class FeedItem extends Component {
     }
     if(currentPost && currentPost.User && currentPost.ImageId) {
       return (
-        <View  shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
+        <View shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
           <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this )}>
             <ScaledImage
               id={currentPost.ImageId}
