@@ -8,7 +8,10 @@ const { height,width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    width: width,
+    minHeight: 300,
+
   },
   descriptions: {
     backgroundColor: '#ffffff',
@@ -72,6 +75,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     minHeight: 350,
+        justifyContent: 'center',
+    alignItems: 'center',
   },
   boxContainer: {
     minHeight: 300,

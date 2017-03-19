@@ -76,14 +76,14 @@ class ScaledImage extends Component {
     if(this.state.url){
       return (
           <View style={[{'width': this.state.width, 'height': this.state.height}, this.props.styles]}>
-            <ActivityIndicator
+            { this.props.loader && <ActivityIndicator
               style={[{
-                'marginLeft': this.state.width/2-10, 
+                'marginLeft': this.state.width/2-10,
                 'marginTop': this.state.height/2-10
               },styles.centering]}
               size="small"
               color="#111111"
-            />
+            />}
             <FadeInImage
               shouldRasterizeIOS={true}
               renderToHardwareTextureAndroid={true}
@@ -95,9 +95,9 @@ class ScaledImage extends Component {
       );
     } else {
       if(this.props.loader) {
-        return( 
+        return(
          <ActivityIndicator style={[{
-                'marginLeft': -10, 
+                'marginLeft': -10,
                 'marginTop': -10
               },styles.centering]}
               size="small"
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'transparent',
   },
-  
+
   horizontal: {
     flexDirection: 'row',
     justifyContent: 'space-around',

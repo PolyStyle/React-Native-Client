@@ -176,6 +176,7 @@ class BrandContainer extends Component{
         />
         <View style={styles.avatarContainer}>
           <ScaledImage
+          loader={false}
             id={this.props.brands[this.props.id].AvatarImageId}
             width={width}
             styles={styles.avatar}

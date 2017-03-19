@@ -8,26 +8,19 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
   },
-   
+
 
 });
 
 
 export default class SearchContainer extends Component {
   static propTypes = {
-    description: PropTypes.string.isRequired,
-    onPress: PropTypes.func,
+
   };
 
   constructor (props) {
     super(props)
   };
-
-  onPress() {
-    if(this.props.onPress) {
-      this.props.onPress()
-    } 
-  }
 
  render(){
     return (
@@ -38,4 +31,4 @@ export default class SearchContainer extends Component {
   }
 
 }
- 
+
