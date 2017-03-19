@@ -16,7 +16,7 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const containerHeight = 50;
 const contentWidth = width;
 const middleHeight = 22;
-const middleWidth = width / 2;
+const middleWidth = (width / 2) - 5;
 
 class SearchBox extends Component {
     constructor(props) {
@@ -140,7 +140,7 @@ class SearchBox extends Component {
                 Animated.timing(
                     this.inputFocusWidthAnimated,
                     {
-                        toValue: contentWidth - 70,
+                        toValue: contentWidth - 90,
                         duration: 100
                     }
                 ).start(),
@@ -311,8 +311,6 @@ const styles = {
         justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 10,
-        borderColor: '#333',
-        borderBottomWidth: 1,
         overflow: 'hidden'
     },
     input: {
@@ -321,7 +319,7 @@ const styles = {
         height: containerHeight - 20,
         paddingTop: 5,
         paddingBottom: 5,
-        paddingRight: 30,
+        paddingRight: 20,
         borderColor: '#000',
         backgroundColor: '#f3f3f3',
         borderRadius: 4,
@@ -342,17 +340,18 @@ const styles = {
     },
     iconDelete: {
         position: 'absolute',
-        right: 63,
+        right: 80,
         top: middleHeight - 7,
         height: 20,
         width: 20,
     },
     cancelButton: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
+        paddingTop: 8,
+        width: 60,
+        alignItems: 'center',
         backgroundColor: 'transparent',
         height: 30,
-
         paddingLeft: 5,
         paddingRight: 5,
         backgroundColor: '#333',
