@@ -4,31 +4,35 @@ import { TouchableOpacity, View, Text, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   default:{
-    flex: 1, 
+    flex: 1,
     padding: 5,
   },
   active: {
-    borderRadius: 3, 
+    borderRadius: 3,
     paddingLeft: 12,
     paddingRight: 12,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
     borderRadius: 3,
     borderColor: '#333333',
     borderWidth: 1,
     backgroundColor: '#333333',
+    alignItems: 'center',
+    justifyContent: 'center',
 
   },
   disable:{
-    borderRadius: 3, 
+    borderRadius: 3,
     paddingLeft: 12,
     paddingRight: 12,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
     borderRadius: 3,
     borderColor: '#555555',
     borderWidth: 1,
     backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   activeText: {
     color: '#ffffff',
