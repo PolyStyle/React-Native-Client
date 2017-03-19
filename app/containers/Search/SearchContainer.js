@@ -26,7 +26,6 @@ export default class SearchContainer extends Component {
     return (
     <View style={styles.container} >
       <SearchBox />
-       <Text> TEST </Text>
    </View>
     )
   }
