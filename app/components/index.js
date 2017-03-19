@@ -38,6 +38,7 @@ import MenuButton from './ExpandInFeed/MenuButton'
 import AddToCollectionView from './ExpandInFeed/AddToCollectionView'
 import CollectionListView from './ExpandInFeed/CollectionListView'
 import CreateNewCollection from './ExpandInFeed/CreateNewCollection'
+import SearchBox from './Search/SearchBox'
 
 export {
 	LogIn,
@@ -79,5 +80,6 @@ export {
 	AddToCollectionView,
 	CollectionListView,
 	CreateNewCollection,
-  FooterIcon
+  FooterIcon,
+  SearchBox
 }

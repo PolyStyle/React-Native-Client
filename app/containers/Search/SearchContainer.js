@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react'
 import { View, TouchableOpacity ,StyleSheet, Dimensions, Text} from 'react-native'
-
+import { SearchBox }  from './../../components'
 const { height,width } = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffcc00',
+    backgroundColor: '#ffffff',
     width: width,
     height: height,
   },
@@ -25,6 +25,7 @@ export default class SearchContainer extends Component {
  render(){
     return (
     <View style={styles.container} >
+      <SearchBox />
        <Text> TEST </Text>
    </View>
     )
