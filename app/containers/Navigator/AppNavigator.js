@@ -22,20 +22,20 @@ export default class AppNavigator extends Component {
   
 
   renderScene = (route, navigator) => {
-
+    console.log('I RENDERED THE MAIN SCENE');
     if (this.props.isAuthed === false) {
       // I NEED TO SHOW THE LOGIN PAGE
       return <SplashContainer  style={{flex: 1, backgroundColor: '#00ccff'}} navigator={navigator} />
     } else if (route.settings === true) {
-
       return <SettingsContainer  style={{flex: 1, backgroundColor: '#ffcc00'}} navigator={navigator} />
     } else if( this.props.isAuthed === true && this.props.isNew === true) {
       // THIS NEEDS AN ONBOARDING
       return <OnboardingContainer  style={{flex: 1, backgroundColor: '#ff0000'}} navigator={navigator} />
-    }
+    } else {
     // IF NONE OF THE ABOVE, START THE STANDARD NAVIGATION (which in include the main view. Thanks iOS for this
     // idiotic way
-    return <FooterTabsContainer navigator={navigator} />
+      return <FooterTabsContainer navigator={navigator} />
+    }
   }
   configureScene = (route) => {
     if (Platform.OS === 'android') {

@@ -67,9 +67,6 @@ class StreamListView extends React.Component {
       return true;
   }
 
-
-
-
   updateListView(){
     console.log('UPDATE LIST VIEW ')
     if(!this.props.posts) return;

@@ -140,7 +140,7 @@ export default class FooterTabs extends Component {
 	    this.state = {
 	      currentSection: FEED,
 	    }
-	    // console.log('FETCH ALL POSTS')
+	    console.log('CONSTRUCTED FOOTER TABS')
 	  }
 	 goToSearch(){
     this.setState({

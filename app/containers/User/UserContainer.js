@@ -1,8 +1,12 @@
 import React, { PropTypes, Component } from 'react'
-import { View, TouchableOpacity ,StyleSheet, Dimensions, Text} from 'react-native'
+import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image} from 'react-native'
 import { connect } from 'react-redux';
 import { CustomButton, ScaledImage} from './../../components'
 import { fetchUser } from './../../redux/modules/users';
+import { uploadPicture } from './../../redux/modules/images'
+import { TakeSelfy }  from './../../components'
+
+const ImagePicker = require('react-native-image-picker')
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { height,width } = Dimensions.get('window')
@@ -20,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#75ffc0',
+    backgroundColor: '#61bfad',
   },
   avatar: {
     flexDirection: 'row',
@@ -65,9 +69,12 @@ class UserContainer extends Component {
   };
 
    componentDidMount() {
-    this.props.dispatch(fetchUser(this.props.user.id));
+    console.log('USER CONTAINER')
+    console.log(this.props)
   }
-
+  componentWillReceiveProps(nextProps) {
+    console.log('NEXT PROPS' , nextProps)
+  }
   handleStartEdit(){
     this.setState({
       isEditing: true,
@@ -80,49 +87,97 @@ class UserContainer extends Component {
     })
   }
 
+  takeSnapshot() {
+    /**
+     * The first arg is the options object for customization (it can also be null or omitted for default options),
+     */
+    const options = {
+      title: 'Select your new profile Image',
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        var source;
+
+        // Reference to the platform specific asset location
+        if (Platform.OS === 'android') {
+          source = {uri: response.uri, isStatic: true};
+        } else {
+          source = {uri: response.uri.replace('file://', ''), isStatic: true};
+        }
+
+        this.setState({
+          avatarSource: source
+        });
+      }
+    });
+  };
+
  render(){
-  console.log(this.props.user.id  );
+    if(!this.props.user){
+      return (<View />)
+    }
     return (
     <View style={styles.container} >
       <View style={styles.backgroundHeader} >
         <View style={styles.avatarContainer} >
-          <ScaledImage
+          { !this.state.avatarSource && 
+
+            <ScaledImage
             styles={styles.avatar}
             id={this.props.user.ImageId}
             width={150}
           />
+          }
+          { this.state.avatarSource &&
+            <Image style={styles.avatar} source={this.state.avatarSource} />
+          }
           {this.state.isEditing &&
             <View style={styles.changeAvatar} >
+              <TouchableOpacity style={styles.productViewItem} onPress={this.takeSnapshot.bind(this)} >
                <Icon
                style={styles.cameraIcon}
                 name='ios-camera-outline'
                 size={50}
                 color={'#fdfdfd'}
                />
+               </TouchableOpacity>
             </View>
           }
         </View>
         <View style={styles.editButton}>
-          {this.props.users[this.props.user.id] && !this.state.isEditing &&
+          {!this.state.isEditing &&
             <CustomButton
-              cta={"Edit"}
-              active={this.props.users[this.props.user.id].isFollowing}
+              cta={"Edit"} 
               onPress={this.handleStartEdit.bind(this)}
             />
           }
-          {this.props.users[this.props.user.id] && this.state.isEditing &&
+          {this.state.isEditing &&
             <CustomButton
               cta={"Cancel"}
-              active={this.props.users[this.props.user.id].isFollowing}
               onPress={this.handleCancelEdit.bind(this)}
             />
           }
           </View>
           <View style={styles.saveButton}>
-          {this.props.users[this.props.user.id] && this.state.isEditing &&
+          {this.state.isEditing &&
             <CustomButton
-              cta={"Save"}
-              active={this.props.users[this.props.user.id].isFollowing}
+              cta={"Save"} 
               onPress={this.handleCancelEdit.bind(this)}
             />
           }
@@ -136,11 +191,11 @@ class UserContainer extends Component {
 }
 
 
-function mapStateToProps ({users}) {
+function mapStateToProps({users}) {
   return {
-    users: users,
     user: users.currentUser,
   }
+   
 }
 
 export default connect(mapStateToProps)(UserContainer)

@@ -102,10 +102,7 @@ class TakeSelfy extends Component {
   render () {
     return (
         <View style={styles.container}>
-          <Navbar
-            title='Swipe'
-            leftButton={Platform.OS === 'android' ? <Hamburger onPress={this.props.openDrawer} /> : null}
-            rightButton={<Gear onPress={this.props.handleToSettings}/>} />
+ 
             { this.state.avatarSource &&
               <Image style={styles.avatar} source={this.state.avatarSource} />
             }
@@ -127,7 +124,7 @@ class TakeSelfy extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: 440,
     backgroundColor: '#f44444'
   },
   image: {
