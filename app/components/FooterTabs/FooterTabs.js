@@ -4,22 +4,30 @@ import { colors } from './../../styles'
 import Icon from 'react-native-vector-icons/Ionicons'
 import IconFontAwsome from 'react-native-vector-icons/FontAwesome'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { UserProfileContainer , LeaderboardContainer, SwipeContainer, TakeSelfyContainer, StreamContainer,SearchStack} from './../../containers'
+import {
+  UserProfileContainer,
+  LeaderboardContainer,
+  TakeSelfyContainer,
+  StreamContainer,
+  SearchStack,
+  AddContentStack,
+  ExploreStack
+} from './../../containers'
 import { FooterIcon}  from './../../components'
 
 
 const { height,width } = Dimensions.get('window')
 const FEED = 'Feed';
 const SEARCH = 'Search';
-const EXPLORE = 'Explore';
 const USERPROFILE = 'User Profile';
-const ADDPHOTO = 'Add Photo';
+const ADDCONTENT = 'Add Content';
+const EXPLORE = 'Explore';
 
 
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height, 
+    height: height,
   },
   closeHamburger: {
     position: 'absolute',
@@ -110,13 +118,13 @@ const styles = StyleSheet.create({
   containerView: {
  		width: width,
  		height: height,
- 		opacity: 1, 
+ 		opacity: 1,
   },
   // This pushes the view out of the viewport, but why the negative bottom?
   hiddenContainer: {
   	opacity: 0,
   	width: 0,
-  	height: 0, 
+  	height: 0,
   }
 })
 
@@ -143,6 +151,16 @@ export default class FooterTabs extends Component {
       currentSection: FEED,
     })
   }
+  goToAddContent(){
+    this.setState({
+      currentSection: ADDCONTENT,
+    })
+  }
+  goToExplore(){
+    this.setState({
+      currentSection: EXPLORE,
+    })
+  }
   /*
 	<StreamContainer navigator={this.props.navigator}/>
   <SearchContainer  navigator={this.props.navigator}/>
@@ -150,19 +168,25 @@ export default class FooterTabs extends Component {
 
   render(){
   	return (
-  		<View style={styles.container}> 
+  		<View style={styles.container}>
   				<View style={this.state.currentSection == FEED ? styles.containerView : styles.hiddenContainer}>
           	 <StreamContainer navigator={this.props.navigator}/>
           </View>
  					<View style={this.state.currentSection == SEARCH ? styles.containerView : styles.hiddenContainer}>
 	           <SearchStack navigator={this.props.navigator}/>
 	  			</View>
+          <View style={this.state.currentSection == ADDCONTENT ? styles.containerView : styles.hiddenContainer}>
+             <AddContentStack navigator={this.props.navigator}/>
+          </View>
+          <View style={this.state.currentSection == EXPLORE ? styles.containerView : styles.hiddenContainer}>
+             <ExploreStack navigator={this.props.navigator}/>
+          </View>
           <View style={styles.bottomMenu}>
 	          <View style={styles.buttonContainer}>
 	            <FooterIcon isActive={this.state.currentSection == SEARCH} iconName={'ios-search'}  active={true}  onPress={this.goToSearch.bind(this)} />
 	            <FooterIcon  isActive={this.state.currentSection == FEED} iconName={'ios-glasses'}  active={true}  onPress={this.goToFeed.bind(this)} />
-	            <FooterIcon isActive={this.state.currentSection ==  ADDPHOTO}  iconName={'ios-add-circle'}  active={true}  onPress={this.goToSearch.bind(this)} />
-	            <FooterIcon isActive={this.state.currentSection == EXPLORE} iconName={'ios-compass'}  active={true}  onPress={this.goToSearch.bind(this)} />
+	            <FooterIcon isActive={this.state.currentSection ==  ADDCONTENT}  iconName={'ios-add-circle'}  active={true}  onPress={this.goToAddContent.bind(this)} />
+	            <FooterIcon isActive={this.state.currentSection == EXPLORE} iconName={'ios-compass'}  active={true}  onPress={this.goToExplore.bind(this)} />
 	            <FooterIcon isActive={this.state.currentSection == USERPROFILE} iconName={'ios-contact'}  active={true}  onPress={this.goToSearch.bind(this)} />
 	          </View>
 	        </View>

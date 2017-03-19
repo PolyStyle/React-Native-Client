@@ -3,38 +3,22 @@ import { TouchableHighlight, StyleSheet, Text, View ,Dimensions, Platform, Navig
 import { connect } from 'react-redux'
 import { Navbar, StreamListView , CustomButton, Gear, Hamburger, Exit, FooterIcon}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
-import { SearchContainer } from  './../../containers'
+import { AddContentContainer } from  './../../containers'
 
 const { height,width } = Dimensions.get('window')
+const ADDCONTENT = 'Add Content';
 
-const SEARCH = 'Search';
+class AddContentStack extends Component {
 
 
-class SearchStack extends Component {
-  componentDidMount() {
-  }
-
-  handlerSelection (id,active){
-    const newCounter = active ? this.state.needed-1 : this.state.needed+1;
-    const isFinished = (newCounter <= 0); // if we have selected enough categories
-    this.setState({
-      needed: newCounter,
-      readyToFinish: isFinished
-    });
-
-  }
 
   constructor (props) {
     super(props)
     this.state = {
       hamburgerMenuOpen: false,
-      needed: 3, // the number of categories needed
-      readyToFinish: false, // when the user has selected at least x needed categories
       openingMenuAnimation: new Animated.Value(),
-      currentSection: SEARCH,
+      currentSection: ADDCONTENT,
     }
-
-    // console.log('FETCH ALL POSTS')
   }
 
   closeHamburger(){
@@ -56,15 +40,6 @@ class SearchStack extends Component {
       this.state.openingMenuAnimation,
         {toValue: height,}
     ).start();  //Step 5
-  }
-
-
-  _navigateToBrand(brandData){
-  this.props.navigator.push({
-      name: 'Brand',
-      title: brandData.displayName,
-      passProps: brandData,
-    })
   }
 
   render () {
@@ -105,16 +80,15 @@ class SearchStack extends Component {
 
           navigationBar={
              <Navigator.NavigationBar
-              ref={(r) => { this.navigatorRef = r; }}
               style={ styles.header }
               routeMapper={NavigationBarRouteMapper} />}
-              initialRoute={{ title: 'Search', name: SEARCH, index: 0 }}
+              initialRoute={{ title: 'Add Photo', name: ADDCONTENT, index: 0 }}
               renderScene={(route, navigator) => {
                 console.log('REQUEST ROUTE IN SEARCH STACK', route.name)
-                if(route.name === SEARCH){
+                if(route.name === ADDCONTENT){
                   return (
                     <View style={styles.categoriesList}>
-                      <SearchContainer  />
+                      <AddContentContainer  />
                     </View>
                   )
                 }
@@ -183,15 +157,6 @@ class SearchStack extends Component {
       padding: 0,
       margin: 0,
     },
-  footer: {
-    width: width,
-    flex: 1,
-    height: 60,
-    borderColor: '#111111',
-    borderTopWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   categoriesList: {
     marginTop: 60,
     flex: 1,
@@ -199,30 +164,9 @@ class SearchStack extends Component {
     height: height-160,
     padding: 0
   },
-  bottomMenu: {
-    paddingTop: 5,
-    paddingLeft: 20,
-    paddingRight: 20,
-    height: 42,
-    borderTopWidth: 1,
-    borderColor: '#111111'
-  },
-  buttonContainer:{
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  }
-
 })
 
 
 
-function mapStateToProps ({posts}) {
-  return {
-    posts: posts,
-  }
-}
-
-
-export default connect()(SearchStack)
+export default  AddContentStack
 

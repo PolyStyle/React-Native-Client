@@ -15,6 +15,10 @@ import BrandContainer from './Brand/BrandContainer'
 import CollectionContainer from './Collection/CollectionContainer'
 import SearchStack from './Search/SearchStack'
 import SearchContainer from './Search/SearchContainer'
+import AddContentStack from './AddContent/AddContentStack'
+import AddContentContainer from './AddContent/AddContentContainer'
+import ExploreStack from './Explore/ExploreStack'
+import ExploreContainer from './Explore/ExploreContainer'
 export {
 	AppNavigator,
 	SplashContainer,
@@ -32,5 +36,9 @@ export {
 	BrandContainer,
 	CollectionContainer,
 	SearchStack,
-	SearchContainer
+	SearchContainer,
+  AddContentStack,
+  AddContentContainer,
+  ExploreStack,
+  ExploreContainer
 }
