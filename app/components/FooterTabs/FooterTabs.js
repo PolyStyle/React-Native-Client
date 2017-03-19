@@ -11,7 +11,8 @@ import {
   StreamContainer,
   SearchStack,
   AddContentStack,
-  ExploreStack
+  ExploreStack,
+  UserStack
 } from './../../containers'
 import { FooterIcon}  from './../../components'
 
@@ -19,9 +20,9 @@ import { FooterIcon}  from './../../components'
 const { height,width } = Dimensions.get('window')
 const FEED = 'Feed';
 const SEARCH = 'Search';
-const USERPROFILE = 'User Profile';
 const ADDCONTENT = 'Add Content';
 const EXPLORE = 'Explore';
+const USER = 'User';
 
 
 const styles = StyleSheet.create({
@@ -161,6 +162,11 @@ export default class FooterTabs extends Component {
       currentSection: EXPLORE,
     })
   }
+  goToUser(){
+    this.setState({
+      currentSection: USER,
+    })
+  }
   /*
 	<StreamContainer navigator={this.props.navigator}/>
   <SearchContainer  navigator={this.props.navigator}/>
@@ -181,13 +187,16 @@ export default class FooterTabs extends Component {
           <View style={this.state.currentSection == EXPLORE ? styles.containerView : styles.hiddenContainer}>
              <ExploreStack navigator={this.props.navigator}/>
           </View>
+           <View style={this.state.currentSection == USER ? styles.containerView : styles.hiddenContainer}>
+             <UserStack navigator={this.props.navigator}/>
+          </View>
           <View style={styles.bottomMenu}>
 	          <View style={styles.buttonContainer}>
 	            <FooterIcon isActive={this.state.currentSection == SEARCH} iconName={'ios-search'}  active={true}  onPress={this.goToSearch.bind(this)} />
 	            <FooterIcon  isActive={this.state.currentSection == FEED} iconName={'ios-glasses'}  active={true}  onPress={this.goToFeed.bind(this)} />
 	            <FooterIcon isActive={this.state.currentSection ==  ADDCONTENT}  iconName={'ios-add-circle'}  active={true}  onPress={this.goToAddContent.bind(this)} />
 	            <FooterIcon isActive={this.state.currentSection == EXPLORE} iconName={'ios-compass'}  active={true}  onPress={this.goToExplore.bind(this)} />
-	            <FooterIcon isActive={this.state.currentSection == USERPROFILE} iconName={'ios-contact'}  active={true}  onPress={this.goToSearch.bind(this)} />
+	            <FooterIcon isActive={this.state.currentSection == USER} iconName={'ios-contact'}  active={true}  onPress={this.goToUser.bind(this)} />
 	          </View>
 	        </View>
      </View>
