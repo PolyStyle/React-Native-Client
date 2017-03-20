@@ -7,6 +7,8 @@ import {
   isFollowingUser as isFollowingUserAPI,
   getUserCollections,
   addCollection,
+  uploadImage,
+  saveUserProfile
 } from './../../api/api_proxy'
 
 
@@ -24,6 +26,8 @@ const ADD_USER_STREAM = 'ADD_USER_STREAM'
 
 const UPDATE_USER_FOLLOW = 'UPDATE_USER_FOLLOW'
 const ADD_USER_COLLECTIONS = 'ADD_USER_COLLECTIONS'
+const ADD_TEMPORARY_PROFILE_IMAGE = 'ADD_TEMPORARY_PROFILE_IMAGE'
+const SAVE_TEMPORARY_PROFILE = 'SAVE_TEMPORARY_PROFILE'
 import {REHYDRATE} from 'redux-persist/constants'
 
 
@@ -156,6 +160,42 @@ export function fetchUserCollections(userId){
     })
   }
 }
+
+export function uploadProfilePicture(source){
+  return function(dispatch){
+    return uploadImage(source,[
+        { width: 100, height: 100 },
+        { width: 500, height: 500 },
+        { width: 1000, height: 1000 }
+      ]).then(function(ImageResult){
+        console.log(ImageResult, ImageResult.id)
+        dispatch(addTemporaryProfileImage(ImageResult.id))
+    })
+  }
+}
+
+
+function addTemporaryProfileImage(id){
+  return {
+    type: ADD_TEMPORARY_PROFILE_IMAGE,
+    id: id,
+  }
+}
+
+
+export function saveTemporaryProfile(tempProfile){
+  console.log('SAVE TEMPORAry PROFILE', tempProfile)
+  return function(dispatch){
+    return saveUserProfile(tempProfile).then(function(user){
+      console.log('USER FROM REDUCER', user);
+      dispatch(setCurrentUser(user))
+    })
+  }
+}
+
+
+
+
 function addUserCollections(userId, collections){
   console.log('ADD USER COLLECTIONS ACTION', userId, collections)
   return {
@@ -212,6 +252,16 @@ export default function users (state = initialState, action) {
         [action.id] : {
           ...state[action.id],
           isFollowing: action.isFollowing
+        }
+      }
+    case ADD_TEMPORARY_PROFILE_IMAGE:
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          temporaryProfile: {
+            ImageId: action.id
+          }
         }
       }
     case SET_CURRENT_USER:

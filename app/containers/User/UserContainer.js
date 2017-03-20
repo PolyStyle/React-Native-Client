@@ -1,9 +1,9 @@
 import React, { PropTypes, Component } from 'react'
-import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image} from 'react-native'
+import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image, ActivityIndicator} from 'react-native'
 import { connect } from 'react-redux';
 import { CustomButton, ScaledImage} from './../../components'
 import { fetchUser } from './../../redux/modules/users';
-import { uploadPicture } from './../../redux/modules/images'
+import { uploadProfilePicture, saveTemporaryProfile } from './../../redux/modules/users'
 import { TakeSelfy }  from './../../components'
 
 const ImagePicker = require('react-native-image-picker')
@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 150,
     width: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 75,
   },
   editButton: {
@@ -50,11 +52,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 75,
     backgroundColor: '#333',
-    opacity: .8,
+    opacity: .60,
   },
   cameraIcon: {
     backgroundColor: 'transparent'
+  },
+  productViewItem: {
+    width: 150,
+    height: 150,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
+
 });
 
 
@@ -86,7 +95,15 @@ class UserContainer extends Component {
       isEditing: false
     })
   }
+  handleSaveEdit(){
+    this.props.dispatch(saveTemporaryProfile(this.props.user.temporaryProfile));
+    this.setState({
+      isEditing: false,
+      avatarSource: null
+    })
 
+
+  }
   takeSnapshot() {
     /**
      * The first arg is the options object for customization (it can also be null or omitted for default options),
@@ -120,10 +137,19 @@ class UserContainer extends Component {
         } else {
           source = {uri: response.uri.replace('file://', ''), isStatic: true};
         }
-
+        console.log(response)
         this.setState({
-          avatarSource: source
+          avatarSource: source,
+          loadingImage: true,
         });
+        var ref = this;
+        this.props.dispatch(uploadProfilePicture(source)).then(function(){
+          ref.setState({
+            loadingImage: false,
+          })
+        })
+
+
       }
     });
   };
@@ -136,7 +162,7 @@ class UserContainer extends Component {
     <View style={styles.container} >
       <View style={styles.backgroundHeader} >
         <View style={styles.avatarContainer} >
-          { !this.state.avatarSource && 
+          { !this.state.avatarSource &&
 
             <ScaledImage
             styles={styles.avatar}
@@ -149,21 +175,27 @@ class UserContainer extends Component {
           }
           {this.state.isEditing &&
             <View style={styles.changeAvatar} >
-              <TouchableOpacity style={styles.productViewItem} onPress={this.takeSnapshot.bind(this)} >
-               <Icon
-               style={styles.cameraIcon}
-                name='ios-camera-outline'
-                size={50}
-                color={'#fdfdfd'}
-               />
+              {!this.state.loadingImage && <TouchableOpacity style={styles.productViewItem} onPress={this.takeSnapshot.bind(this)} >
+                 <Icon
+                 style={styles.cameraIcon}
+                  name='ios-camera-outline'
+                  size={40}
+                  color={'#ccc'}
+                 />
                </TouchableOpacity>
+              }
+              {this.state.loadingImage && <ActivityIndicator
+                  size="small"
+                  color="#ccc"
+                />
+              }
             </View>
           }
         </View>
         <View style={styles.editButton}>
           {!this.state.isEditing &&
             <CustomButton
-              cta={"Edit"} 
+              cta={"Edit"}
               onPress={this.handleStartEdit.bind(this)}
             />
           }
@@ -177,8 +209,8 @@ class UserContainer extends Component {
           <View style={styles.saveButton}>
           {this.state.isEditing &&
             <CustomButton
-              cta={"Save"} 
-              onPress={this.handleCancelEdit.bind(this)}
+              cta={"Save"}
+              onPress={this.handleSaveEdit.bind(this)}
             />
           }
 
@@ -195,7 +227,7 @@ function mapStateToProps({users}) {
   return {
     user: users.currentUser,
   }
-   
+
 }
 
 export default connect(mapStateToProps)(UserContainer)

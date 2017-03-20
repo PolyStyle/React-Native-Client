@@ -1,4 +1,4 @@
-import { selfie } from './../../api/auth'
+
 
 const READY_TO_UPLOAD = 'READY_TO_UPLOAD'
 const UPLOADING_IMAGE = 'UPLOADING_IMAGE'
@@ -17,13 +17,29 @@ function uploadFinished () {
 }
 
 
-export function uploadPicture(url, config) {
-  console.log('CLICKED UPOLOAD PICTURe -------')
+export function uploadPicture(url) {
+  var photo = {
+    uri: url,
+    type: 'image/jpeg',
+    name: 'photo.jpg',
+  };
+
+  var body = new FormData();
+  body.append('file', photo);
+  body.append('sizes', JSON.stringify([{ width: 200, height: 200 }, { width: 500, height: 500 }]));
+
+
+  fetch('http://localhost:3000/images/upload/', {
+    method: 'POST',
+    body
+  })
+
+  /* console.log('CLICKED UPOLOAD PICTURe -------')
   console.log(url,config)
 
   return function (dispatch) {
     console.log('got here --------')
-    dispatch(startUploading()) 
+    dispatch(startUploading())
     return selfie.publishImage(url,config)
       .then(function (result) {
         console.log(result);
@@ -31,13 +47,16 @@ export function uploadPicture(url, config) {
       })
       .catch((error) => console.warn('Error in handle auth: ', error))
   }
+
+
+  */
 }
- 
+
 const initialState = {
   isUploading: false,
 }
 
-export default function authentication (state = initialState, action) { 
+export default function authentication (state = initialState, action) {
   switch (action.type) {
     case READY_TO_UPLOAD :
       return {
@@ -46,11 +65,11 @@ export default function authentication (state = initialState, action) {
       }
     case UPLOADING_IMAGE :
       return {
-        isUploading: true, 
+        isUploading: true,
       }
     case UPLOADED_COMPLETED :
       return {
-        isUploading: false, 
+        isUploading: false,
       }
     default :
       return state

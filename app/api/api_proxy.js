@@ -3,8 +3,8 @@ import { AccessToken as FacebookAccessToken, LoginManager } from 'react-native-f
 var onAuthStateChangedCallbacks = [];
 /* proxy for all the api calls on the node server */
 
-var baseUrl = 'http://104.155.46.72/api/v1'
-// var baseUrl = 'http://127.0.0.1:3000'
+// var baseUrl = 'http://104.155.46.72/api/v1'
+ var baseUrl = 'http://127.0.0.1:3000'
 
 var AccessToken = null;
 
@@ -632,6 +632,30 @@ function unlikeProduct(id) {
 
 exports.unlikeProduct = runWithRefresh(unlikeProduct);
 
+
+function saveUserProfile(profile){
+  console.log('API ENDPOINT',profile)
+    var self = this;
+    var endpoint = baseUrl + '/users/me';
+    return fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + AccessToken.accessToken
+        },
+        body: JSON.stringify({profile: profile})
+    }).then(function(res) {
+        if (!isSuccess(res.status)) {
+            return res.json().then(function(json) {
+                return Promise.reject(json);
+            });
+        }
+        return res.json();
+    })
+}
+exports.saveUserProfile = runWithRefresh(saveUserProfile);
+
 /*   Collection part
 /   GET /users/:userId/collections
 /   GET /collections/:collectionId
@@ -741,6 +765,32 @@ function addPostToCollection(collectionId, post) {
     })
 };
 
+
+export function uploadImage(source, sizes){
+
+
+  let photo = { uri: source.uri}
+  let formdata = new FormData();
+
+
+  formdata.append("sizes", JSON.stringify(sizes))
+  formdata.append("file", {uri: photo.uri, name: 'image.jpg', type: 'multipart/form-data'})
+
+  return fetch('http://localhost:3000/images/upload/',{
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: formdata
+  }).then(response => {
+    return response.json().then(function(json) {
+
+        return  json ;
+  });
+  }).catch(err => {
+    console.log(err)
+  })
+}
 
 
 /* authentication part */

@@ -42,12 +42,12 @@ export default class RNFashion extends Component {
   }
 
   componentDidMount () {
-      _self = this;
-      var persistor = persistStore(store, {storage: AsyncStorage}, () => {
-        this.setState({
-          restoredPersistentStore: true
-        })
-    })
+    _self = this;
+    var persistor = persistStore(store, {storage: AsyncStorage}, () => {
+      this.setState({
+        restoredPersistentStore: true
+      })
+    }).purge()
   }
 
   render(){
