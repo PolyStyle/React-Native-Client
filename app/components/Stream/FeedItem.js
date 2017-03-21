@@ -8,12 +8,12 @@ const { height,width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    minHeight: 500,
+    minHeight: 400,
     backgroundColor: '#fff',
   },
   imageContainer: {
     flex: 1,
-    minHeight: 500,
+    minHeight: 400,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',

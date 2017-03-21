@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image, ActivityIndicator} from 'react-native'
+import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image, ActivityIndicator, ScrollView} from 'react-native'
 import { connect } from 'react-redux';
 import { CustomButton, ScaledImage} from './../../components'
 import { fetchUser } from './../../redux/modules/users';
@@ -10,26 +10,29 @@ const ImagePicker = require('react-native-image-picker')
 import Icon from 'react-native-vector-icons/Ionicons'
 
 const { height,width } = Dimensions.get('window')
+
+const MARGIN_STANDARD = 14;
+const AVATAR_SIZE = (width-(MARGIN_STANDARD*3))/5*2;
+const TEXT_HEADER_SIZE = (width-(MARGIN_STANDARD*3))/5*3;
+const SUBTEXT_HEADER_SIZE = (TEXT_HEADER_SIZE-(MARGIN_STANDARD*2))/3;
 const styles = StyleSheet.create({
   container: {
 
   },
  backgroundHeader: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     width: width,
     height: 210
   },
   avatarContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#61bfad',
+    marginLeft: MARGIN_STANDARD,
+    position: 'absolute',
+    zIndex: 2,
   },
   avatar: {
     flexDirection: 'row',
-    height: 150,
-    width: 150,
+    height: AVATAR_SIZE,
+    width: AVATAR_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 75,
@@ -38,16 +41,18 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: 10,
       right: 10,
+      zIndex: 10,
     },
   saveButton: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
+    top: 10,
+    left: 10,
+    zIndex: 10,
   },
   changeAvatar: {
     position: 'absolute',
-    height: 150,
-    width: 150,
+    height: AVATAR_SIZE,
+    width: AVATAR_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 75,
@@ -58,11 +63,81 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   productViewItem: {
-    width: 150,
-    height: 150,
+    width: AVATAR_SIZE,
+    height: AVATAR_SIZE,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  backgroundPicture:{
+    position: 'absolute',
+    top: 0,
+    height: 0,
+    width: width,
+    height: height,
+    opacity: .5,
+  },
+  headerUserProfileBackground:{
+    width: width,
+    height: Math.round(width*0.39),
+  },
+
+  overlayContent: {
+    width: width,
+    minHeight: height,
+    paddingTop: 80,
+  },
+  overlayContentBackground: {
+    backgroundColor: '#fff',
+    width: width,
+    height: height,
+  },
+  userNameText: {
+    fontFamily: 'AvenirNext-Bold',
+    fontSize: 26,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    right: 10,
+    zIndex: 4,
+    marginTop: 40,
+    lineHeight: 32,
+    width:  TEXT_HEADER_SIZE,
+    height: 32,
+    textAlign: 'center',
+  },
+  subTextStyle: {
+    fontFamily: 'AvenirNext-Regular',
+    fontSize: 14,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    width: SUBTEXT_HEADER_SIZE,
+    zIndex: 4,
+    lineHeight: 20,
+    height: 25,
+    textAlign: 'center',
+    marginTop: 110,
+  },
+  subTextValueStyle: {
+    fontFamily: 'AvenirNext-Regular',
+    fontSize: 18,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    width: SUBTEXT_HEADER_SIZE,
+    zIndex: 4,
+    lineHeight: 20,
+    height: 25,
+    textAlign: 'center',
+    marginTop: 98,
+  },
+  postsNameText:{
+    right: 30+SUBTEXT_HEADER_SIZE*2,
+  },
+  likesNameText:{
+    right: 10,
+  },
+  followersNameText:{
+    right: 20+SUBTEXT_HEADER_SIZE,
   }
+
 
 });
 
@@ -161,60 +236,82 @@ class UserContainer extends Component {
     return (
     <View style={styles.container} >
       <View style={styles.backgroundHeader} >
-        <View style={styles.avatarContainer} >
-          { !this.state.avatarSource &&
-
-            <ScaledImage
-            styles={styles.avatar}
-            id={this.props.user.ImageId}
-            width={150}
-          />
-          }
-          { this.state.avatarSource &&
-            <Image style={styles.avatar} source={this.state.avatarSource} />
-          }
-          {this.state.isEditing &&
-            <View style={styles.changeAvatar} >
-              {!this.state.loadingImage && <TouchableOpacity style={styles.productViewItem} onPress={this.takeSnapshot.bind(this)} >
-                 <Icon
-                 style={styles.cameraIcon}
-                  name='ios-camera-outline'
-                  size={40}
-                  color={'#ccc'}
-                 />
-               </TouchableOpacity>
+        <ScaledImage
+          styles={styles.backgroundPicture}
+          id={this.props.user.ImageId}
+          width={width}
+          loading={false}
+        />
+        <View style={styles.editButton}>
+              {!this.state.isEditing &&
+                <CustomButton
+                  cta={"Edit"}
+                  onPress={this.handleStartEdit.bind(this)}
+                />
               }
-              {this.state.loadingImage && <ActivityIndicator
-                  size="small"
-                  color="#ccc"
+              {this.state.isEditing &&
+                <CustomButton
+                  cta={"Cancel"}
+                  onPress={this.handleCancelEdit.bind(this)}
                 />
               }
             </View>
-          }
-        </View>
-        <View style={styles.editButton}>
-          {!this.state.isEditing &&
-            <CustomButton
-              cta={"Edit"}
-              onPress={this.handleStartEdit.bind(this)}
-            />
-          }
-          {this.state.isEditing &&
-            <CustomButton
-              cta={"Cancel"}
-              onPress={this.handleCancelEdit.bind(this)}
-            />
-          }
-          </View>
-          <View style={styles.saveButton}>
-          {this.state.isEditing &&
-            <CustomButton
-              cta={"Save"}
-              onPress={this.handleSaveEdit.bind(this)}
-            />
-          }
+            <View style={styles.saveButton}>
+            {this.state.isEditing &&
+              <CustomButton
+                cta={"Save"}
+                onPress={this.handleSaveEdit.bind(this)}
+              />
+            }
 
+            </View>
+        <ScrollView style={styles.overlayContent} >
+          <View style={styles.avatarContainer} >
+              { !this.state.avatarSource &&
+                <ScaledImage
+                  styles={styles.avatar}
+                  id={this.props.user.ImageId}
+                  width={AVATAR_SIZE}
+                />
+              }
+              { this.state.avatarSource &&
+                <Image style={styles.avatar} source={this.state.avatarSource} />
+              }
+              {this.state.isEditing &&
+                <View style={styles.changeAvatar} >
+                  {!this.state.loadingImage && <TouchableOpacity style={styles.productViewItem} onPress={this.takeSnapshot.bind(this)} >
+                     <Icon
+                     style={styles.cameraIcon}
+                      name='ios-camera-outline'
+                      size={40}
+                      color={'#ccc'}
+                     />
+                   </TouchableOpacity>
+                  }
+                  {this.state.loadingImage && <ActivityIndicator
+                      size="small"
+                      color="#ccc"
+                    />
+                  }
+                </View>
+              }
           </View>
+          <Text style={styles.userNameText} >{this.props.user.firstName +' '+this.props.user.lastName} </Text>
+          <Text style={[styles.subTextStyle, styles.postsNameText]}>posts</Text>
+          <Text style={[styles.subTextStyle, styles.likesNameText]}>likes</Text>
+          <Text style={[styles.subTextStyle, styles.followersNameText]}>followers</Text>
+          <Text style={[styles.subTextValueStyle , styles.postsNameText]}>1234</Text>
+          <Text style={[styles.subTextValueStyle, styles.likesNameText]}>14k</Text>
+          <Text style={[styles.subTextValueStyle, styles.followersNameText]}>999M</Text>
+
+          <Image
+            style={styles.headerUserProfileBackground}
+            source={require('../../images/headerUserProfileBackground.png')}
+          />
+          <View style={styles.overlayContentBackground}  >
+             <Text> content </Text>
+          </View>
+        </ScrollView>
       </View>
    </View>
     )
