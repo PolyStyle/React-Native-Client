@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     height: 0,
     width: width,
     height: height,
-    opacity: .5,
+    opacity: .8,
   },
   headerUserProfileBackground:{
     width: width,
