@@ -44,7 +44,7 @@ class UserCollectionsContainer extends Component {
 
  render(){
 
-    if(!this.props.collections && this.props.collections.length <= 0){
+    if(!this.props.collections || this.props.collections.length <= 0){
       return (<View />)
     }
     console.log('i should render', this.props.collections.length)
@@ -61,7 +61,11 @@ class UserCollectionsContainer extends Component {
 
 
 function mapStateToProps({users}) {
-  console.log('MAPS STATE TO PROPS', users[users.currentUser.id].collections)
+  if(!users[users.currentUser.id] ||
+    !users[users.currentUser.id].collections ||
+    !users[users.currentUser.id].collections.collections){
+    return {};
+  }
   return {
     collections: users[users.currentUser.id].collections.collections,
   }

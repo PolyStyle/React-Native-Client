@@ -84,9 +84,10 @@ const styles = StyleSheet.create({
     height: 75,
 
   },
-  roundedProduct: {
+  carouselItem: {
     width: 160,
     height: 160,
+    marginRight: 1,
 
   },
   roundedBrand: {
@@ -202,7 +203,7 @@ class CollectionsCarousel extends Component {
           dataSource={this.state.dataSource}
           renderRow={(rowData) =>
               <ScaledImage
-                styles={styles.roundedProduct}
+                styles={styles.carouselItem}
                 id={rowData.ImageId}
                 width={100}
               />

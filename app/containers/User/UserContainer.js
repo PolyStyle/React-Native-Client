@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { CustomButton, ScaledImage, FooterIcon} from './../../components'
 import { fetchUser } from './../../redux/modules/users';
 import { uploadProfilePicture, saveTemporaryProfile } from './../../redux/modules/users'
-import { TakeSelfy }  from './../../components'
+import { fetchUserCollections } from './../../redux/modules/users'
 import UserCollectionsContainer from './UserCollectionsContainer'
 
 const ImagePicker = require('react-native-image-picker')
@@ -52,11 +52,11 @@ const styles = StyleSheet.create({
   },
   changeAvatar: {
     position: 'absolute',
-    height: AVATAR_SIZE,
-    width: AVATAR_SIZE,
+    height: Math.floor(AVATAR_SIZE/2)*2,
+    width: Math.floor(AVATAR_SIZE/2)*2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 75,
+    borderRadius: Math.floor(AVATAR_SIZE/2)*2,
     backgroundColor: '#333',
     opacity: .60,
   },
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     height: 42,
     borderBottomWidth: 1,
-    borderTopWidth: 1,
+    marginBottom: 20,
     borderColor: '#111111'
   },
   buttonContainer:{
@@ -175,7 +175,7 @@ class UserContainer extends Component {
   };
 
    componentDidMount() {
-    console.log('USER CONTAINER')
+    this.props.dispatch(fetchUserCollections(this.props.user.id))
     console.log(this.props)
   }
   componentWillReceiveProps(nextProps) {
