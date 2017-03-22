@@ -39,6 +39,7 @@ import AddToCollectionView from './ExpandInFeed/AddToCollectionView'
 import CollectionListView from './ExpandInFeed/CollectionListView'
 import CreateNewCollection from './ExpandInFeed/CreateNewCollection'
 import SearchBox from './Search/SearchBox'
+import CollectionsCarousel from './Collections/CollectionsCarousel'
 
 export {
 	LogIn,
@@ -81,5 +82,6 @@ export {
 	CollectionListView,
 	CreateNewCollection,
   FooterIcon,
-  SearchBox
+  SearchBox,
+  CollectionsCarousel
 }

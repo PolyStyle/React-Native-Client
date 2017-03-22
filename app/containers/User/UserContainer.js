@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from 'react'
 import { View, TouchableOpacity ,StyleSheet, Dimensions, Text, Platform, Image, ActivityIndicator, ScrollView} from 'react-native'
 import { connect } from 'react-redux';
-import { CustomButton, ScaledImage} from './../../components'
+import { CustomButton, ScaledImage, FooterIcon} from './../../components'
 import { fetchUser } from './../../redux/modules/users';
 import { uploadProfilePicture, saveTemporaryProfile } from './../../redux/modules/users'
 import { TakeSelfy }  from './../../components'
+import UserCollectionsContainer from './UserCollectionsContainer'
 
 const ImagePicker = require('react-native-image-picker')
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
 
   },
  backgroundHeader: {
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     width: width,
     height: 210
   },
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     height: 0,
     width: width,
     height: height,
-    opacity: .8,
+    opacity: .6,
   },
   headerUserProfileBackground:{
     width: width,
@@ -136,8 +137,29 @@ const styles = StyleSheet.create({
   },
   followersNameText:{
     right: 20+SUBTEXT_HEADER_SIZE,
-  }
+  },
 
+
+// MENU
+ bottomMenu: {
+
+    width: width,
+
+    backgroundColor: '#fff',
+    marginTop: 20,
+    paddingTop: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 42,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#111111'
+  },
+  buttonContainer:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
 
 });
 
@@ -309,7 +331,17 @@ class UserContainer extends Component {
             source={require('../../images/headerUserProfileBackground.png')}
           />
           <View style={styles.overlayContentBackground}  >
-             <Text> content </Text>
+            <View style={styles.bottomMenu}>
+              <View style={styles.buttonContainer}>
+                <FooterIcon isActive={true} onPress={() =>{}} iconName={'ios-browsers'}  active={true}   />
+                <FooterIcon  isActive={false} onPress={() =>{}} iconName={'ios-heart'}  active={true}   />
+                <FooterIcon isActive={false} onPress={() =>{}} iconName={'ios-person-add'}  active={true}  />
+                <FooterIcon isActive={false} onPress={() =>{}} iconName={'ios-people'}  active={true}   />
+                <FooterIcon isActive={false} onPress={() =>{}} iconName={'ios-stats'}  active={true}
+                  />
+              </View>
+            </View>
+            <UserCollectionsContainer userId={this.props.user.id} />
           </View>
         </ScrollView>
       </View>

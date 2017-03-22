@@ -21,6 +21,7 @@ import ExploreStack from './Explore/ExploreStack'
 import ExploreContainer from './Explore/ExploreContainer'
 import UserStack from './User/UserStack'
 import UserContainer from './User/UserContainer'
+import UserCollectionsContainer from './User/UserCollectionsContainer'
 
 export {
 	AppNavigator,
@@ -45,5 +46,6 @@ export {
   ExploreStack,
   ExploreContainer,
   UserStack,
-  UserContainer
+  UserContainer,
+  UserCollectionsContainer
 }
