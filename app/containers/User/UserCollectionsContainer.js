@@ -8,18 +8,11 @@ const { height,width } = Dimensions.get('window')
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fc0',
-    height: 200,
+
     width: width,
+    paddingBottom: 60,
+
   },
- backgroundHeader: {
-    backgroundColor: '#000',
-    width: width,
-    height: 210
-  },
-
-
-
 });
 
 

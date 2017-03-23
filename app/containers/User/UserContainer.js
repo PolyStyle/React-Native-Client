@@ -18,12 +18,12 @@ const TEXT_HEADER_SIZE = (width-(MARGIN_STANDARD*3))/5*3;
 const SUBTEXT_HEADER_SIZE = (TEXT_HEADER_SIZE-(MARGIN_STANDARD*2))/3;
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
 
   },
  backgroundHeader: {
     backgroundColor: '#000',
-    width: width,
-    height: 210
+    flex: 1,
   },
   avatarContainer: {
     marginLeft: MARGIN_STANDARD,
@@ -83,14 +83,13 @@ const styles = StyleSheet.create({
   },
 
   overlayContent: {
-    width: width,
-    minHeight: height,
+    flex: 1,
+    paddingBottom: 120,
     paddingTop: 80,
   },
   overlayContentBackground: {
     backgroundColor: '#fff',
     width: width,
-    height: height,
   },
   userNameText: {
     fontFamily: 'AvenirNext-Bold',
@@ -354,7 +353,7 @@ class UserContainer extends Component {
 
 function mapStateToProps({users}) {
   return {
-    user: users.currentUser,
+    user: users[users.currentUser.id],
   }
 
 }
