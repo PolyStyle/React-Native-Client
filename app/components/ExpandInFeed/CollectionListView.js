@@ -5,7 +5,7 @@ import FeedItem from './../Stream/FeedItem';
 import CollectionGroupItem from './CollectionGroupItem'
 import CollectionCreateNewItem from './CollectionCreateNewItem'
 import { fetchUserCollections } from './../../redux/modules/users'
-import { addPostToCollection } from './../../redux/modules/collections'
+import { addPostToCollection, addProductToCollection } from './../../redux/modules/collections'
 
 const styles = StyleSheet.create({
   container: {
@@ -129,8 +129,10 @@ class CollectionListView extends React.Component {
         self.props.dispatch(fetchUserCollections(self.props.userId))
 
       });
-    } else {
-      // I'm trying to add something else
+    } else if(this.props.itemType == 'PRODUCT') {
+       this.props.dispatch(addProductToCollection(id, this.props.item)).then(function(){
+        self.props.dispatch(fetchUserCollections(self.props.userId))
+      });
     }
 
     // this.props.taskAchievedCallback();

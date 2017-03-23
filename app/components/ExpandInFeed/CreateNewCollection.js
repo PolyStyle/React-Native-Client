@@ -4,7 +4,7 @@ import { View, ListView, StyleSheet, Text,Dimensions, TextInput } from 'react-na
 import {ScaledImage, WideButton} from './../../components'
 import FeedItem from './../Stream/FeedItem';
 import CollectionGroupItem from './CollectionGroupItem'
-import { createNewUserCollectionWithPost } from './../../redux/modules/collections'
+import { createNewUserCollectionWithPost, createNewUserCollectionWithProduct} from './../../redux/modules/collections'
 import { fetchUserCollections } from './../../redux/modules/users'
 const { height,width } = Dimensions.get('window')
 
@@ -103,6 +103,21 @@ class CreateNewCollection extends React.Component {
                 self.props.backToPrevious();
              });
         });
+      } else if (this.props.itemType == 'PRODUCT'){
+
+        this.props.dispatch(
+          createNewUserCollectionWithProduct(this.props.userId, this.props.item.id, this.state.text))
+            .then(function(){
+              console.log('CREATE NEW USER COLLECTION WITH PRODUCT')
+             self.props.dispatch(fetchUserCollections(self.props.userId)) .then(function(){
+                          console.log('FETCH USER COLLECTION')
+                self.props.backToPrevious();
+             });
+        });
+
+
+
+
       }
     })
   }

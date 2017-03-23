@@ -88,7 +88,7 @@ class AddToCollectionView extends Component {
           <View style={styles.separationLine} />
           {this.state.showListView && <CollectionListView
             item={this.props.item}
-             itemType={this.props.itemType}
+            itemType={this.props.itemType}
             userId={this.props.userId}
             taskAchievedCallback={this.props.taskAchievedCallback}
             onCreateNewCollection={this.createNewCollectionHandler.bind(this)}/>}

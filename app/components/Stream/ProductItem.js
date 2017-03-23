@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage} from './../../components'
+import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
 import { connect } from 'react-redux'
 import { fetchProduct,unlikeProduct,likeProduct, hasLikedProduct } from './../../redux/modules/products'
 
@@ -29,7 +29,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 5,
-    marginTop: 5
+    marginTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10
   },
   heartIcon: {
     flexDirection: 'row',
@@ -91,13 +93,12 @@ const styles = StyleSheet.create({
 class ProductItem extends Component {
   static propTypes = {
     onPress: PropTypes.func,
-    active: PropTypes.bool,
     navigator: PropTypes.object
   }
   constructor (props) {
     super(props)
     this.state = {
-      active: props.active,
+      exapndedMoreMenu: false,
     }
 
   }
@@ -174,6 +175,13 @@ class ProductItem extends Component {
     }
   }
 
+  expandMoreMenu(){
+    //this.props.scrollTo({y:-50})
+    this.setState({
+      exapndedMoreMenu: !this.state.exapndedMoreMenu
+    })
+  }
+
   render(){
     if (this.props.products[this.props.id] && this.props.products[this.props.id].ImageId) {
       return (
@@ -188,11 +196,13 @@ class ProductItem extends Component {
               width={width}
             />
           </TouchableOpacity>
-         <View style={styles.descriptions}>
+
           <View style={styles.iconContainer}>
             <Heart active={this.props.products[this.props.id].isLiking} style={styles.heartIcon}  onPress={this.likeProduct.bind(this)}/>
-            <MoreDots style={styles.addIcon} />
+            <MoreDots ref="moreButton" active={this.state.exapndedMoreMenu} style={styles.addIcon} onPress={this.expandMoreMenu.bind(this)}/>
           </View>
+          {this.state.exapndedMoreMenu && <ExpandInFeed taskAchievedCallback={this.expandMoreMenu.bind(this)} itemType={'PRODUCT'} item={this.props.products[this.props.id]}/>}
+        <View style={styles.descriptions}>
           <View style={styles.separationLine} />
           <Text style={styles.descriptionText}> {this.props.productCode} This is a detail description of something long.</Text>
          </View>

@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
   },
   avatar: {
     flexDirection: 'row',
-    height: AVATAR_SIZE,
-    width: AVATAR_SIZE,
+    height:  Math.floor(AVATAR_SIZE/2)*2,
+    width:  Math.floor(AVATAR_SIZE/2)*2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 75,
+    borderRadius: Math.floor(AVATAR_SIZE/2),
   },
   editButton: {
       position: 'absolute',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     width: Math.floor(AVATAR_SIZE/2)*2,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: Math.floor(AVATAR_SIZE/2)*2,
+    borderRadius: Math.floor(AVATAR_SIZE/2),
     backgroundColor: '#333',
     opacity: .60,
   },
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   userNameText: {
     fontFamily: 'AvenirNext-Bold',
-    fontSize: 26,
+    fontSize: 24,
     position: 'absolute',
     backgroundColor: 'transparent',
     right: 10,

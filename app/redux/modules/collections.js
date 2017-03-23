@@ -1,6 +1,7 @@
 import {
   addCollection,
   addPostToCollection as addPostToCollectionAPI,
+  addProductToCollection as addProductToCollectionAPI,
 } from './../../api/api_proxy'
 
 
@@ -29,6 +30,30 @@ export function createNewUserCollectionWithPost(UserId, PostId, displayName){
   }
 }
 
+export function createNewUserCollectionWithProduct(UserId, ProductId, displayName){
+
+  var collection = {
+    displayName: displayName,
+    UserId: UserId
+  }
+  return function(dispatch){
+    return addCollection(collection).then(function(collection){
+      console.log('added usccessfully the collection', collection);
+      const collectionId = collection.id;
+      const productObject = {
+        id: ProductId,
+      }
+      return addProductToCollectionAPI(collectionId,productObject);
+    })
+  }
+}
+
+
+export function addProductToCollection(CollectionId, Product){
+   return function(dispatch){
+     return addProductToCollectionAPI(CollectionId, Product);
+   }
+}
 export function addPostToCollection(CollectionId, Post){
    return function(dispatch){
      return addPostToCollectionAPI(CollectionId, Post);
