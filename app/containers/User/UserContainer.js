@@ -6,6 +6,7 @@ import { fetchUser } from './../../redux/modules/users';
 import { uploadProfilePicture, saveTemporaryProfile } from './../../redux/modules/users'
 import { fetchUserCollections } from './../../redux/modules/users'
 import UserCollectionsContainer from './UserCollectionsContainer'
+import UserLikeContainer from './UserLikeContainer'
 
 const ImagePicker = require('react-native-image-picker')
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -174,6 +175,7 @@ class UserContainer extends Component {
   };
 
    componentDidMount() {
+    this.props.dispatch(fetchUser(this.props.user.id))
     this.props.dispatch(fetchUserCollections(this.props.user.id))
     console.log(this.props)
   }
@@ -192,7 +194,7 @@ class UserContainer extends Component {
     })
   }
   handleSaveEdit(){
-    this.props.dispatch(saveTemporaryProfile(this.props.user.temporaryProfile));
+    this.props.dispatch(saveTemporaryProfile(this.props.currentUser.temporaryProfile));
     this.setState({
       isEditing: false,
       avatarSource: null
@@ -341,6 +343,7 @@ class UserContainer extends Component {
               </View>
             </View>
             <UserCollectionsContainer userId={this.props.user.id} />
+            <UserLikeContainer id={this.props.user.id}/>
           </View>
         </ScrollView>
       </View>
@@ -354,6 +357,7 @@ class UserContainer extends Component {
 function mapStateToProps({users}) {
   return {
     user: users[users.currentUser.id],
+    currentUser : users.currentUser,
   }
 
 }

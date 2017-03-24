@@ -184,11 +184,10 @@ function addTemporaryProfileImage(id){
 
 
 export function saveTemporaryProfile(tempProfile){
-  console.log('SAVE TEMPORAry PROFILE', tempProfile)
   return function(dispatch){
     return saveUserProfile(tempProfile).then(function(user){
-      console.log('USER FROM REDUCER', user);
-      dispatch(setCurrentUser(user))
+        dispatch(setCurrentUser(user))
+
     })
   }
 }
@@ -267,6 +266,10 @@ export default function users (state = initialState, action) {
     case SET_CURRENT_USER:
       return {
         ...state,
+        [action.user.id]: {
+          ...state[action.user.id],
+          ...action.user,
+        },
         currentUser: {
           ...state.currentUser,
           ...action.user,
