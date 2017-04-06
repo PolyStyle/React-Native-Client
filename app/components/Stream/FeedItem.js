@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity,TouchableHighlight,TouchableWithoutFeedback} from 'react-native';
-import { Gear, Hamburger, Heart, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
+import { Gear, Hamburger, Heart, HeartAnimatedView, TagLabel, MoreDots, ScaledImage, ExpandInFeed} from './../../components'
 import { fetchPost, hasLikedPost,unlikePost , likePost } from './../../redux/modules/posts'
 const { height,width } = Dimensions.get('window');
 
@@ -101,6 +101,7 @@ class FeedItem extends Component {
     this.state = {
       currentIndexInPosts: -1,
       exapndedMoreMenu: false,
+      lastPressed: 0
     };
   }
   componentDidMount() {
@@ -143,13 +144,37 @@ class FeedItem extends Component {
   }
 
   likePost(){
+    console.log('heart pressed');
     if(this.props.posts[this.state.currentIndexInPosts].isLiking){
       // remove the follow
       this.props.dispatch(unlikePost(this.props.id));
     } else {
       // add the follow
+        this.refs.heartView.animate();
       this.props.dispatch(likePost(this.props.id));
     }
+  }
+
+  _onPress() {
+      const {lastPressed} = this.state;
+      let delta = new Date().getTime() - lastPressed;
+
+      if(!this.navigateTimeout) {
+          this.navigateTimeout = setTimeout(() => {
+              this._navigateToPost();
+          }, 300);
+      }
+
+      if(delta < 300) {
+        console.log('double tapped');
+        clearTimeout(this.navigateTimeout);
+        this.navigateTimeout = null;
+        this.likePost();
+      }
+
+      this.setState({
+          lastPressed: new Date().getTime()
+      })
   }
 
   _navigateToPost(){
@@ -208,11 +233,11 @@ class FeedItem extends Component {
       return (
         <View shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true} style={styles.container}>
           <View style={styles.imageContainer}>
-            <TouchableOpacity activeOpacity={0.9} onPress={this._navigateToPost.bind(this )}>
-              <ScaledImage
-                id={currentPost.ImageId}
-                width={width}
-              />
+            <TouchableOpacity activeOpacity={0.9} onPress={this._onPress.bind(this)}>
+                <HeartAnimatedView
+                    ref={'heartView'}
+                    childView={<ScaledImage id={currentPost.ImageId} width={width}/>}
+                />
             </TouchableOpacity>
             <TouchableOpacity
               activeOpacity={0.9}

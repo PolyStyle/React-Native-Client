@@ -13,6 +13,7 @@ import Close from './Icons/Close'
 import Yay from './Icons/Yay'
 import Nan from './Icons/Nan'
 import Heart from './Icons/Heart'
+import HeartAnimatedView from './Animation/HeartAnimatedView'
 import MoreDots from './Icons/MoreDots'
 import FlashNotification from './FlashNotification/FlashNotification'
 import PressableIcon from './Icons/PressableIcon'
@@ -56,6 +57,7 @@ export {
 	Yay,
 	Nan ,
 	Heart,
+	HeartAnimatedView,
 	MoreDots,
 	FlashNotification,
 	PressableIcon,
