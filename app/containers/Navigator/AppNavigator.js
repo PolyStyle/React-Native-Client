@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
-import { View, Navigator, Platform, StatusBar, StyleSheet, Dimensions} from 'react-native'
+import { View, Platform, StatusBar, StyleSheet, Dimensions} from 'react-native'
+import { Navigator } from 'react-native-deprecated-custom-components'
 import { SplashContainer, OnboardingContainer, FooterTabsContainer, SettingsContainer } from './../../containers'
 import { FooterIcon}  from './../../components'
 
@@ -19,7 +20,7 @@ export default class AppNavigator extends Component {
     isNew: PropTypes.bool.isRequired
   }
 
-  
+
 
   renderScene = (route, navigator) => {
     console.log('I RENDERED THE MAIN SCENE');
@@ -47,7 +48,7 @@ export default class AppNavigator extends Component {
     return Navigator.SceneConfigs.FloatFromRight
   }
 
-  
+
   render () {
     return (
        <View style={{flex: 1}}>
@@ -55,7 +56,7 @@ export default class AppNavigator extends Component {
           initialRoute={{ }}
           renderScene={this.renderScene}
           configureScene={this.configureScene} />
-         
+
       </View>
     )
   }

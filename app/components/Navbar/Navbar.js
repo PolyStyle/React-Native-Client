@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
-import { Platform,StyleSheet,Dimensions, Navigator } from 'react-native'
+import { Platform,StyleSheet,Dimensions } from 'react-native'
+import { Navigator } from 'react-native-deprecated-custom-components'
 import NavigationBar from 'react-native-navbar'
 import { colors } from './../../styles'
 const { height,width } = Dimensions.get('window')
@@ -11,7 +12,7 @@ Navbar.propTypes = {
 }
 
 export default function Navbar (props) {
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -50,4 +51,4 @@ export default function Navbar (props) {
 }
 
 
- 
+

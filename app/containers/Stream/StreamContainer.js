@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react'
-import { TouchableHighlight, StyleSheet, Text, View ,Dimensions, Platform, Navigator, Animated } from 'react-native'
+import { TouchableHighlight, StyleSheet, Text, View ,Dimensions, Platform, Animated } from 'react-native'
+import { Navigator } from 'react-native-deprecated-custom-components'
 import { connect } from 'react-redux'
 import { Navbar, StreamListView , CustomButton, Gear, Hamburger, Exit, FooterIcon}  from './../../components'
 import { userOnboarded } from './../../redux/modules/users'
@@ -182,7 +183,7 @@ class StreamContainer extends Component {
                 }
               }}
            />
-            
+
         </View>
     )
   }
